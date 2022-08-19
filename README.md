@@ -1,1 +1,1 @@
-# movie-monday-manager
+# Movie Monday Manager
