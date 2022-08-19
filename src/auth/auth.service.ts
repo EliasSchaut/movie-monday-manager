@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { UsersService } from '../users/users.service'
-import { Prisma } from "@prisma/client"
+import {Prisma} from "@prisma/client"
 const bcrypt = require('bcrypt')
 
 @Injectable()
