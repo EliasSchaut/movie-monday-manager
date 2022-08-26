@@ -3,14 +3,14 @@
   <div class="form-intro">
     <p class="big"><b>Melde dich an!</b></p>
   </div>
-  <form @submit.prevent="" id="form_register" class="form needs-validation">
+  <form method="post" action="/api/auth/register" id="form_register" class="form needs-validation">
     <div class="mb-3">
       <label for="from_username" class="form-label">Benutzername</label>
-      <input type="text" class="form-control" id="from_forename" placeholder="Max" name="forename" required>
+      <input type="text" class="form-control" id="from_username" placeholder="Max Mustermann" name="username" required>
     </div>
     <div class="mb-3">
       <label for="from_password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="from_password" placeholder="Mustermann" name="password" required>
+      <input type="password" class="form-control" id="from_password" placeholder="*******************" name="password" required>
     </div>
     <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
             data-bs-placement="bottom">
@@ -23,12 +23,12 @@
   </form>
   <!----------------------------------------------------------------->
 </template>
-<script>
+<script lang="ts">
 import { ref } from "vue";
 
 let loading = ref(false);
 export default {
-  name: "Join",
+  name: "LoginComponent",
   data() {
     return {
       form: {
@@ -43,7 +43,7 @@ export default {
     loading() {
       return loading;
     }
-  },
+  }
 };
 </script>
 <style scoped>

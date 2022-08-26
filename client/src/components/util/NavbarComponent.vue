@@ -14,17 +14,20 @@
           </li>
         </ul>
         <router-link class="btn btn-success" type="button" to="/login">Login</router-link>
+        <router-link class="btn btn-primary" type="button" to="/register">Register</router-link>
       </div>
     </div>
   </nav>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "NavbarComponent"
 };
 </script>
 
 <style scoped>
-
+.btn {
+  margin-left: 10px;
+}
 </style>
