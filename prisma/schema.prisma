@@ -11,7 +11,27 @@ datasource db {
 }
 
 model User {
-    id       Int    @default(autoincrement()) @id
-    username String @unique
-    password String
+  id       Int      @id @default(autoincrement())
+  username String   @unique
+  password String
+  Movies   Movies[]
+  Votes    Votes[]
+}
+
+model Movies {
+  id          Int     @id @default(autoincrement())
+  imdbID      String  @unique
+  title       String
+  link        String
+  proposer_id Int
+  proposer    User    @relation(fields: [proposer_id], references: [id])
+  Votes       Votes[]
+}
+
+model Votes {
+  id       Int     @id @default(autoincrement())
+  movie_id Int?
+  movie    Movies? @relation(fields: [movie_id], references: [id])
+  user_id  Int?
+  user     User?   @relation(fields: [user_id], references: [id])
 }
