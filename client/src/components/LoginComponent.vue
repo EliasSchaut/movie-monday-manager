@@ -1,24 +1,25 @@
 <template>
   <!-- From ------------------------------------------------------->
   <div class="form-intro">
-    <p class="big"><b>Melde dich an!</b></p>
+    <p class="big"><b>{{ head[route] }}</b></p>
   </div>
-  <form method="post" action="/api/auth/register" id="form_register" class="form needs-validation">
+  <form action="api/auth/{{route}}" @submit.prevent="onSubmit" id="form_register" class="form needs-validation">
     <div class="mb-3">
-      <label for="from_username" class="form-label">Benutzername</label>
+      <label for="from_username" class="form-label">{{ form.username }}</label>
       <input type="text" class="form-control" id="from_username" placeholder="Max Mustermann" name="username" required>
     </div>
     <div class="mb-3">
-      <label for="from_password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="from_password" placeholder="*******************" name="password" required>
+      <label for="from_password" class="form-label">{{ form.password }}</label>
+      <input type="password" class="form-control" id="from_password" placeholder="••••••••••••••••" name="password"
+             required>
     </div>
     <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
             data-bs-placement="bottom">
-      {{ this.form.submit.name }}
+      {{ form.submit.name }}
     </button>
     <button v-if="loading.value" id="button_loading" type="submit" class="btn btn-primary form-submit" disabled>
       <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-      {{ this.form.submit.loading }}
+      {{ form.submit.loading }}
     </button>
   </form>
   <!----------------------------------------------------------------->
@@ -32,7 +33,13 @@ export default {
   name: "LoginComponent",
   data() {
     return {
+      head: {
+        login: "Melde dich an!",
+        register: "Registriere dich!",
+      },
       form: {
+        username: "Benutzername",
+        password: "Password",
         submit: {
           name: "Bestätigen",
           loading: "Fertigstellen..."
@@ -40,9 +47,34 @@ export default {
       }
     };
   },
+  props: {
+    route: String
+  },
   computed: {
     loading() {
       return loading;
+    }
+  },
+  methods: {
+    async onSubmit(e: SubmitEvent) {
+      const form_html = e.target as HTMLFormElement;
+      const form = new FormData(form_html);
+      const post = {} as any;
+      form.forEach((value, key) => {
+        post[key] = value;
+      });
+
+      fetch(form_html.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(post)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+        });
     }
   }
 };
