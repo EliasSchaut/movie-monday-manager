@@ -3,7 +3,7 @@
   <div class="form-intro">
     <p class="big"><b>{{ head[route] }}</b></p>
   </div>
-  <form action="api/auth/{{route}}" @submit.prevent="onSubmit" id="form_register" class="form needs-validation">
+  <form :action="route_base + route" @submit.prevent="onSubmit" id="form_register" class="form needs-validation">
     <div class="mb-3">
       <label for="from_username" class="form-label">{{ form.username }}</label>
       <input type="text" class="form-control" id="from_username" placeholder="Max Mustermann" name="username" required>
@@ -33,6 +33,7 @@ export default {
   name: "LoginComponent",
   data() {
     return {
+      route_base: "api/auth/",
       head: {
         login: "Melde dich an!",
         register: "Registriere dich!",
