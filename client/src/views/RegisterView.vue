@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import LoginComponent from "@/components/LoginComponent.vue";
+import LoginComponent from "@/components/LoginComponent.vue";
+const route = "register";
 </script>
 
 <template>
-  <LoginComponent />
+  <LoginComponent :route="route" />
 </template>
 
 <style scoped>
