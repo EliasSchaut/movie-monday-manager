@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { UsersService } from '../users/users.service';
-import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
@@ -31,6 +32,15 @@ export class AuthService {
 
   async register(user: any) {
     const payload = { username: user.username, password: user.password };
-    console.log(await this.usersService.create(payload));
+    try {
+      await this.usersService.create(payload);
+
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ConflictException('Username already exists');
+      } else {
+        throw new InternalServerErrorException('Unable to create user');
+      }
+    }
   }
 }

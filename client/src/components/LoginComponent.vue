@@ -23,6 +23,7 @@
   </form>
   <!----------------------------------------------------------------->
 </template>
+
 <script lang="ts">
 import { ref } from "vue";
 
@@ -46,6 +47,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .form-intro {
   margin: 1em 0;
