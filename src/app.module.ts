@@ -5,6 +5,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { MoviesModule } from './common/db_services/movies/movies.module';
+import { MovieModule } from './movie/movie.module';
 
 @Module({
   imports: [AuthModule, ProfileModule,
@@ -12,6 +13,7 @@ import { MoviesModule } from './common/db_services/movies/movies.module';
       rootPath: join(__dirname, '..', 'client/dist'),
     }),
     MoviesModule,
+    MovieModule,
   ],
   providers: [PrismaService],
 })
