@@ -11,27 +11,27 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  username String   @unique
+  id       Int     @id @default(autoincrement())
+  username String  @unique
   password String
-  Movies   Movies[]
-  Votes    Votes[]
+  Movie    Movie[]
+  Vote     Vote[]
 }
 
-model Movies {
-  id          Int     @id @default(autoincrement())
-  imdbID      String  @unique
+model Movie {
+  id          Int    @id @default(autoincrement())
+  imdbID      String @unique
   title       String
   link        String
   proposer_id Int
-  proposer    User    @relation(fields: [proposer_id], references: [id])
-  Votes       Votes[]
+  proposer    User   @relation(fields: [proposer_id], references: [id])
+  Vote        Vote[]
 }
 
-model Votes {
-  id       Int     @id @default(autoincrement())
+model Vote {
+  id       Int    @id @default(autoincrement())
   movie_id Int?
-  movie    Movies? @relation(fields: [movie_id], references: [id])
+  movie    Movie? @relation(fields: [movie_id], references: [id])
   user_id  Int?
-  user     User?   @relation(fields: [user_id], references: [id])
+  user     User?  @relation(fields: [user_id], references: [id])
 }
