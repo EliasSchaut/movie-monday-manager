@@ -37,4 +37,4 @@ lerna-debug.log*
 # Prisma
 /prisma/migrations
 dev.db*
-*.env*
+*.env
