@@ -1,24 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import imdb_api, { Client } from "imdb-api";
+import { Client } from "imdb-api";
+import { MovieDBService } from "../common/db_services/movies/movieDB.service";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class MovieService {
-  private imdb: Client
 
-  constructor() {
-    this.imdb = new imdb_api.Client({apiKey: process.env.OMDB_API_KEY});
+  private readonly imdb: Client
+
+  constructor(private readonly movieDBService: MovieDBService) {
+    this.imdb = new Client({apiKey: process.env.OMDB_API_KEY});
   }
 
   async get(imdb_id: string) {
-    const movie = this.imdb.get({id: imdb_id})
+    const movie = await this.imdb.get({id: imdb_id})
     console.log(movie)
     return movie
   }
 
-  async save(imdb_id: string) {
+  async save(imdb_id: string, proposer_id: string) {
     const movie = await this.get(imdb_id)
     console.log(movie)
-    return movie
+
+    const movieDB_data = {
+      imdbID: imdb_id,
+      title: movie.title,
+      link: "",
+      proposer_id: proposer_id,
+      proposer: ""
+    } as Prisma.MovieCreateInput
+
+    return this.movieDBService.add(movieDB_data)
   }
 
 }

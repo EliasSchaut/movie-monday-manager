@@ -14,8 +14,8 @@ model User {
   id       Int     @id @default(autoincrement())
   username String  @unique
   password String
-  Movie    Movie[]
-  Vote     Vote[]
+  movie    Movie[]
+  vote     Vote[]
 }
 
 model Movie {
@@ -25,7 +25,7 @@ model Movie {
   link        String
   proposer_id Int
   proposer    User   @relation(fields: [proposer_id], references: [id])
-  Vote        Vote[]
+  vote        Vote[]
 }
 
 model Vote {
