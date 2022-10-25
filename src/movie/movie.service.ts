@@ -1,36 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
+import { UsersService } from "../common/db_services/users/users.service";
 
 @Injectable()
 export class MovieService {
 
   private readonly imdb: Client
 
-  constructor(private readonly movieDBService: MovieDBService) {
-    this.imdb = new Client({apiKey: process.env.OMDB_API_KEY});
+  constructor(private readonly movieDBService: MovieDBService,
+              private readonly usersService: UsersService) {
+    this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
 
   async get(imdb_id: string) {
-    const movie = await this.imdb.get({id: imdb_id})
-    console.log(movie)
-    return movie
+    return await this.imdb.get({ id: imdb_id })
   }
 
   async save(imdb_id: string, proposer_id: string) {
     const movie = await this.get(imdb_id)
-    console.log(movie)
+    const { username } : Prisma.UserCreateInput = await this.usersService.get({id: Number(proposer_id)}) as User
 
-    const movieDB_data = {
+    const movieDB_data: Prisma.MovieCreateInput = {
       imdbID: imdb_id,
       title: movie.title,
-      link: "",
-      proposer_id: proposer_id,
-      proposer: ""
-    } as Prisma.MovieCreateInput
+      link: movie.imdburl,
+      proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput
+    }
 
     return this.movieDBService.add(movieDB_data)
+
   }
 
 }

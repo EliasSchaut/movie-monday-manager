@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, Param, Post, Request, UseGuards } from "@nestjs/common";
 import { MovieService } from "./movie.service";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 @Controller('movie')
 export class MovieController {
@@ -11,4 +12,9 @@ export class MovieController {
     return await this.movieService.get(imdb_id)
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post(':imdb_id')
+  async post_media(@Param('imdb_id') imdb_id: string, @Request() req: any) {
+    return await this.movieService.save(imdb_id, req.user.id)
+  }
 }

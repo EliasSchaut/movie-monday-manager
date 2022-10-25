@@ -3,7 +3,6 @@ import { PrismaService } from '../../../prisma.service';
 import { User, Prisma } from '@prisma/client';
 const bcrypt = require('bcrypt');
 
-
 @Injectable()
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
