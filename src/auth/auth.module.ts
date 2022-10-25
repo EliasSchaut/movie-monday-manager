@@ -14,7 +14,7 @@ import { LoggerMiddleware } from "../common/middleware/logger.middleware";
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION },
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
