@@ -75,6 +75,9 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
+          if (data.hasOwnProperty("access_token")) {
+            localStorage.setItem("access_token", data.access_token);
+          }
         });
     }
   }

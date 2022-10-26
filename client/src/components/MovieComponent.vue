@@ -10,7 +10,7 @@
     <tr v-for="movie in movies" :key="movie.id">
       <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
       <td>
-        <button class="btn btn-primary" @click="">
+        <button class="btn btn-outline-primary" @click="">
           <i class="fas fa-edit">👍</i>
         </button>
       </td>
@@ -27,11 +27,10 @@ export default {
   name: "MovieComponent",
   data() {
     return {
-      movies: movies
+      movies
     };
   },
   setup() {
-    console.log("MovieComponent setup");
     fetch("api/movie/all")
       .then((res) => res.json()
         .then(

@@ -15,6 +15,7 @@
         </ul>
         <router-link class="btn btn-success" type="button" to="/login">Login</router-link>
         <router-link class="btn btn-primary" type="button" to="/register">Register</router-link>
+        <router-link class="btn btn-outline-primary" type="button" to="/profile">Profile</router-link>
       </div>
     </div>
   </nav>
