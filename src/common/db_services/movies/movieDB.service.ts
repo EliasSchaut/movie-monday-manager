@@ -13,6 +13,12 @@ export class MovieDBService {
     });
   }
 
+  async get_imdb(imdb_id: string) {
+    return await this.prisma.movie.findUnique({
+      where: { imdbID: imdb_id },
+    });
+  }
+
   async get_all() {
     return await this.prisma.movie.findMany();
   }

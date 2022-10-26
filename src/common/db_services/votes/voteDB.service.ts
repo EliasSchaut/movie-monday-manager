@@ -13,11 +13,19 @@ export class VoteDBService {
     });
   }
 
-  async has(user_id: Prisma.UserWhereUniqueInput, movie_id: Prisma.MovieWhereUniqueInput) {
+  async has(user_id: Prisma.UserWhereUniqueInput, imdb_id: Prisma.MovieWhereUniqueInput) {
     return await this.prisma.vote.findFirst({
       where: {
         user: user_id,
-        movie: movie_id
+        movie: imdb_id
+      }
+    })
+  }
+
+  async num_of(user_id: number) {
+    return await this.prisma.vote.count({
+      where: {
+        user: { id: user_id }
       }
     })
   }

@@ -8,10 +8,9 @@ export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post(':movieId')
-  async vote(@Param('movieId') movieId: string, @Request() req: any) {
-    console.log("yes")
-    return this.voteService.vote(movieId, req.user);
+  @Post(':imdb_id')
+  async vote(@Param('imdb_id') imdb_id: string, @Request() req: any) {
+    return this.voteService.vote(imdb_id, req.user);
   }
 
 }

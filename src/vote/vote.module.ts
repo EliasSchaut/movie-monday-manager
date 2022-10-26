@@ -11,6 +11,4 @@ import { PrismaService } from "../common/db_services/prisma.service";
   controllers: [VoteController],
   providers: [PrismaService, VoteService]
 })
-export class VoteModule {
-
-}
+export class VoteModule {}
