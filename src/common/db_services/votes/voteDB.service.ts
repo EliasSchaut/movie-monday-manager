@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from "../../../prisma.service";
+import { PrismaService } from "../prisma.service";
 import { Prisma } from "@prisma/client";
 
 @Injectable()
@@ -11,6 +11,15 @@ export class VoteDBService {
     return await this.prisma.vote.findUnique({
       where: vote_id,
     });
+  }
+
+  async has(user_id: Prisma.UserWhereUniqueInput, movie_id: Prisma.MovieWhereUniqueInput) {
+    return await this.prisma.vote.findFirst({
+      where: {
+        user: user_id,
+        movie: movie_id
+      }
+    })
   }
 
   async get_all() {
