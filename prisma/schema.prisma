@@ -16,6 +16,7 @@ model User {
   username  String   @unique
   password  String
   Movie     Movie[]
+  Vote      Vote[]
 }
 
 model Movie {
@@ -26,4 +27,14 @@ model Movie {
   link        String
   proposer_id Int
   proposer    User     @relation(fields: [proposer_id], references: [id])
+  Vote        Vote[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  movie_id  Int
+  movie     Movie    @relation(fields: [movie_id], references: [id])
+  user_id   Int
+  user      User     @relation(fields: [user_id], references: [id])
 }
