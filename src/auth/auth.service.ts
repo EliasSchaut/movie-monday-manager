@@ -1,5 +1,5 @@
 import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { UsersService } from '../common/db_services/users/users.service';
+import { UserDBService } from '../common/db_services/users/userDB.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 const bcrypt = require('bcrypt');
@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private usersService: UserDBService,
     private jwtService: JwtService,
   ) {}
 

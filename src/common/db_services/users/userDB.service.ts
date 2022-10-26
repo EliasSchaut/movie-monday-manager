@@ -4,7 +4,7 @@ import { User, Prisma } from '@prisma/client';
 const bcrypt = require('bcrypt');
 
 @Injectable()
-export class UsersService {
+export class UserDBService {
   constructor(private readonly prisma: PrismaService) {}
 
   async get(

@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AuthService } from './auth.service';
-import { UsersModule } from '../common/db_services/users/users.module';
+import { UserDBModule } from '../common/db_services/users/userDB.module';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
@@ -10,7 +10,7 @@ import { LoggerMiddleware } from "../common/middleware/logger.middleware";
 
 @Module({
   imports: [
-    UsersModule,
+    UserDBModule,
     PassportModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,

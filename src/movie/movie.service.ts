@@ -2,7 +2,7 @@ import { ConflictException, Injectable, NotFoundException } from "@nestjs/common
 import { Client } from "imdb-api";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { Prisma, User } from "@prisma/client";
-import { UsersService } from "../common/db_services/users/users.service";
+import { UserDBService } from "../common/db_services/users/userDB.service";
 
 @Injectable()
 export class MovieService {
@@ -10,7 +10,7 @@ export class MovieService {
   private readonly imdb: Client
 
   constructor(private readonly movieDBService: MovieDBService,
-              private readonly usersService: UsersService) {
+              private readonly usersService: UserDBService) {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
 
