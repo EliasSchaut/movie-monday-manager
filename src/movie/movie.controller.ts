@@ -7,6 +7,11 @@ export class MovieController {
 
   constructor(private readonly movieService: MovieService) {}
 
+  @Get('all')
+  async get_all_media() {
+    return await this.movieService.get_all()
+  }
+
   @Get(':imdb_id')
   async get_media(@Param('imdb_id') imdb_id: string) {
     return await this.movieService.get(imdb_id)

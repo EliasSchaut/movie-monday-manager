@@ -22,6 +22,10 @@ export class MovieService {
     }
   }
 
+  async get_all() {
+    return await this.movieDBService.get_all()
+  }
+
   async save(imdb_id: string, proposer_id: string) {
     const movie = await this.get(imdb_id)
     const { username } : Prisma.UserCreateInput = await this.usersService.get({id: Number(proposer_id)}) as User
