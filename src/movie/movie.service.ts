@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { Prisma, User } from "@prisma/client";
@@ -15,7 +15,11 @@ export class MovieService {
   }
 
   async get(imdb_id: string) {
-    return await this.imdb.get({ id: imdb_id })
+    try {
+      return await this.imdb.get({ id: imdb_id })
+    } catch (e) {
+      throw new NotFoundException('Movie not found')
+    }
   }
 
   async save(imdb_id: string, proposer_id: string) {
@@ -29,8 +33,11 @@ export class MovieService {
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput
     }
 
-    return this.movieDBService.add(movieDB_data)
-
+    try {
+      return await this.movieDBService.add(movieDB_data)
+    } catch (e) {
+      throw new ConflictException('Movie already exists')
+    }
   }
 
 }
