@@ -15,7 +15,7 @@ export class MovieDBService {
 
   async get_imdb(imdb_id: string) {
     return await this.prisma.movie.findUnique({
-      where: { imdbID: imdb_id },
+      where: { imdb_id },
     });
   }
 

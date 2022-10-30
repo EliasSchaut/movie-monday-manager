@@ -31,7 +31,7 @@ export class MovieService {
     const { username } : Prisma.UserCreateInput = await this.usersService.get({id: Number(proposer_id)}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
-      imdbID: imdb_id,
+      imdb_id: imdb_id,
       title: movie.title,
       link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput

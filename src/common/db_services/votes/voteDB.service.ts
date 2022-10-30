@@ -38,8 +38,8 @@ export class VoteDBService {
     return await this.prisma.vote.create({ data });
   }
 
-  async delete(vote_id : Prisma.VoteWhereUniqueInput) {
-    return await this.prisma.movie.delete({ where: vote_id });
+  async delete(data : Prisma.VoteWhereUniqueInput) {
+    return await this.prisma.vote.delete({ where: data });
   }
 
 }
