@@ -30,9 +30,16 @@ export class VoteDBService {
     })
   }
 
-  async get_votes(user_id: number) {
+  async get_num_of_votes(imdb_id: string) {
+    return await this.prisma.vote.count({
+      where: { movie: { imdb_id } }
+    });
+  }
+
+  async get_votes_user(user_id: number) {
     return await this.prisma.vote.findMany({
-      where: { user: {id: user_id} }
+      where: { user: { id: user_id } },
+      select: { imdb_id: true }
     });
   }
 

@@ -11,9 +11,17 @@ export class VoteService {
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService) {}
 
-  async get_votes(user: User) {
+  async get_votes(imdb_id: string) {
     try {
-      return await this.voteDBService.get_votes(user.id)
+      return await this.voteDBService.get_num_of_votes(imdb_id)
+    } catch (e) {
+      throw new InternalServerErrorException('Error getting votes')
+    }
+  }
+
+  async get_votes_user(user: User) {
+    try {
+      return (await this.voteDBService.get_votes_user(user.id)).map(vote => vote.imdb_id)
     } catch (e) {
       throw new InternalServerErrorException('Error getting votes')
     }
