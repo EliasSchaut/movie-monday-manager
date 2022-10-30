@@ -1,4 +1,4 @@
-import { Controller, Param, Post, Request, UseGuards } from "@nestjs/common";
+import { Controller, Delete, Param, Post, Request, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { VoteService } from "./vote.service";
 
@@ -11,6 +11,12 @@ export class VoteController {
   @Post(':imdb_id')
   async vote(@Param('imdb_id') imdb_id: string, @Request() req: any) {
     return this.voteService.vote(imdb_id, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':imdb_id')
+  async unvote(@Param('imdb_id') imdb_id: string, @Request() req: any) {
+    return this.voteService.unvote(imdb_id, req.user);
   }
 
 }

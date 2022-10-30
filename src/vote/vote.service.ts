@@ -18,7 +18,7 @@ export class VoteService {
     }
 
     const voteDB_data: Prisma.VoteCreateInput = {
-      movie: { connect: { imdbID: imdb_id } } as Prisma.MovieCreateNestedOneWithoutVoteInput,
+      movie: { connect: { imdb_id } } as Prisma.MovieCreateNestedOneWithoutVoteInput,
       user: { connect: { id: user.id } } as Prisma.UserCreateNestedOneWithoutVoteInput
     }
 
@@ -26,6 +26,18 @@ export class VoteService {
       return await this.voteDBService.add(voteDB_data)
     } catch (e) {
       throw new ConflictException('Vote already exists')
+    }
+  }
+
+  async unvote(imdb_id: string, user: any) {
+    const voteDB_data: Prisma.VoteWhereUniqueInput = {
+      imdb_id_user_id: { imdb_id, user_id: user.id }
+    }
+
+    try {
+      return await this.voteDBService.delete(voteDB_data)
+    } catch (e) {
+      throw new ConflictException('Vote does not exist')
     }
   }
 }
