@@ -1,4 +1,4 @@
-import { Controller, Delete, Param, Post, Request, UseGuards } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Request, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { VoteService } from "./vote.service";
 
@@ -6,6 +6,12 @@ import { VoteService } from "./vote.service";
 export class VoteController {
 
   constructor(private readonly voteService: VoteService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async get_votes(@Request() req: any) {
+    return this.voteService.get_votes(req.user);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')

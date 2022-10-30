@@ -1,8 +1,8 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 
 @Injectable()
 export class VoteService {
@@ -10,6 +10,14 @@ export class VoteService {
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService) {}
+
+  async get_votes(user: User) {
+    try {
+      return await this.voteDBService.get_votes(user.id)
+    } catch (e) {
+      throw new InternalServerErrorException('Error getting votes')
+    }
+  }
 
   async vote(imdb_id: string, user: any) {
     const num_of_votes = await this.voteDBService.num_of(user.id)

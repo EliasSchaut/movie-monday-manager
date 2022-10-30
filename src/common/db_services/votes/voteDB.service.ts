@@ -7,9 +7,9 @@ export class VoteDBService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async get(vote_id : Prisma.VoteWhereUniqueInput) {
+  async get(data : Prisma.VoteWhereUniqueInput) {
     return await this.prisma.vote.findUnique({
-      where: vote_id,
+      where: data,
     });
   }
 
@@ -30,8 +30,10 @@ export class VoteDBService {
     })
   }
 
-  async get_all() {
-    return await this.prisma.vote.findMany();
+  async get_votes(user_id: number) {
+    return await this.prisma.vote.findMany({
+      where: { user: {id: user_id} }
+    });
   }
 
   async add(data: Prisma.VoteCreateInput) {
