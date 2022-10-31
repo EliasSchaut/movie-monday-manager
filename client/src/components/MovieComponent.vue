@@ -7,12 +7,14 @@
           Title
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie"><b>+</b></button>
         </th>
+        <th scope="col">Proposer</th>
         <th scope="col">Vote</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in movies" :key="movie.id">
+      <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
+        <td><p>{{ movie.proposer }}</p></td>
         <td>
           <button class="btn btn-primary" @click="">
             <i class="fas fa-edit">👍</i>
@@ -62,6 +64,7 @@ export default {
         .then(
           (data) => {
             movies.value = data;
+            console.log(movies.value);
           }
         )
       )

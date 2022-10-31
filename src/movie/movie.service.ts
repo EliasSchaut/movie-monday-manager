@@ -23,7 +23,16 @@ export class MovieService {
   }
 
   async get_all() {
-    return await this.movieDBService.get_all()
+    const movies = await this.movieDBService.get_all()
+    return await Promise.all(movies.map(async (movie) => {
+      return {
+        imdb_id: movie.imdb_id,
+        title: movie.title,
+        link: movie.link,
+        proposer: (await this.usersService.get({ id: movie.proposer_id }) as User).username,
+        createdAt: movie.createdAt
+      };
+    }));
   }
 
   async save(imdb_id: string, proposer_id: string) {
