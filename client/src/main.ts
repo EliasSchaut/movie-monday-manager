@@ -4,6 +4,8 @@ import router from './router'
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min.js";
+import "bootstrap-table/dist/bootstrap-table.min.css";
+import "bootstrap-table/dist/bootstrap-table.min.js";
 import "./assets/css/main.css";
 
 const app = createApp(App)

@@ -1,6 +1,26 @@
 <template>
 <div class="main">
-  <table class="table table-striped table-bordered ">
+  <table class="table table-striped table-bordered table-active"
+         data-toolbar="#toolbar"
+         data-search="true"
+         data-show-refresh="true"
+         data-show-toggle="true"
+         data-show-fullscreen="true"
+         data-show-columns="true"
+         data-show-columns-toggle-all="true"
+         data-detail-view="true"
+         data-show-export="true"
+         data-click-to-select="true"
+         data-detail-formatter="detailFormatter"
+         data-minimum-count-columns="2"
+         data-show-pagination-switch="true"
+         data-pagination="true"
+         data-id-field="id"
+         data-page-list="[10, 25, 50, 100, all]"
+         data-show-footer="true"
+         data-side-pagination="server"
+         data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
+         data-response-handler="responseHandler">
     <thead>
       <tr class="table-dark align-middle">
         <th scope="col" class="d-flex justify-content-between align-items-baseline">
@@ -58,16 +78,18 @@ export default {
       movies
     };
   },
-  setup() {
+  setup(props: any) {
     fetch("api/movie/all")
       .then((res) => res.json()
         .then(
           (data) => {
             movies.value = data;
             console.log(movies.value);
+
           }
         )
       )
+    console.log(props.logged_in);
   },
   methods: {
     onSubmit(e: SubmitEvent) {
