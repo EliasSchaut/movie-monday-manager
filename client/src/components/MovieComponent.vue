@@ -11,7 +11,7 @@
         </th>
         <th scope="col">Proposer</th>
         <th scope="col">Created At</th>
-        <th scope="col" colspan="2">Vote</th>
+        <th scope="col" colspan="2">Votes</th>
       </tr>
     </thead>
     <tbody>
@@ -19,9 +19,7 @@
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td><p>{{ movie.proposer }}</p></td>
         <td><p>{{ movie.createdAt }}</p></td>
-        <td>
-          ??
-        </td>
+        <td><p>{{ movie.votes }}</p></td>
         <td>
           <button class="btn btn-primary" @click="" :disabled="!store.logged_in">
             <i class="fas fa-edit">👍</i>
