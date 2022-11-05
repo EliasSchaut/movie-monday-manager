@@ -10,13 +10,18 @@
           </button>
         </th>
         <th scope="col">Proposer</th>
-        <th scope="col">Vote</th>
+        <th scope="col">Created At</th>
+        <th scope="col" colspan="2">Vote</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td><p>{{ movie.proposer }}</p></td>
+        <td><p>{{ movie.createdAt }}</p></td>
+        <td>
+          ??
+        </td>
         <td>
           <button class="btn btn-primary" @click="" :disabled="!store.logged_in">
             <i class="fas fa-edit">👍</i>
