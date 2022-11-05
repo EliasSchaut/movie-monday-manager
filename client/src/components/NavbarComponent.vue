@@ -12,6 +12,9 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
+          <li>
+            <router-link class="nav-link" to="/history">History</router-link>
+          </li>
         </ul>
         <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
           <span class="visually-hidden">Loading...</span>
