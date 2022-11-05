@@ -3,6 +3,7 @@ import { Client } from "imdb-api";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { Prisma, User } from "@prisma/client";
 import { UserDBService } from "../common/db_services/users/userDB.service";
+import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 
 @Injectable()
 export class MovieService {
@@ -10,7 +11,8 @@ export class MovieService {
   private readonly imdb: Client
 
   constructor(private readonly movieDBService: MovieDBService,
-              private readonly usersService: UserDBService) {
+              private readonly userDBService: UserDBService,
+              private readonly voteDBService: VoteDBService) {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
 
@@ -29,15 +31,16 @@ export class MovieService {
         imdb_id: movie.imdb_id,
         title: movie.title,
         link: movie.link,
-        proposer: (await this.usersService.get({ id: movie.proposer_id }) as User).username,
-        createdAt: movie.createdAt
+        proposer: (await this.userDBService.get({ id: movie.proposer_id }) as User).username,
+        createdAt: movie.createdAt,
+        votes: await this.voteDBService.get_num_of_votes(movie.imdb_id)
       };
     }));
   }
 
   async save(imdb_id: string, proposer_id: string) {
     const movie = await this.get(imdb_id)
-    const { username } : Prisma.UserCreateInput = await this.usersService.get({id: Number(proposer_id)}) as User
+    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: Number(proposer_id)}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
