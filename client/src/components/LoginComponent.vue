@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
+import router from "@/router";
 
 let loading = ref(false);
 export default {
@@ -78,6 +79,7 @@ export default {
           if (data.hasOwnProperty("access_token")) {
             localStorage.setItem("access_token", data.access_token);
           }
+          router.push("/");
         });
     }
   }

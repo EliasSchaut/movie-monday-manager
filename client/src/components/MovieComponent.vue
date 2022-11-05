@@ -1,31 +1,13 @@
 <template>
 <div class="main">
-  <table class="table table-striped table-bordered table-active"
-         data-toolbar="#toolbar"
-         data-search="true"
-         data-show-refresh="true"
-         data-show-toggle="true"
-         data-show-fullscreen="true"
-         data-show-columns="true"
-         data-show-columns-toggle-all="true"
-         data-detail-view="true"
-         data-show-export="true"
-         data-click-to-select="true"
-         data-detail-formatter="detailFormatter"
-         data-minimum-count-columns="2"
-         data-show-pagination-switch="true"
-         data-pagination="true"
-         data-id-field="id"
-         data-page-list="[10, 25, 50, 100, all]"
-         data-show-footer="true"
-         data-side-pagination="server"
-         data-url="https://examples.wenzhixin.net.cn/examples/bootstrap_table/data"
-         data-response-handler="responseHandler">
+  <table class="table table-striped table-bordered table-active">
     <thead>
       <tr class="table-dark align-middle">
         <th scope="col" class="d-flex justify-content-between align-items-baseline">
           Title
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie"><b>+</b></button>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in">
+            <b>+</b>
+          </button>
         </th>
         <th scope="col">Proposer</th>
         <th scope="col">Vote</th>
@@ -36,7 +18,7 @@
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td><p>{{ movie.proposer }}</p></td>
         <td>
-          <button class="btn btn-primary" @click="">
+          <button class="btn btn-primary" @click="" :disabled="!store.logged_in">
             <i class="fas fa-edit">👍</i>
           </button>
         </td>
@@ -67,32 +49,29 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { store } from './util/store.js'
 import { ref } from "vue";
-let movies = ref({ });
+let movies = ref([] as any[]);
+
+fetch("api/movie/all")
+  .then((res) => res.json()
+    .then(
+      (data) => {
+        movies.value = data;
+        console.log(movies.value);
+      }
+    )
+  )
+</script>
+
+<script lang="ts">
+
 
 export default {
   name: "MovieComponent",
-  data() {
-    return {
-      movies
-    };
-  },
-  setup(props: any) {
-    fetch("api/movie/all")
-      .then((res) => res.json()
-        .then(
-          (data) => {
-            movies.value = data;
-            console.log(movies.value);
-
-          }
-        )
-      )
-    console.log(props.logged_in);
-  },
   methods: {
-    onSubmit(e: SubmitEvent) {
+    onSubmit(e: Event) {
       const form_html = e.target as HTMLFormElement;
       const form = new FormData(form_html);
       const imdb_id = form.get("imdb_id") as string

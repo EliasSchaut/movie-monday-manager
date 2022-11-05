@@ -13,17 +13,25 @@
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
         </ul>
-        <router-link class="btn btn-success" type="button" to="/login">Login</router-link>
-        <router-link class="btn btn-primary" type="button" to="/register">Register</router-link>
-        <router-link class="btn btn-outline-primary" type="button" to="/profile">Profile</router-link>
+        <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <router-link class="btn btn-success" type="button" to="/login" v-if="!store.logged_in">Login</router-link>
+        <router-link class="btn btn-primary" type="button" to="/register" v-if="!store.logged_in">Register</router-link>
+        <router-link class="btn btn-outline-primary" type="button" to="/profile" v-if="store.logged_in">Profile</router-link>
+        <router-link class="btn btn-danger" type="button" to="/logout" v-if="store.logged_in">Logout</router-link>
       </div>
     </div>
   </nav>
 </template>
 
+<script lang="ts" setup>
+import { store } from './util/store.js'
+</script>
+
 <script lang="ts">
 export default {
-  name: "NavbarComponent"
+  name: "NavbarComponent",
 };
 </script>
 
