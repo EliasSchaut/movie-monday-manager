@@ -4,13 +4,17 @@
     <p class="big"><b>{{ head[route] }}</b></p>
   </div>
   <form :action="route_base + route" @submit.prevent="onSubmit" id="form_register" class="form needs-validation">
-    <div class="mb-3">
-      <label for="from_username" class="form-label">{{ form.username }}</label>
-      <input type="text" class="form-control" id="from_username" placeholder="Max Mustermann" name="username" required>
+    <div class="mb-3" v-if="route === 'register'">
+      <label for="form_name" class="form-label">{{ form.name }}</label>
+      <input type="text" class="form-control" id="form_name" placeholder="Max Mustermann" name="name" required>
     </div>
     <div class="mb-3">
-      <label for="from_password" class="form-label">{{ form.password }}</label>
-      <input type="password" class="form-control" id="from_password" placeholder="••••••••••••••••" name="password"
+      <label for="form_username" class="form-label">{{ form.username }}</label>
+      <input type="text" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" required>
+    </div>
+    <div class="mb-3">
+      <label for="form_password" class="form-label">{{ form.password }}</label>
+      <input type="password" class="form-control" id="form_password" placeholder="••••••••••••••••" name="password"
              required>
     </div>
     <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
@@ -40,8 +44,9 @@ export default {
         register: "Registriere dich!",
       },
       form: {
-        username: "Benutzername",
+        username: "E-Mail",
         password: "Password",
+        name: "Name",
         submit: {
           name: "Bestätigen",
           loading: "Fertigstellen..."

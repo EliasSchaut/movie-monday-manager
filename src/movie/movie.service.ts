@@ -27,11 +27,14 @@ export class MovieService {
   async get_all() {
     const movies = await this.movieDBService.get_all()
     return await Promise.all(movies.map(async (movie) => {
+      const user = await this.userDBService.get({ id: movie.proposer_id }) as User
+
       return {
         imdb_id: movie.imdb_id,
         title: movie.title,
         link: movie.link,
-        proposer: (await this.userDBService.get({ id: movie.proposer_id }) as User).username,
+        proposer: user.name,
+        proposer_id: user.id,
         createdAt: movie.createdAt,
         votes: await this.voteDBService.get_num_of_votes(movie.imdb_id)
       };
