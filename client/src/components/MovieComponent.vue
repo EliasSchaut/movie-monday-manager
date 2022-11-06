@@ -21,7 +21,10 @@
         <td><p>{{ movie.createdAt }}</p></td>
         <td><p>{{ movie.votes }}</p></td>
         <td>
-          <button class="btn btn-primary" @click="" :disabled="!store.logged_in">
+          <button v-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
+            <i class="fas fa-edit">👍</i>
+          </button>
+          <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id)" :disabled="!store.logged_in">
             <i class="fas fa-edit">👍</i>
           </button>
         </td>
@@ -56,6 +59,7 @@
 import { store } from './util/store.js'
 import { ref } from "vue";
 let movies = ref([] as any[]);
+let votes = ref([] as any[]);
 
 fetch("api/movie/all")
   .then((res) => res.json()
@@ -66,10 +70,28 @@ fetch("api/movie/all")
       }
     )
   )
+
+if (store.logged_in) {
+  fetch("api/vote", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("access_token")
+    }
+  })
+    .then((res) => res.json()
+      .then(
+        (data) => {
+          votes.value = data;
+          console.log(data);
+        }
+      )
+    )
+}
 </script>
 
 <script lang="ts">
-
+import router from "@/router";
 
 export default {
   name: "MovieComponent",
@@ -89,6 +111,35 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
+          router.go(0);
+        });
+    },
+    vote(imdb_id: string) {
+      fetch("api/vote/" + imdb_id, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          router.go(0);
+        });
+    },
+    unvote(imdb_id: string) {
+      fetch("api/vote/" + imdb_id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          router.go(0);
         });
     }
   }
