@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards } from '@nestjs/common';
+import { Controller, Request, Post, UseGuards, Get, Param } from "@nestjs/common";
 import { LocalAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -15,5 +15,10 @@ export class AuthController {
   @Post('register')
   async register(@Request() req: any) {
     return this.authService.register(req.body)
+  }
+
+  @Get('confirm/:challenge')
+  async confirm(@Param('challenge') challenge: string) {
+    return await this.authService.confirm(challenge)
   }
 }

@@ -1,22 +1,35 @@
-import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException
+} from "@nestjs/common";
 import { UserDBService } from '../common/db_services/users/userDB.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { EmailService } from "../common/util_services/email.service";
 const bcrypt = require('bcrypt');
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UserDBService,
+    private userDBService: UserDBService,
     private jwtService: JwtService,
+    private emailService: EmailService,
   ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
-    const user = await this.usersService.get({
-      username: username,
-      id: undefined,
+    const user = await this.userDBService.get({
+      username: username
     });
     if (user && (await bcrypt.compare(password, user.password))) {
+      if (!user.verified) {
+        const challenge_url = `${process.env.FRONTEND_URL}api/auth/confirm/${user.challenge}`;
+        await this.emailService.sendChallenge(user.username, user.name, challenge_url);
+        throw new ForbiddenException('Email not verified. Please check your inbox! If you did not receive an email, please check your spam folder. If you still cannot find it, please contact us.');
+      }
+
       const { password, ...result } = user;
       return result;
     }
@@ -33,7 +46,9 @@ export class AuthService {
   async register(user: any) {
     const payload = { username: user.username, name: user.name, password: user.password };
     try {
-      await this.usersService.create(payload);
+      const userDB = await this.userDBService.create(payload);
+      const challenge_url = `${process.env.FRONTEND_URL}api/auth/confirm/${userDB.challenge}`;
+      await this.emailService.sendChallenge(user.username, user.name, challenge_url);
 
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -42,5 +57,19 @@ export class AuthService {
         throw new InternalServerErrorException('Unable to create user');
       }
     }
+  }
+
+  async confirm(challenge: string) {
+    const user = await this.userDBService.get({
+      challenge: challenge,
+    });
+    if (user && !user.verified) {
+      await this.userDBService.update({
+        where: { challenge },
+        data: { verified: true },
+      })
+      return true
+    }
+    throw new NotFoundException('Email already verified or challenge not found');
   }
 }

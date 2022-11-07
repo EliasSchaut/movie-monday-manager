@@ -14,8 +14,10 @@ model User {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   username  String   @unique
-  name      String
   password  String
+  name      String
+  verified  Boolean  @default(false)
+  challenge String   @unique @default(cuid())
   Movie     Movie[]
   Vote      Vote[]
 }
