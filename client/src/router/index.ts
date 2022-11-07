@@ -4,6 +4,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import HistoryView from '../views/HistoryView.vue'
+import PrivacyView from '../views/PrivacyView.vue'
 import { store } from "@/components/util/store";
 
 const router = createRouter({
@@ -33,6 +34,11 @@ const router = createRouter({
       path: '/history',
       name: 'history',
       component: HistoryView
+    },
+    {
+      path: '/privacy',
+      name: 'privacy',
+      component: PrivacyView
     }
   ]
 })
