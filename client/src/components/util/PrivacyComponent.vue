@@ -4,11 +4,11 @@
       <h3>Impressum</h3>
 
       <p>Angaben gemäß § 5 TMG</p>
-      <p>{{ this.impressum.name }}</p>
+      <p>{{ impressum.name }}</p>
 
       <p><b>Kontakt:</b><br>
-        E-Mail: {{ this.impressum.email }}<br>
-        Telefon: {{ this.impressum.number }}<br>
+        E-Mail: {{ impressum.email }}<br>
+        Telefon: {{ impressum.number }}<br>
       </p>
     </div>
 
@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "PrivacyComponent",
   data() {
