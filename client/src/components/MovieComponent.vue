@@ -11,7 +11,7 @@
         </th>
         <th scope="col">Proposer</th>
         <th scope="col">Created At</th>
-        <th scope="col" colspan="2">Votes</th>
+        <th scope="col" colspan="2">Interested</th>
       </tr>
     </thead>
     <tbody>
@@ -148,7 +148,7 @@ export default {
 
 <style scoped>
   .main {
-    width: 70vw;
+    width: 90vw;
     margin: 20px auto;
   }
 </style>
