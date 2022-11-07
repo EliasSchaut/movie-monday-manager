@@ -16,7 +16,7 @@
       <h3>Datenschutzerklärung</h3>
 
       <p><b>Was passiert mit den Angaben, die ich bei der Registrierung angebe?</b><br>
-        Wenn bei der Registrierung auf „Bestätigen“ geklickt wird, werden alle hier gemachten Angaben an eine Datenbank auf dem Webserver von Elias Lorenz Schaut in Frankfurt, Deutschland gesendet und dort spätestens zum Ende des Betreibens dieser Webseite gespeichert.
+        Wenn bei der Registrierung auf „Bestätigen“ geklickt wird, werden alle hier gemachten Angaben an eine Datenbank auf einem dedizierten Server von IONOS SE in Frankfurt, Deutschland gesendet und dort spätestens zum Ende des Betreibens dieser Webseite gespeichert.
       </p>
 
       <p><b>Wer hat Zugriff auf meine Daten und warum?</b><br>
