@@ -9,6 +9,8 @@
             <b>+</b>
           </button>
         </th>
+        <th scope="col">Year</th>
+        <th scope="col">Genre</th>
         <th scope="col">Proposer</th>
         <th scope="col">Proposed on</th>
         <th scope="col" colspan="2">Interested</th>
@@ -17,11 +19,16 @@
     <tbody>
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
+        <td><p>{{ movie.year }}</p></td>
+        <td><p>{{ movie.genre }}</p></td>
         <td><p>{{ movie.proposer }}</p></td>
         <td><p>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</p></td>
         <td><p>{{ movie.votes }}</p></td>
         <td>
-          <button v-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
+          <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id" class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
+            <i class="fas fa-edit">X</i>
+          </button>
+          <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
             <i class="fas fa-edit">👍</i>
           </button>
           <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id)" :disabled="!store.logged_in">
@@ -60,6 +67,7 @@ import { store } from './util/store.js'
 import { ref } from "vue";
 let movies = ref([] as any[]);
 let votes = ref([] as any[]);
+let user_id = ref(-1);
 
 fetch("api/movie/all")
   .then((res) => res.json()
@@ -87,6 +95,20 @@ if (store.logged_in) {
         }
       )
     )
+  fetch("api/profile", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem("access_token")
+    }
+  })
+    .then((res) => res.json()
+      .then(
+        (data) => {
+          user_id.value = data.id;
+        }
+      )
+    )
 }
 </script>
 
@@ -111,7 +133,7 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          router.go(0);
+          this.vote(imdb_id);
         });
     },
     vote(imdb_id: string) {
@@ -130,6 +152,20 @@ export default {
     },
     unvote(imdb_id: string) {
       fetch("api/vote/" + imdb_id, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          router.go(0);
+        });
+    },
+    delete_media(imdb_id: string) {
+      fetch("api/movie/" + imdb_id, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
