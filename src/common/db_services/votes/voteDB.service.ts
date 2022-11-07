@@ -51,4 +51,7 @@ export class VoteDBService {
     return await this.prisma.vote.delete({ where: data });
   }
 
+  async delete_all(imdb_id: string) {
+    return await this.prisma.vote.deleteMany({ where: { imdb_id } });
+  }
 }

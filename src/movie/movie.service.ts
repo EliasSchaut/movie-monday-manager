@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
-import { Prisma, User } from "@prisma/client";
+import { Prisma, User, Movie } from "@prisma/client";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 
@@ -63,4 +63,15 @@ export class MovieService {
     }
   }
 
+  async delete(imdb_id: string, proposer_id: string) {
+    const movie = await this.movieDBService.get({ imdb_id }) as Movie
+
+    if (movie.proposer_id === Number(proposer_id)) {
+      await this.voteDBService.delete_all(imdb_id)
+      await this.movieDBService.delete({ imdb_id })
+      return { success: true }
+    } else {
+      throw new NotFoundException('Movie not found or you are not the proposer')
+    }
+  }
 }
