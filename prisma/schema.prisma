@@ -23,12 +23,16 @@ model User {
 }
 
 model Movie {
-  imdb_id     String   @id
-  createdAt   DateTime @default(now())
+  imdb_id     String    @id
+  createdAt   DateTime  @default(now())
   title       String
+  year        Int
+  genre       String
   link        String
   proposer_id Int
-  proposer    User     @relation(fields: [proposer_id], references: [id])
+  proposer    User      @relation(fields: [proposer_id], references: [id])
+  watched     Boolean   @default(false)
+  watchedAT   DateTime?
   Vote        Vote[]
 }
 

@@ -10,7 +10,7 @@
           </button>
         </th>
         <th scope="col">Proposer</th>
-        <th scope="col">Created At</th>
+        <th scope="col">Proposed on</th>
         <th scope="col" colspan="2">Interested</th>
       </tr>
     </thead>
@@ -18,7 +18,7 @@
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td><p>{{ movie.proposer }}</p></td>
-        <td><p>{{ movie.createdAt }}</p></td>
+        <td><p>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</p></td>
         <td><p>{{ movie.votes }}</p></td>
         <td>
           <button v-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">

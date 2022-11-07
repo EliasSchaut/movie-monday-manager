@@ -33,6 +33,8 @@ export class MovieService {
         imdb_id: movie.imdb_id,
         title: movie.title,
         link: movie.link,
+        year: movie.year,
+        genre: movie.genre,
         proposer: user.name,
         proposer_id: user.id,
         createdAt: movie.createdAt,
@@ -48,6 +50,8 @@ export class MovieService {
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
       title: movie.title,
+      year: movie.year,
+      genre: movie.genres,
       link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput
     }
