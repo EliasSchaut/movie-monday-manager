@@ -1,4 +1,4 @@
-<template style="display: none">
+<template>
   <div style="display: none">
     <div class="alert alert-primary d-flex align-items-center alert-dismissible fade show" role="alert">
       <img class="bi flex-shrink-0 me-2" aria-label="Info:" :src="info_svg" alt="img_info" />

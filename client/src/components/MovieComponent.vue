@@ -47,10 +47,16 @@
           <h5 class="modal-title">Add Movie</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="api/movie/" method="post" @submit.prevent="onSubmit" id="form_register" class="form needs-validation">
+        <form action="api/movie/" method="post" @submit.prevent="onSubmit" id="form_register" class="form was-validated" novalidate>
           <div class="modal-body">
             <b>IMDB ID:</b>
-            <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" required>
+            <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+            <div class="invalid-feedback">
+              Should be a valid IMDB ID, e.g. tt1234567
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -120,6 +126,10 @@ export default {
   methods: {
     onSubmit(e: Event) {
       const form_html = e.target as HTMLFormElement;
+      if (!form_html.checkValidity()) {
+        return
+      }
+
       const form = new FormData(form_html);
       const imdb_id = form.get("imdb_id") as string
 
