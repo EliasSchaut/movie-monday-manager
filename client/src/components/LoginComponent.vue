@@ -118,7 +118,7 @@ export default {
 
 .form {
   margin: 30px auto 0;
-  width: 400px;
+  width: min(400px, 80vw);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
