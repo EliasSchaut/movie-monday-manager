@@ -51,7 +51,6 @@
 import { ref } from "vue";
 import router from "@/router";
 import { call } from "@/components/ts/api";
-import { store } from "@/components/ts/store";
 
 let loading = ref(false);
 export default {
@@ -96,17 +95,14 @@ export default {
       });
 
       call(form_html.action, "POST", post)
-        .then(async (res) => {
-          const data = await res.json()
-          if (!res.ok) {
-            return store.show_alert(store.generate_type(res.status), data.message);
-          }
-          else if (data.hasOwnProperty("access_token")) {
+        .then((data) => {
+          if (data.hasOwnProperty("access_token")) {
             localStorage.setItem("access_token", data.access_token);
-            await router.push("/");
+            router.push("/");
+          } else if (data.hasOwnProperty("statusCode") && data.statusCode === 409) {
+            return
           } else {
-            store.show_alert(store.generate_type(res.status), data.message);
-            await router.push("../login");
+            router.push("../login");
           }
         })
     }

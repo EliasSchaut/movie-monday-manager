@@ -18,9 +18,7 @@ export default {
   },
   setup() {
     call("api/profile")
-      .then((res) => res.json()
-        .then((data) => { user.value = data; })
-      )
+      .then((data) => { user.value = data; })
   }
 };
 </script>

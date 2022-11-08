@@ -83,19 +83,13 @@ export default {
     let user_id = ref(-1);
 
     call("api/movie/all")
-    .then((res) => res.json()
-    .then((data) => { movies.value = data; })
-    )
+      .then((data) => { movies.value = data; })
 
     if (store.logged_in) {
       call("api/vote")
-        .then((res) => res.json()
-          .then((data) => { votes.value = data; })
-        )
+        .then((data) => { votes.value = data; })
       call("api/profile")
-        .then((res) => res.json()
-          .then((data) => { user_id.value = data.id; })
-        )
+        .then((data) => { user_id.value = data.id; })
     }
 
     return {

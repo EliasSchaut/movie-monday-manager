@@ -1,5 +1,4 @@
 import { reactive } from  'vue';
-import { call } from "@/components/ts/api";
 
 export const store = reactive({
   logged_in: false,
@@ -15,7 +14,13 @@ export const store = reactive({
   },
 
   async update_logged_in() {
-    this.logged_in = (await call("api/profile/check")).status === 200;
+    this.logged_in = (await fetch("api/profile/check", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("access_token")
+      }
+    })).status === 200;
   },
 
   generate_type(http_code: number) {
