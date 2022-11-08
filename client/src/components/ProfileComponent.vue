@@ -6,6 +6,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
+import { call } from "@/components/ts/api";
 const user = ref({})
 
 export default {
@@ -16,19 +17,9 @@ export default {
     };
   },
   setup() {
-    fetch("api/profile", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("access_token")
-      }
-    })
+    call("api/profile")
       .then((res) => res.json()
-        .then(
-          (data) => {
-            user.value = data;
-          }
-        )
+        .then((data) => { user.value = data; })
       )
   }
 };

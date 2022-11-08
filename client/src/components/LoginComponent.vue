@@ -50,6 +50,7 @@
 <script lang="ts">
 import { ref } from "vue";
 import router from "@/router";
+import { call } from "./ts/api";
 
 let loading = ref(false);
 export default {
@@ -81,7 +82,7 @@ export default {
     }
   },
   methods: {
-    async onSubmit(e: SubmitEvent) {
+    async add_media(e: SubmitEvent) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
         return
@@ -93,13 +94,7 @@ export default {
         post[key] = value;
       });
 
-      fetch(form_html.action, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(post)
-      })
+      call(form_html.action, "POST", post)
         .then((res) => res.json())
         .then((data) => {
           if (data.hasOwnProperty("access_token")) {

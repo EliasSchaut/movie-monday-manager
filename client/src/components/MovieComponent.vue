@@ -5,14 +5,12 @@
       <tr class="table-dark align-middle">
         <th scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">
           <div>Title</div>
-          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in">
-            <b>+</b>
-          </button>
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>+</b></button>
         </th>
         <th scope="col">Year</th>
         <th scope="col">Genre</th>
         <th scope="col">Proposer</th>
-        <th scope="col" style="min-width: 120px">Proposed on</th>
+        <th scope="col">Proposed&nbsp;on</th>
         <th scope="col" colspan="2">Interested</th>
       </tr>
     </thead>
@@ -40,91 +38,67 @@
   </table>
 </div>
 
-  <div class="modal fade" id="modal_add_movie" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Add Movie</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form action="api/movie/" method="post" @submit.prevent="onSubmit" id="form_register" class="form was-validated" novalidate>
-          <div class="modal-body">
-            <b>IMDB ID:</b>
-            <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-            <div class="invalid-feedback">
-              Should be a valid IMDB ID, e.g. tt1234567
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
+<div class="modal fade" id="modal_add_movie" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Movie</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_register" class="form was-validated" novalidate>
+        <div class="modal-body">
+          <b>IMDB ID:</b>
+          <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
+          <div class="valid-feedback">
+            Looks good!
+          </div>
+          <div class="invalid-feedback">
+            Should be a valid IMDB ID, e.g. tt1234567
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
 </template>
 
 <script setup lang="ts">
-import { store } from './util/store.js'
+import { store } from './ts/store'
 import { ref } from "vue";
+import { call } from "@/components/ts/api";
 let movies = ref([] as any[]);
 let votes = ref([] as any[]);
 let user_id = ref(-1);
 
-fetch("api/movie/all")
+call("api/movie/all")
   .then((res) => res.json()
-    .then(
-      (data) => {
-        movies.value = data;
-        console.log(movies.value);
-      }
-    )
+    .then((data) => { movies.value = data; })
   )
 
 if (store.logged_in) {
-  fetch("api/vote", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("access_token")
-    }
-  })
+  call("api/vote")
     .then((res) => res.json()
-      .then(
-        (data) => {
-          votes.value = data;
-          console.log(data);
-        }
-      )
+      .then((data) => { votes.value = data; })
     )
-  fetch("api/profile", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + localStorage.getItem("access_token")
-    }
-  })
+  call("api/profile")
     .then((res) => res.json()
-      .then(
-        (data) => {
-          user_id.value = data.id;
-        }
-      )
+      .then((data) => { user_id.value = data.id; })
     )
 }
 </script>
 
 <script lang="ts">
 import router from "@/router";
+import { call } from "@/components/ts/api";
 
 export default {
   name: "MovieComponent",
   methods: {
-    onSubmit(e: Event) {
+    add_media(e: Event) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
         return
@@ -133,60 +107,20 @@ export default {
       const form = new FormData(form_html);
       const imdb_id = form.get("imdb_id") as string
 
-      fetch(form_html.action + imdb_id, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("access_token")
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          this.vote(imdb_id);
-        });
-    },
-    vote(imdb_id: string) {
-      fetch("api/vote/" + imdb_id, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("access_token")
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          router.go(0);
-        });
-    },
-    unvote(imdb_id: string) {
-      fetch("api/vote/" + imdb_id, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("access_token")
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          router.go(0);
-        });
+      call(form_html.action + imdb_id, "POST")
+        .then(() => router.go(0))
     },
     delete_media(imdb_id: string) {
-      fetch("api/movie/" + imdb_id, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("access_token")
-        }
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          router.go(0);
-        });
+      call("api/movie/" + imdb_id, "DELETE")
+        .then(() => router.go(0))
+    },
+    vote(imdb_id: string) {
+      call("api/vote/" + imdb_id, "POST")
+        .then(() => router.go(0))
+    },
+    unvote(imdb_id: string) {
+      call("api/vote/" + imdb_id, "DELETE")
+        .then(() => router.go(0))
     }
   }
 };

@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import { store } from './util/store.js'
+import { store } from './ts/store'
 </script>
 
 <script lang="ts">
