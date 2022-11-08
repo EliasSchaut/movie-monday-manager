@@ -66,37 +66,44 @@
 </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { store } from './ts/store'
 import { ref } from "vue";
 import { call } from "@/components/ts/api";
-let movies = ref([] as any[]);
-let votes = ref([] as any[]);
-let user_id = ref(-1);
-
-call("api/movie/all")
-  .then((res) => res.json()
-    .then((data) => { movies.value = data; })
-  )
-
-if (store.logged_in) {
-  call("api/vote")
-    .then((res) => res.json()
-      .then((data) => { votes.value = data; })
-    )
-  call("api/profile")
-    .then((res) => res.json()
-      .then((data) => { user_id.value = data.id; })
-    )
-}
-</script>
-
-<script lang="ts">
 import router from "@/router";
-import { call } from "@/components/ts/api";
 
 export default {
   name: "MovieComponent",
+  data() {
+    return { store }
+  },
+  setup() {
+    let movies = ref([] as any[]);
+    let votes = ref([] as any[]);
+    let user_id = ref(-1);
+
+    call("api/movie/all")
+    .then((res) => res.json()
+    .then((data) => { movies.value = data; })
+    )
+
+    if (store.logged_in) {
+      call("api/vote")
+        .then((res) => res.json()
+          .then((data) => { votes.value = data; })
+        )
+      call("api/profile")
+        .then((res) => res.json()
+          .then((data) => { user_id.value = data.id; })
+        )
+    }
+
+    return {
+      movies,
+      votes,
+      user_id
+    }
+  },
   methods: {
     add_media(e: Event) {
       const form_html = e.target as HTMLFormElement;

@@ -6,10 +6,10 @@ export const store = reactive({
   loading: false,
 
   update_loading(loading: boolean) {
-    store.loading = loading;
+    this.loading = loading;
   },
 
   async update_logged_in() {
-    store.logged_in = (await call("api/profile/check")).status === 200;
+    this.logged_in = (await call("api/profile/check")).status === 200;
   }
 })

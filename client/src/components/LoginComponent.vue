@@ -50,7 +50,7 @@
 <script lang="ts">
 import { ref } from "vue";
 import router from "@/router";
-import { call } from "./ts/api";
+import { call } from "@/components/ts/api";
 
 let loading = ref(false);
 export default {
@@ -82,7 +82,7 @@ export default {
     }
   },
   methods: {
-    async add_media(e: SubmitEvent) {
+    async onSubmit(e: SubmitEvent) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
         return
