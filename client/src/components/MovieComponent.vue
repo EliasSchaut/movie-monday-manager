@@ -1,10 +1,10 @@
 <template>
-<div class="main">
+<div class="main table-responsive">
   <table class="table table-striped table-bordered table-active">
     <thead>
       <tr class="table-dark align-middle">
-        <th scope="col" class="d-flex justify-content-between align-items-baseline">
-          Title
+        <th scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">
+          <div>Title</div>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in">
             <b>+</b>
           </button>
@@ -12,7 +12,7 @@
         <th scope="col">Year</th>
         <th scope="col">Genre</th>
         <th scope="col">Proposer</th>
-        <th scope="col">Proposed on</th>
+        <th scope="col" style="min-width: 120px">Proposed on</th>
         <th scope="col" colspan="2">Interested</th>
       </tr>
     </thead>
