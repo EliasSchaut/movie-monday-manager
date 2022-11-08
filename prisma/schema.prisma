@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  username  String   @unique
+  password  String
+  name      String
+  verified  Boolean  @default(false)
+  challenge String   @unique @default(cuid())
+  Movie     Movie[]
+  Vote      Vote[]
+}
+
+model Movie {
+  imdb_id     String    @id
+  createdAt   DateTime  @default(now())
+  title       String
+  year        Int
+  genre       String
+  link        String
+  proposer_id Int
+  proposer    User      @relation(fields: [proposer_id], references: [id])
+  watched     Boolean   @default(false)
+  watchedAT   DateTime?
+  Vote        Vote[]
+}
+
+model Vote {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  imdb_id   String
+  movie     Movie    @relation(fields: [imdb_id], references: [imdb_id])
+  user_id   Int
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@unique([imdb_id, user_id])
+}
