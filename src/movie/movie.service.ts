@@ -75,7 +75,7 @@ export class MovieService {
   }
 
   async delete(imdb_id: string, proposer_id: string) {
-    const movie = await this.movieDBService.get({ imdb_id }) as Movie
+    const movie = await this.movieDBService.get(imdb_id) as Movie
 
     if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)

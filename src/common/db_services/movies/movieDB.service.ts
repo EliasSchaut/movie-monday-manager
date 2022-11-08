@@ -7,9 +7,9 @@ export class MovieDBService {
 
   constructor(private readonly prisma: PrismaService) {}
 
-  async get(movie_id : Prisma.MovieWhereUniqueInput) {
+  async get(imdb_id : string) {
     return await this.prisma.movie.findUnique({
-      where: movie_id,
+      where: { imdb_id },
     });
   }
 

@@ -2,7 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException } from "@ne
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
-import { Prisma } from "@prisma/client";
+import { Movie, Prisma } from "@prisma/client";
 
 @Injectable()
 export class VoteService {
@@ -46,6 +46,11 @@ export class VoteService {
   }
 
   async unvote(imdb_id: string, user_id: number) {
+    const movie = await this.movieDBService.get(imdb_id) as Movie
+    if (movie.proposer_id === user_id) {
+      throw new ConflictException('You cannot unvote a movie you proposed')
+    }
+
     const voteDB_data: Prisma.VoteWhereUniqueInput = {
       imdb_id_user_id: { imdb_id, user_id: user_id }
     }
