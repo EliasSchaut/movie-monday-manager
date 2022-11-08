@@ -2,7 +2,7 @@ import { ConflictException, Injectable, InternalServerErrorException } from "@ne
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class VoteService {
@@ -19,23 +19,23 @@ export class VoteService {
     }
   }
 
-  async get_votes_user(user: User) {
+  async get_votes_user(user_id: number) {
     try {
-      return (await this.voteDBService.get_votes_user(user.id)).map(vote => vote.imdb_id)
+      return (await this.voteDBService.get_votes_user(user_id)).map(vote => vote.imdb_id)
     } catch (e) {
       throw new InternalServerErrorException('Error getting votes')
     }
   }
 
-  async vote(imdb_id: string, user: any) {
-    const num_of_votes = await this.voteDBService.num_of(user.id)
+  async vote(imdb_id: string, user_id: number) {
+    const num_of_votes = await this.voteDBService.num_of(user_id)
     if (num_of_votes >= Number(process.env.MAX_VOTES)) {
       throw new ConflictException(`You have already voted for the maximum number (${process.env.MAX_VOTES}) of movies`)
     }
 
     const voteDB_data: Prisma.VoteCreateInput = {
       movie: { connect: { imdb_id } } as Prisma.MovieCreateNestedOneWithoutVoteInput,
-      user: { connect: { id: user.id } } as Prisma.UserCreateNestedOneWithoutVoteInput
+      user: { connect: { id: user_id } } as Prisma.UserCreateNestedOneWithoutVoteInput
     }
 
     try {
@@ -45,9 +45,9 @@ export class VoteService {
     }
   }
 
-  async unvote(imdb_id: string, user: any) {
+  async unvote(imdb_id: string, user_id: number) {
     const voteDB_data: Prisma.VoteWhereUniqueInput = {
-      imdb_id_user_id: { imdb_id, user_id: user.id }
+      imdb_id_user_id: { imdb_id, user_id: user_id }
     }
 
     try {

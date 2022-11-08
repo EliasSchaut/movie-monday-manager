@@ -10,7 +10,7 @@ export class VoteController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async get_votes(@Request() req: any) {
-    return this.voteService.get_votes_user(req.user);
+    return this.voteService.get_votes_user(Number(req.user.id));
   }
 
   @Get(':imdb_id')
@@ -21,13 +21,13 @@ export class VoteController {
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async save_vote(@Param('imdb_id') imdb_id: string, @Request() req: any) {
-    return this.voteService.vote(imdb_id, req.user);
+    return this.voteService.vote(imdb_id, Number(req.user.id));
   }
 
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
   async unvote(@Param('imdb_id') imdb_id: string, @Request() req: any) {
-    return this.voteService.unvote(imdb_id, req.user);
+    return this.voteService.unvote(imdb_id, Number(req.user.id));
   }
 
 }

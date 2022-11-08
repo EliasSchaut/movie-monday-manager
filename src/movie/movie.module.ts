@@ -5,10 +5,11 @@ import { PrismaService } from "../common/db_services/prisma.service";
 import { MovieDBModule } from "../common/db_services/movies/movieDB.module";
 import { UserDBModule } from "../common/db_services/users/userDB.module";
 import { VoteDBModule } from "../common/db_services/votes/voteDB.module";
+import { VoteService } from "../vote/vote.service";
 
 @Module({
   imports: [MovieDBModule, UserDBModule, VoteDBModule],
   controllers: [MovieController],
-  providers: [PrismaService, MovieService]
+  providers: [PrismaService, MovieService, VoteService]
 })
 export class MovieModule {}

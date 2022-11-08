@@ -4,6 +4,7 @@ import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
+import { VoteService } from "../vote/vote.service";
 
 @Injectable()
 export class MovieService {
@@ -12,7 +13,8 @@ export class MovieService {
 
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
-              private readonly voteDBService: VoteDBService) {
+              private readonly voteDBService: VoteDBService,
+              private readonly voteService: VoteService) {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
 
@@ -57,7 +59,16 @@ export class MovieService {
     }
 
     try {
-      return await this.movieDBService.add(movieDB_data)
+      return this.movieDBService.add(movieDB_data).then((movie) => {
+        return this.voteService.vote(movie.imdb_id, Number(proposer_id))
+          .then((vote) => {
+            return { movie, vote }
+          })
+          .catch((e) => {
+            this.movieDBService.delete({ imdb_id: movie.imdb_id })
+            throw e
+          })
+      })
     } catch (e) {
       throw new ConflictException('Movie already exists')
     }
