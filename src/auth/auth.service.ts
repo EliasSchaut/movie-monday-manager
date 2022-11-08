@@ -33,7 +33,7 @@ export class AuthService {
       const { password, ...result } = user;
       return result;
     }
-    return null;
+    throw new ForbiddenException('Invalid username or password');
   }
 
   async login(user: any) {
@@ -49,6 +49,7 @@ export class AuthService {
       const userDB = await this.userDBService.create(payload);
       const challenge_url = `${process.env.FRONTEND_URL}api/auth/confirm/${userDB.challenge}`;
       await this.emailService.sendChallenge(user.username, user.name, challenge_url);
+      return { message: "Please confirm you email address by clicking the link that was sent to your inbox. If you did not receive an email, please check your spam folder. If you still cannot find it, try to log in to receive another confirmation mail!" };
 
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

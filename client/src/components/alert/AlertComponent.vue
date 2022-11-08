@@ -17,7 +17,7 @@ const tabs = {
   "danger": AlertDangerComponent,
   "warning": AlertWarningComponent,
   "success": AlertSuccessComponent
-}
+} as any;
 </script>
 
 <style scoped>
