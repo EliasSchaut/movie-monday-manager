@@ -14,13 +14,15 @@ export const store = reactive({
   },
 
   async update_logged_in() {
-    this.logged_in = (await fetch("api/profile/check", {
+    const check = (await fetch("api/profile/check", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + localStorage.getItem("access_token")
       }
-    })).status === 200;
+    }));
+    const data = await check.text()
+    this.logged_in = data === "true"
   },
 
   generate_type(http_code: number) {

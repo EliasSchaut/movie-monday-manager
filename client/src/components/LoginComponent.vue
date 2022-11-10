@@ -73,7 +73,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import router from "@/router";
+import router from "@/router/router";
 import { call } from "@/components/ts/api";
 
 let loading = ref(false);
@@ -81,7 +81,7 @@ export default {
   name: "LoginComponent",
   data() {
     return {
-      route_base: "api/auth/",
+      route_base: "/api/auth/",
       head: {
         login: "Log In!",
         register: "Register!",
@@ -139,6 +139,12 @@ export default {
       } else {
         password_confirm.setCustomValidity("");
       }
+    }
+  },
+  mounted() {
+    const confirm = router.currentRoute.value.params.confirm
+    if (confirm) {
+      call("/api/auth/confirm/" + confirm)
     }
   }
 };

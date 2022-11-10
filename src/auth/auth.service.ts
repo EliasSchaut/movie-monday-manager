@@ -47,7 +47,7 @@ export class AuthService {
     const payload = { username: user.username, name: user.name, password: user.password };
     try {
       const userDB = await this.userDBService.create(payload);
-      const challenge_url = `${process.env.FRONTEND_URL}api/auth/confirm/${userDB.challenge}`;
+      const challenge_url = `${process.env.FRONTEND_URL}login/${userDB.challenge}`;
       await this.emailService.sendChallenge(user.username, user.name, challenge_url);
       return { message: "Please confirm you email address by clicking the link that was sent to your inbox. " +
           "If you did not receive an email, please check your spam folder. " +
@@ -56,7 +56,7 @@ export class AuthService {
 
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ConflictException('Username already exists');
+        throw new ConflictException('E-Mail already exists');
       } else {
         throw new InternalServerErrorException('Unable to create user');
       }
@@ -72,7 +72,7 @@ export class AuthService {
         where: { challenge },
         data: { verified: true },
       })
-      return true
+      return { message: "Email successfully verified! You can now log in.", show_alert: true };
     }
     throw new NotFoundException('Email already verified or challenge not found');
   }

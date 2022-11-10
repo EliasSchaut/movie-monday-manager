@@ -70,7 +70,7 @@
 import { store } from './ts/store'
 import { ref } from "vue";
 import { call } from "@/components/ts/api";
-import router from "@/router";
+import router from "@/router/router";
 
 export default {
   name: "MovieComponent",
