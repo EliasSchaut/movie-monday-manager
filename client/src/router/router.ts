@@ -50,7 +50,12 @@ router.beforeEach((to, from, next) => {
     router.go(0);
   }
   else if (localStorage.getItem("access_token")) {
-    store.update_logged_in().then(next)
+    store.update_logged_in().then(() => {
+      if (!store.logged_in) {
+        localStorage.removeItem("access_token");
+      }
+      next()
+    })
   } else {
     next()
   }
