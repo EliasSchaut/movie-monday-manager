@@ -1,17 +1,17 @@
 <template>
 <div class="main table-responsive">
-  <table class="table table-striped table-bordered table-active">
+  <table class="table table-striped table-bordered table-active" data-toggle="table" >
     <thead>
       <tr class="table-dark align-middle">
-        <th scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">
+        <th data-field="title" data-sortable="true" scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">
           <div>Title</div>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>+</b></button>
         </th>
-        <th scope="col">Year</th>
-        <th scope="col">Genre</th>
-        <th scope="col">Proposer</th>
-        <th scope="col">Proposed&nbsp;on</th>
-        <th scope="col" colspan="2">Interested</th>
+        <th data-field="year" data-sortable="true" scope="col">Year</th>
+        <th data-field="gerne" data-sortable="true" scope="col">Genre</th>
+        <th data-field="proposer" data-sortable="true" scope="col">Proposer</th>
+        <th data-field="proposed_on" data-sortable="true" scope="col">Proposed&nbsp;on</th>
+        <th data-field="interested" data-sortable="true" scope="col" colspan="2">Interested</th>
       </tr>
     </thead>
     <tbody>
@@ -123,7 +123,7 @@ export default {
       call("api/vote/" + imdb_id, "DELETE")
         .then(() => router.go(0))
     }
-  }
+  },
 };
 </script>
 
