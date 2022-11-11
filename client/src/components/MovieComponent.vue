@@ -1,6 +1,6 @@
 <template>
 <div class="main table-responsive">
-  <table class="table table-striped table-bordered table-active" data-toggle="table" >
+  <table class="table table-striped table-bordered table-active" >
     <thead>
       <tr class="table-dark align-middle">
         <th data-field="title" data-sortable="true" scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">

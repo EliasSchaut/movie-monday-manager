@@ -47,9 +47,14 @@ router.beforeEach((to, from, next) => {
   if (to.path === "/logout") {
     localStorage.removeItem("access_token");
     store.logged_in = false;
-    return router.go(0);
+    router.go(0);
   }
-  store.update_logged_in().then(next)
+  else if (localStorage.getItem("access_token")) {
+    store.update_logged_in().then(next)
+  } else {
+    next()
+  }
+
 })
 
 export default router
