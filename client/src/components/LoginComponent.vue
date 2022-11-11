@@ -16,7 +16,7 @@
     </div>
     <div class="mb-3">
       <label for="form_username" class="form-label">{{ form.username }}</label>
-      <input type="text" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,7}$" required>
+      <input type="email" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" required>
       <div class="valid-feedback">
         Looks good!
       </div>
@@ -24,41 +24,8 @@
         Please enter a valid email address!
       </div>
     </div>
-    <div class="mb-3" v-if="route === 'register'">
-      <label for="form_password" class="form-label">{{ form.password }}</label>
-      <input type="password" class="form-control" id="form_password" placeholder="•••" name="password"
-             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" @input="check_password" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        - At least 8 characters<br>
-        - Contains an uppercase letter, lowercase letter, and a number<br>
-        - Can contain special characters
-      </div>
-    </div>
-    <div class="mb-3" v-else>
-      <label for="form_password" class="form-label">{{ form.password }}</label>
-      <input type="password" class="form-control" id="form_password" placeholder="•••" name="password"
-             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Minimum eight characters, at least one letter and one number!
-      </div>
-    </div>
-    <div class="mb-3" v-if="route === 'register'">
-      <label for="form_password_confirm" class="form-label">{{ form.confirm }}</label>
-      <input type="password" class="form-control" id="form_password_confirm" placeholder="•••" name="password_confirm"
-             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$" @input="check_password" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Should be the same as the password!
-      </div>
-    </div>
+    <PasswordComponent v-if="route === 'register'" type="double" />
+    <PasswordComponent v-else type="single" />
     <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
             data-bs-placement="bottom">
       {{ form.submit.name }}
@@ -75,10 +42,12 @@
 import { ref } from "vue";
 import router from "@/router/router";
 import { call } from "@/components/ts/api";
+import PasswordComponent from "@/components/util/PasswordComponent.vue";
 
 let loading = ref(false);
 export default {
   name: "LoginComponent",
+  components: { PasswordComponent },
   data() {
     return {
       route_base: "/api/auth/",
