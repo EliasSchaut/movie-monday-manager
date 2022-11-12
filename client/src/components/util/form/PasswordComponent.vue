@@ -39,6 +39,7 @@
     name="password"
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
     :invalid_feedback="invalid_feedback.single"
+    v-bind="$attrs"
     required />
 </template>
 
@@ -48,6 +49,7 @@ import InputComponent from "@/components/util/form/InputComponent.vue";
 export default {
   name: "PasswordComponent",
   components: { InputComponent },
+  inheritAttrs: false,
   data() {
     return {
       label: {

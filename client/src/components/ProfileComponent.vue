@@ -31,7 +31,7 @@
     <InputComponent label="Gravatar-Url:" type="url" placeholder="https://www.gravatar.com/avatar/00000000000000000000000000000000"
                     name="gravatar_url" pattern="https://www.gravatar.com/avatar/[0-9a-f]{32}"
                     invalid_feedback="Not a valid gravatar url (e.g. https://www.gravatar.com/avatar/1234...)" required/>
-    <PasswordComponent />
+    <PasswordComponent label="Confirm with password" />
     <SubmitComponent inner_text="Update" />
   </form>
 </ModalComponent>
@@ -41,7 +41,7 @@
 <ModalComponent id="modal_change_email" title="Change Email">
   <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
     <EmailComponent label="New email" />
-    <PasswordComponent />
+    <PasswordComponent label="Confirm with password" />
     <SubmitComponent inner_text="Update" />
   </form>
 </ModalComponent>
