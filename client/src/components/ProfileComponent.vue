@@ -25,82 +25,61 @@
 </div>
 
 <!-- Modal: Change Profile -->
-<div class="modal fade" id="modal_profile" tabindex="-1" aria-labelledby="modal_profile_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_profile_label">Edit Profile</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column justify-content-between">
-        <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
-          <div class="d-flex flex-column align-items-start mb-3">
-            <label for="form_name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="form_name" placeholder="Max Mustermann" name="name" value="Elias Schaut" required>
-          </div>
-          <div class="d-flex flex-column align-items-start mb-3">
-            <label for="form_gravatar" class="form-label">Gravatar-Url:</label>
-            <input type="url" class="form-control" id="form_gravatar" placeholder="https://s.gravatar.com/avatar/12345" name="gravatar">
-          </div>
-          <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<ModalComponent id="modal_profile" title="Edit Profile">
+  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
+    <NameComponent />
+    <InputComponent label="Gravatar-Url:" type="url" placeholder="https://www.gravatar.com/avatar/00000000000000000000000000000000"
+                    name="gravatar_url" pattern="https://www.gravatar.com/avatar/[0-9a-f]{32}"
+                    invalid_feedback="Not a valid gravatar url (e.g. https://www.gravatar.com/avatar/1234...)" required/>
+    <PasswordComponent />
+    <SubmitComponent inner_text="Update" />
+  </form>
+</ModalComponent>
+
 
 <!-- Modal: Change Email -->
-<div class="modal fade" id="modal_change_email" tabindex="-1" aria-labelledby="modal_change_email_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_change_email_label">Change Email</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column justify-content-between">
-        <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
-          <div class="d-flex flex-column align-items-start mb-3">
-            <label for="form_username" class="form-label">Email:</label>
-            <input type="email" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" value="eschaut@web.de" required>
-          </div>
-          <button type="submit" class="btn btn-success">Submit</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+<ModalComponent id="modal_change_email" title="Change Email">
+  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
+    <EmailComponent label="New email" />
+    <PasswordComponent />
+    <SubmitComponent inner_text="Update" />
+  </form>
+</ModalComponent>
 
 <!-- Modal: Change Password -->
-<div class="modal fade" id="modal_change_password" tabindex="-1" aria-labelledby="modal_change_password_label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modal_change_password_label">Change Password</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body d-flex flex-column justify-content-between">
-      <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
-        <PasswordComponent type="double" />
-        <button type="submit" class="btn btn-success">Submit</button>
-      </form>
-      </div>
-    </div>
-  </div>
-</div>
+<ModalComponent id="modal_change_password" title="Change Password">
+  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
+    <PasswordComponent type="tripple" />
+    <SubmitComponent inner_text="Update" />
+  </form>
+</ModalComponent>
 </template>
 
 <script lang="ts">
 import { ref } from "vue";
 import { call } from "@/components/ts/api";
-import PasswordComponent from "@/components/util/PasswordComponent.vue";
+import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
+import ModalComponent from "@/components/util/ModalComponent.vue";
+import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
+import EmailComponent from "@/components/util/form/EmailComponent.vue";
+import NameComponent from "@/components/util/form/NameComponent.vue";
+import InputComponent from "@/components/util/form/InputComponent.vue";
 const user = ref({} as any)
 
 export default {
   name: "ProfileComponent",
-  components: { PasswordComponent },
+  components: {
+    InputComponent,
+    NameComponent,
+    EmailComponent,
+    SubmitComponent,
+    PasswordComponent,
+    ModalComponent
+  },
   data() {
     return {
-      user
+      user,
+      submit: "Update"
     };
   },
   setup() {

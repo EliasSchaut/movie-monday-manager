@@ -4,76 +4,37 @@
     <p class="big"><b>{{ head[route] }}</b></p>
   </div>
   <form :action="route_base + route" @submit.prevent="onSubmit" id="form_register" class="form was-validated">
-    <div class="mb-3" v-if="route === 'register'">
-      <label for="form_name" class="form-label">{{ form.name }}</label>
-      <input type="text" class="form-control" id="form_name" placeholder="Max Mustermann" name="name" pattern="^[A-Z](.*)$" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Should start with a capital letter.
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="form_username" class="form-label">{{ form.username }}</label>
-      <input type="email" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Please enter a valid email address!
-      </div>
-    </div>
+    <NameComponent v-if="route === 'register'"/>
+    <EmailComponent />
     <PasswordComponent v-if="route === 'register'" type="double" />
     <PasswordComponent v-else type="single" />
-    <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
-            data-bs-placement="bottom">
-      {{ form.submit.name }}
-    </button>
-    <button v-if="loading.value" id="button_loading" type="submit" class="btn btn-primary form-submit" disabled>
-      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-      {{ form.submit.loading }}
-    </button>
+    <SubmitComponent />
   </form>
   <!----------------------------------------------------------------->
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
 import router from "@/router/router";
 import { call } from "@/components/ts/api";
-import PasswordComponent from "@/components/util/PasswordComponent.vue";
+import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
+import EmailComponent from "@/components/util/form/EmailComponent.vue";
+import NameComponent from "@/components/util/form/NameComponent.vue";
+import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
 
-let loading = ref(false);
 export default {
   name: "LoginComponent",
-  components: { PasswordComponent },
+  components: { SubmitComponent, NameComponent, EmailComponent, PasswordComponent },
   data() {
     return {
       route_base: "/api/auth/",
       head: {
         login: "Log In!",
         register: "Register!",
-      },
-      form: {
-        username: "E-Mail",
-        password: "Password",
-        confirm: "Retype password",
-        name: "Name",
-        submit: {
-          name: "Submit",
-          loading: "Loading..."
-        }
       }
     };
   },
   props: {
     route: String
-  },
-  computed: {
-    loading() {
-      return loading;
-    }
   },
   methods: {
     async onSubmit(e: SubmitEvent) {
@@ -131,9 +92,5 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-}
-
-.form-submit {
-  margin-top: 20px
 }
 </style>
