@@ -11,6 +11,7 @@
 
   <InputComponent
     v-if="type === 'double' || type === 'tripple'"
+    id="form_input_password"
     :label="label.single"
     type="password"
     placeholder="•••"
@@ -22,6 +23,7 @@
 
   <InputComponent
     v-if="type === 'double' || type === 'tripple'"
+    id="form_input_password_confirm"
     :label="label.retype"
     type="password"
     placeholder="•••"
