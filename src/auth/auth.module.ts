@@ -7,6 +7,7 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.stategy';
 import { EmailService } from "../common/util_services/email.service";
+import { PasswordService } from "../common/util_services/password.service";
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { EmailService } from "../common/util_services/email.service";
       signOptions: { expiresIn: process.env.JWT_EXPIRATION },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, EmailService],
+  providers: [AuthService, LocalStrategy, JwtStrategy, EmailService, PasswordService],
   controllers: [AuthController],
 })
 export class AuthModule {}
