@@ -14,7 +14,7 @@ export const store = reactive({
   },
 
   async update_logged_in() {
-    const check = (await fetch("api/profile/check", {
+    const check = (await fetch("api/user/check", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -88,7 +88,7 @@ export default {
     if (store.logged_in) {
       call("api/vote")
         .then((data) => { votes.value = data; })
-      call("api/profile")
+      call("api/user")
         .then((data) => { user_id.value = data.id; })
     }
 

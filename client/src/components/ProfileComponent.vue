@@ -83,7 +83,7 @@ export default {
     };
   },
   setup() {
-    call("api/profile")
+    call("api/user")
       .then((data) => { user.value = data; console.log(data); })
   }
 };
