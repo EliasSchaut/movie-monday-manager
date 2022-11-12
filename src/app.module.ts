@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
-import { ProfileModule } from './profile/profile.module';
+import { UserModule } from './user/user.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { MovieModule } from './movie/movie.module';
 import { VoteModule } from './vote/vote.module';
 
 @Module({
-  imports: [AuthModule, ProfileModule, MovieModule, VoteModule,
+  imports: [AuthModule, UserModule, MovieModule, VoteModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client/dist'),
     })

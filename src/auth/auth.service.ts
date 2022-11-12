@@ -26,7 +26,7 @@ export class AuthService {
     });
     if (user && (await this.passwordService.compare(password, user.password))) {
       if (!user.verified) {
-        const challenge_url = `${process.env.FRONTEND_URL}api/auth/confirm/${user.challenge}`;
+        const challenge_url = this.emailService.generate_challenge_url(user.challenge);
         await this.emailService.sendChallenge(user.username, user.name, challenge_url);
         throw new ForbiddenException('Email not verified. Please check your inbox! If you did not receive an email, please check your spam folder. If you still cannot find it, please contact us.');
       }

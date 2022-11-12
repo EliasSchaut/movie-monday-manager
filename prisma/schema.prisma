@@ -11,15 +11,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  username  String   @unique
-  password  String
-  name      String
-  verified  Boolean  @default(false)
-  challenge String   @unique @default(cuid())
-  Movie     Movie[]
-  Vote      Vote[]
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  username     String   @unique
+  password     String
+  name         String
+  verified     Boolean  @default(false)
+  challenge    String   @unique @default(cuid())
+  use_gravatar Boolean  @default(false)
+  gravatar_url String?
+  Movie        Movie[]
+  Vote         Vote[]
 }
 
 model Movie {
