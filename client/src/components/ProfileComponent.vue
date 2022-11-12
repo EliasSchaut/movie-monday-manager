@@ -5,14 +5,15 @@
   </div>
   <div class="card-body d-flex flex-column justify-content-between">
     <div class="mb-3">
-      <img class="card-img-top" src="../assets/img/Portrait_Placeholder.png" alt="Profile Picture" id="profile_picture">
-      <h5 class="card-title">Elias Schaut</h5>
+      <img v-if="user.use_gravatar" class="card-img-top" :src="user.gravatar_url" alt="Profile Picture" id="profile_picture">
+      <img v-else class="card-img-top" src="../assets/img/Portrait_Placeholder.png" alt="Placeholder Picture" id="profile_picture">
+      <h5 class="card-title">{{ user.name }}</h5>
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_profile">Edit Profile</button>
     </div>
-    <div class="d-flex flex-row justify-content-around">
+    <div class="d-flex flex-row justify-content-around mb-3">
       <div class="d-flex flex-column align-items-start">
         <strong>Email:</strong>
-        <p>eschaut@web.de</p>
+        <p>{{ user.username }}</p>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_email">Change Email</button>
       </div>
       <div class="d-flex flex-column align-items-start">
@@ -21,15 +22,24 @@
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_password">Change Password</button>
       </div>
     </div>
+    <div class="card text-center">
+      <div class="card-header">
+        Options
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a @click.prevent="get_user_data" href="">Get all user data</a></li>
+        <li class="list-group-item"><a style="color: red" href="">Delete account</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 
 <!-- Modal: Change Profile -->
 <ModalComponent id="modal_profile" title="Edit Profile">
   <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
-    <NameComponent />
+    <NameComponent :value="user.name" />
     <InputComponent label="Gravatar-Url:" type="url" placeholder="https://www.gravatar.com/avatar/00000000000000000000000000000000"
-                    name="gravatar_url" pattern="https://www.gravatar.com/avatar/[0-9a-f]{32}"
+                    name="gravatar_url" pattern="https://www.gravatar.com/avatar/[0-9a-f]{32}" :value="user.gravatar_url"
                     invalid_feedback="Not a valid gravatar url (e.g. https://www.gravatar.com/avatar/1234...)" required/>
     <PasswordComponent label="Confirm with password" />
     <SubmitComponent inner_text="Update" />
@@ -56,7 +66,6 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
 import { call } from "@/components/ts/api";
 import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
 import ModalComponent from "@/components/util/ModalComponent.vue";
@@ -64,7 +73,8 @@ import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
 import EmailComponent from "@/components/util/form/EmailComponent.vue";
 import NameComponent from "@/components/util/form/NameComponent.vue";
 import InputComponent from "@/components/util/form/InputComponent.vue";
-const user = ref({} as any)
+import { ref } from "vue";
+const user = ref({})
 
 export default {
   name: "ProfileComponent",
@@ -78,13 +88,26 @@ export default {
   },
   data() {
     return {
-      user,
-      submit: "Update"
+      submit: "Update",
+      user: user
     };
   },
   setup() {
-    call("api/user")
-      .then((data) => { user.value = data; console.log(data); })
+    call("/api/user").then((data) => {
+      user.value = data;
+    })
+  },
+  methods: {
+    get_user_data() {
+      call("/api/user/data").then((data) => {
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: "application/json" }));
+        a.setAttribute("download", "user_data.json");
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      })
+    }
   }
 };
 </script>

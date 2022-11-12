@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import ProfileComponent from "@/components/ProfileComponent.vue";
 </script>
 
