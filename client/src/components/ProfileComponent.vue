@@ -84,7 +84,7 @@ export default {
   },
   setup() {
     call("api/profile")
-      .then((data) => { user.value = data; })
+      .then((data) => { user.value = data; console.log(data); })
   }
 };
 </script>

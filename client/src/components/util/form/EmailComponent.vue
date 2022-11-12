@@ -3,7 +3,7 @@
     :label="label"
     type="email"
     placeholder="max@mustermann.de"
-    name="email"
+    name="username"
     :invalid_feedback="invalid_feedback"
     required />
 </template>
