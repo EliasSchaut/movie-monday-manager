@@ -16,7 +16,7 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async update_profile(@Request() req: any) {
-    return await this.userService.change_profile(Number(req.user.id), req.json);
+    return await this.userService.change_profile(Number(req.user.id), req.body);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -29,13 +29,19 @@ export class UserService {
   }
 
   async change_profile(user_id: number, data: any) {
+    const user = await this.userDBService.get({ id: user_id }) as User;
     const data_to_update = {
       name: data.name
     } as Prisma.UserUpdateInput;
 
-    if (data.use_gravatar && data.gravatar_url.length) {
-      data_to_update["use_gravatar"] = data.use_gravatar;
-      data_to_update["gravatar_url"] = data.gravatar_url;
+    if (data.hasOwnProperty("use_gravatar") && data.use_gravatar) {
+      data_to_update["use_gravatar"] = true;
+      const gravatar_hash = this.passwordService.hash_md5(user.username);
+      data_to_update["gravatar_url"] = `https://www.gravatar.com/avatar/${gravatar_hash}`;
+
+    } else {
+      data_to_update["use_gravatar"] = true;
+      data_to_update["gravatar_url"] = null;
     }
 
     await this.userDBService.update({ where: { id: user_id }, data: data_to_update });
