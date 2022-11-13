@@ -36,12 +36,10 @@
 
 <!-- Modal: Change Profile -->
 <ModalComponent id="modal_profile" title="Edit Profile">
-  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
+  <form @submit.prevent="on_submit" action="/api/user" method="post"
+        class="d-flex flex-column was-validated">
     <NameComponent :value="user.name" />
-    <InputComponent label="Gravatar-Url:" type="url" placeholder="https://www.gravatar.com/avatar/00000000000000000000000000000000"
-                    name="gravatar_url" pattern="https://www.gravatar.com/avatar/[0-9a-f]{32}" :value="user.gravatar_url"
-                    invalid_feedback="Not a valid gravatar url (e.g. https://www.gravatar.com/avatar/1234...)" required/>
-    <PasswordComponent label="Confirm with password" />
+    <InputComponent id="check" class="form-check-input" type="checkbox" role="switch" label="Use Gravatar?" name="use_gravatar" :checked="user.use_gravatar" />
     <SubmitComponent inner_text="Update" />
   </form>
 </ModalComponent>
@@ -49,8 +47,9 @@
 
 <!-- Modal: Change Email -->
 <ModalComponent id="modal_change_email" title="Change Email">
-  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
-    <EmailComponent label="New email" />
+  <form @submit.prevent="on_submit" action="/api/user/username" method="post"
+        class="d-flex flex-column justify-content-around was-validated">
+    <EmailComponent label="New email" :value="user.username"/>
     <PasswordComponent label="Confirm with password" />
     <SubmitComponent inner_text="Update" />
   </form>
@@ -58,7 +57,8 @@
 
 <!-- Modal: Change Password -->
 <ModalComponent id="modal_change_password" title="Change Password">
-  <form @submit.prevent="" class="d-flex flex-column justify-content-around was-validated">
+  <form @submit.prevent="on_submit" action="/api/suer/password" method="post"
+        class="d-flex flex-column justify-content-around was-validated">
     <PasswordComponent type="tripple" />
     <SubmitComponent inner_text="Update" />
   </form>
@@ -93,11 +93,25 @@ export default {
     };
   },
   setup() {
-    call("/api/user").then((data) => {
-      user.value = data;
-    })
+    fetch_user()
   },
   methods: {
+    on_submit(e: SubmitEvent) {
+      const form = e.target as HTMLFormElement;
+      const form_data = new FormData(form);
+      const post = {} as any;
+      form_data.forEach((value, key) => {
+        post[key] = value;
+      });
+      console.log(post);
+      call(form.action, form.method, post).then(() => {
+        fetch_user().then(() => {
+          form.setAttribute("data-bs-dismiss", "modal");
+          form.click()
+          form.removeAttribute("data-bs-dismiss");
+        });
+      });
+    },
     get_user_data() {
       call("/api/user/data").then((data) => {
         const a = document.createElement("a");
@@ -110,6 +124,12 @@ export default {
     }
   }
 };
+
+function fetch_user(): Promise<void> {
+  return call("/api/user").then((data) => {
+    user.value = data;
+  });
+}
 </script>
 
 <style scoped>

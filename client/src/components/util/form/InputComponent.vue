@@ -24,7 +24,7 @@ export default {
     invalid_feedback: {
       type: String,
       default: "",
-    },
+    }
   },
 };
 </script>
