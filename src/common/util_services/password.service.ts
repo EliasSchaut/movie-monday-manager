@@ -10,9 +10,8 @@ export class PasswordService {
     return bcrypt.hash(password, 10);
   }
 
-  hash_md5(username: string): string {
-    const trim = username.trim().toLowerCase();
-    return md5(trim).toString();
+  hash_md5(string: string): string {
+    return md5(string).toString();
   }
 
   async compare(password: string, hash: string): Promise<boolean> {

@@ -6,6 +6,7 @@ import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
+import { GravatarService } from "../common/util_services/gravatar_service";
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,8 @@ export class UserService {
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
               private readonly passwordService: PasswordService,
-              private readonly emailService: EmailService) {}
+              private readonly emailService: EmailService,
+              private readonly gravatarService: GravatarService) {}
 
   async get(user_id: number) {
     const { password, verified, challenge, ...result } = await this.userDBService.get({ id: user_id }) as User;
@@ -36,8 +38,7 @@ export class UserService {
 
     if (data.hasOwnProperty("use_gravatar") && data.use_gravatar) {
       data_to_update["use_gravatar"] = true;
-      const gravatar_hash = this.passwordService.hash_md5(user.username);
-      data_to_update["gravatar_url"] = `https://www.gravatar.com/avatar/${gravatar_hash}`;
+      data_to_update["gravatar_url"] = this.gravatarService.generate_gravatar_url(user.username);
 
     } else {
       data_to_update["use_gravatar"] = false;
@@ -77,7 +78,8 @@ export class UserService {
         data: {
           username: data.username,
           verified: false,
-          challenge: new_challenge
+          challenge: new_challenge,
+          gravatar_url: this.gravatarService.generate_gravatar_url(data.username)
         }
       });
       const new_challenge_url = this.emailService.generate_challenge_url(new_challenge);
