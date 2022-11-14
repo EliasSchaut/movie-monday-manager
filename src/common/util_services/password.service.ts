@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 
 const bcrypt = require('bcrypt');
-import { createHmac } from 'crypto'
+import md5 from "crypto-js/md5";
 
 @Injectable()
 export class PasswordService {
@@ -12,7 +12,7 @@ export class PasswordService {
 
   hash_md5(username: string): string {
     const trim = username.trim().toLowerCase();
-    return createHmac('md5', trim).digest('hex');
+    return md5(trim).toString();
   }
 
   async compare(password: string, hash: string): Promise<boolean> {

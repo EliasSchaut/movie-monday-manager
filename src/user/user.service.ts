@@ -40,7 +40,7 @@ export class UserService {
       data_to_update["gravatar_url"] = `https://www.gravatar.com/avatar/${gravatar_hash}`;
 
     } else {
-      data_to_update["use_gravatar"] = true;
+      data_to_update["use_gravatar"] = false;
       data_to_update["gravatar_url"] = null;
     }
 
