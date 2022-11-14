@@ -18,6 +18,9 @@
           <li>
             <router-link class="nav-link" to="/privacy">Privacy</router-link>
           </li>
+          <li>
+            <a class="nav-link" href="https://github.com/EliasSchaut/Movie-Monday-Manager" target="_blank">GitHub</a>
+          </li>
         </ul>
         <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
           <span class="visually-hidden">Loading...</span>

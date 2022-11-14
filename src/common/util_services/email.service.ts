@@ -29,4 +29,8 @@ export class EmailService {
       \n\nDear,\n${this.project_name} Team`,
     })
   }
+
+  generate_challenge_url(challenge: string) {
+    return `${process.env.FRONTEND_URL}login/${challenge}`;
+  }
 }

@@ -3,83 +3,38 @@
   <div class="form-intro">
     <p class="big"><b>{{ head[route] }}</b></p>
   </div>
-  <form :action="route_base + route" @submit.prevent="onSubmit" id="form_register" class="form was-validated" novalidate>
-    <div class="mb-3" v-if="route === 'register'">
-      <label for="form_name" class="form-label">{{ form.name }}</label>
-      <input type="text" class="form-control" id="form_name" placeholder="Max Mustermann" name="name" pattern="^[A-Z](.*)$" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Should start with a capital letter.
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="form_username" class="form-label">{{ form.username }}</label>
-      <input type="text" class="form-control" id="form_username" placeholder="max@mustermann.de" name="username" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Please enter a valid email address!
-      </div>
-    </div>
-    <div class="mb-3">
-      <label for="form_password" class="form-label">{{ form.password }}</label>
-      <input type="password" class="form-control" id="form_password" placeholder="•••" name="password"
-             pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$" required>
-      <div class="valid-feedback">
-        Looks good!
-      </div>
-      <div class="invalid-feedback">
-        Minimum eight characters, at least one letter and one number!
-      </div>
-    </div>
-    <button v-if="!loading.value" id="button_submit" type="submit" class="btn btn-primary form-submit"
-            data-bs-placement="bottom">
-      {{ form.submit.name }}
-    </button>
-    <button v-if="loading.value" id="button_loading" type="submit" class="btn btn-primary form-submit" disabled>
-      <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-      {{ form.submit.loading }}
-    </button>
+  <form :action="route_base + route" @submit.prevent="onSubmit" id="form_register" class="form was-validated">
+    <NameComponent v-if="route === 'register'"/>
+    <EmailComponent />
+    <PasswordComponent v-if="route === 'register'" type="double" />
+    <PasswordComponent v-else type="single" />
+    <SubmitComponent />
   </form>
   <!----------------------------------------------------------------->
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
-import router from "@/router";
+import router from "@/router/router";
 import { call } from "@/components/ts/api";
+import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
+import EmailComponent from "@/components/util/form/EmailComponent.vue";
+import NameComponent from "@/components/util/form/NameComponent.vue";
+import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
 
-let loading = ref(false);
 export default {
   name: "LoginComponent",
+  components: { SubmitComponent, NameComponent, EmailComponent, PasswordComponent },
   data() {
     return {
-      route_base: "api/auth/",
+      route_base: "/api/auth/",
       head: {
-        login: "Melde dich an!",
-        register: "Registriere dich!",
-      },
-      form: {
-        username: "E-Mail",
-        password: "Password",
-        name: "Name",
-        submit: {
-          name: "Submit",
-          loading: "Fertigstellen..."
-        }
+        login: "Log In!",
+        register: "Register!",
       }
     };
   },
   props: {
     route: String
-  },
-  computed: {
-    loading() {
-      return loading;
-    }
   },
   methods: {
     async onSubmit(e: SubmitEvent) {
@@ -105,6 +60,21 @@ export default {
             router.push("../login");
           }
         })
+    },
+    async check_password() {
+      const password = document.getElementById("form_password") as HTMLInputElement;
+      const password_confirm = document.getElementById("form_password_confirm") as HTMLInputElement;
+      if (password.value !== password_confirm.value) {
+        password_confirm.setCustomValidity("Should be the same as the password!");
+      } else {
+        password_confirm.setCustomValidity("");
+      }
+    }
+  },
+  mounted() {
+    const confirm = router.currentRoute.value.params.confirm
+    if (confirm) {
+      call("/api/auth/confirm/" + confirm)
     }
   }
 };
@@ -122,9 +92,5 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-}
-
-.form-submit {
-  margin-top: 20px
 }
 </style>

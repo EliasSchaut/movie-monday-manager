@@ -2,8 +2,9 @@
 A full stack management application for voting movies for weekly movie events.
 
 ## Features
-- Account-Registration with email verification
+- Account-registration with email verification
 - Users can vote, add and remove movies
+- Users can manage own profile
 - Clean and responsive Bootstrap-UI
 - 100% useable without client (via REST-API)
 - **(soon)** automatic management of voted movies around movie events
