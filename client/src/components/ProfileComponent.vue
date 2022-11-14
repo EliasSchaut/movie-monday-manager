@@ -28,7 +28,7 @@
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><a @click.prevent="get_user_data" href="">Get all user data</a></li>
-        <li class="list-group-item"><a style="color: red" href="">Delete account</a></li>
+        <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">Delete account</a></li>
       </ul>
     </div>
   </div>
@@ -39,7 +39,9 @@
   <form @submit.prevent="on_submit" action="/api/user" method="post"
         class="d-flex flex-column was-validated">
     <NameComponent :value="user.name" />
-    <InputComponent id="check" class="form-check-input" type="checkbox" role="switch" label="Use Gravatar?" name="use_gravatar" :checked="user.use_gravatar" />
+    <InputComponent id="check" _class="form-check-input" type="checkbox" role="switch"
+                    label="Use Gravatar" help="https://en.gravatar.com/"
+                    name="use_gravatar" :checked="user.use_gravatar" />
     <SubmitComponent inner_text="Update" />
   </form>
 </ModalComponent>
@@ -63,6 +65,17 @@
     <SubmitComponent inner_text="Update" />
   </form>
 </ModalComponent>
+
+<!-- Modal: Delete Account -->
+<ModalComponent id="modal_delete_account" title="Delete Account?">
+<p style="color: red">All your proposed movies, votes and user data will be irretrievable lost!</p>
+<br>
+<form @submit.prevent="delete_account" action="/api/user" method="post"
+      class="d-flex flex-column justify-content-around was-validated">
+  <PasswordComponent label="Confirm with password" />
+  <SubmitComponent inner_text="Delete" class="btn btn-danger form-submit" />
+</form>
+</ModalComponent>
 </template>
 
 <script lang="ts">
@@ -74,6 +87,7 @@ import EmailComponent from "@/components/util/form/EmailComponent.vue";
 import NameComponent from "@/components/util/form/NameComponent.vue";
 import InputComponent from "@/components/util/form/InputComponent.vue";
 import { ref } from "vue";
+import router from "@/router/router";
 const user = ref({})
 
 export default {
@@ -103,7 +117,6 @@ export default {
       form_data.forEach((value, key) => {
         post[key] = value;
       });
-      console.log(post);
       call(form.action, form.method, post).then(() => {
         fetch_user().then(() => {
           form.setAttribute("data-bs-dismiss", "modal");
@@ -121,12 +134,26 @@ export default {
         a.click();
         document.body.removeChild(a);
       })
+    },
+    delete_account(e: SubmitEvent) {
+      const form = e.target as HTMLFormElement;
+      const form_data = new FormData(form);
+      const post = {} as any;
+      form_data.forEach((value, key) => {
+        post[key] = value;
+      });
+      call(form.action, "Delete", post).then(() => {
+        router.push("/").then(() => router.push("/logout"));
+      });
     }
   }
 };
 
 function fetch_user(): Promise<void> {
   return call("/api/user").then((data) => {
+    if (data.use_gravatar) {
+      data.gravatar_url += "?s=100"
+    }
     user.value = data;
   });
 }

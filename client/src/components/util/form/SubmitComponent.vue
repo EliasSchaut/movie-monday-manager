@@ -1,5 +1,5 @@
 <template>
-  <button v-if="!loading" type="submit" class="btn btn-primary form-submit"
+  <button v-bind="$attrs" v-if="!loading" type="submit" class="btn btn-primary form-submit"
           data-bs-placement="bottom">
     {{ inner_text }}
   </button>
