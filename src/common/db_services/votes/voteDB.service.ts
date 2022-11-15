@@ -43,6 +43,21 @@ export class VoteDBService {
     });
   }
 
+  async get_most_voted(count: number) {
+    return await this.prisma.vote.groupBy({
+      by: ['imdb_id'],
+      _count: {
+        user_id: true,
+      },
+      orderBy: {
+        _count: {
+          user_id: 'desc'
+        }
+      },
+      take: count,
+    })
+  }
+
   async add(data: Prisma.VoteCreateInput) {
     return await this.prisma.vote.create({ data });
   }
