@@ -5,7 +5,7 @@ import RegisterView from '../views/RegisterView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import HistoryView from '../views/HistoryView.vue'
 import PrivacyView from '../views/PrivacyView.vue'
-import { store } from "@/components/ts/store";
+import { store } from "@/util/store";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { store } from "@/components/ts/store";
+import { store } from "@/util/store";
 
 export default {
   name: "SubmitComponent",

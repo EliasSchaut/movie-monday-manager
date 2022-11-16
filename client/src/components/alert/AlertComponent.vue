@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { store } from "@/components/ts/store";
+import { store } from "@/util/store";
 
 import AlertInfoComponent from "@/components/alert/AlertInfoComponent.vue";
 import AlertDangerComponent from "@/components/alert/AlertDangerComponent.vue";

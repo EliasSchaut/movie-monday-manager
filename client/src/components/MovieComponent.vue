@@ -67,9 +67,9 @@
 </template>
 
 <script lang="ts">
-import { store } from './ts/store'
 import { ref } from "vue";
-import { call } from "@/components/ts/api";
+import { store } from '@/util/store'
+import { call } from "@/util/api";
 import router from "@/router/router";
 
 export default {
