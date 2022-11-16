@@ -9,19 +9,17 @@ export class EventService {
   constructor(private readonly historyJob: HistoryJob,
               private readonly watchListJob: WatchListJob) {}
 
-  private readonly schedule = process.env.SCHEDULE as string
-
   init() {
     this.init_event_watch_list()
     this.init_event_history()
   }
 
   private init_event_watch_list() {
-    scheduleJob(this.schedule, this.watchListJob.run)
+    scheduleJob(process.env.SCHEDULE_WATCHLIST as string, this.watchListJob.run)
   }
 
 
   private init_event_history() {
-    scheduleJob(this.schedule, this.historyJob.run)
+    scheduleJob(process.env.SCHEDULE_HISTORY as string, this.historyJob.run)
   }
 }

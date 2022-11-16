@@ -66,7 +66,7 @@ export class MovieService {
             return { movie, vote }
           })
           .catch((e) => {
-            this.movieDBService.delete({ imdb_id: movie.imdb_id })
+            this.movieDBService.delete(movie.imdb_id)
             throw e
           })
       })
@@ -80,7 +80,7 @@ export class MovieService {
 
     if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
-      await this.movieDBService.delete({ imdb_id })
+      await this.movieDBService.delete(imdb_id)
       return { success: true }
     } else {
       throw new NotFoundException('Movie not found or you are not the proposer')
