@@ -28,4 +28,14 @@ export class MovieController {
   async delete_media(@Param('imdb_id') imdb_id: string, @Request() req: any) {
     return await this.movieService.delete(imdb_id, req.user.id)
   }
+
+  @Get('watchlist')
+  async get_watchlist() {
+    return await this.movieService.get_watchlist()
+  }
+
+  @Get('history')
+  async get_history() {
+    return await this.movieService.get_history()
+  }
 }

@@ -5,6 +5,10 @@ import { Prisma, User, Movie } from "@prisma/client";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
+import { HistoryDBService } from "../common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
+
+
 
 @Injectable()
 export class MovieService {
@@ -14,6 +18,8 @@ export class MovieService {
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
+              private readonly histroyDBService: HistoryDBService,
+              private readonly watchlistDBService: WatchListDBService,
               private readonly voteService: VoteService) {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
@@ -85,5 +91,13 @@ export class MovieService {
     } else {
       throw new NotFoundException('Movie not found or you are not the proposer')
     }
+  }
+
+  async get_watchlist() {
+    return await this.watchlistDBService.get_all()
+  }
+
+  async get_history() {
+    return await this.histroyDBService.get_all()
   }
 }
