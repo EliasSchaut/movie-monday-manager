@@ -56,7 +56,7 @@ export class MovieService {
       genre: movie.genres,
       link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
-      runtime: (movie.runtime.split(" "))[0] as unknown as number,
+      runtime: Number((movie.runtime.split(" "))[0])
     }
 
     try {
