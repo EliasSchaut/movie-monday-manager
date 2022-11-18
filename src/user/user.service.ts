@@ -7,6 +7,7 @@ import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
 import { GravatarService } from "../common/util_services/gravatar_service";
+import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
+              private readonly watchListDBService: WatchListDBService,
               private readonly passwordService: PasswordService,
               private readonly emailService: EmailService,
               private readonly gravatarService: GravatarService) {}
@@ -68,7 +70,7 @@ export class UserService {
 
   async change_username(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (user.username === data.username) {
+    if ((user.username === data.username) || (await this.userDBService.has_user(data.username))) {
       throw new ConflictException("Email is already in use");
     }
 
@@ -95,6 +97,7 @@ export class UserService {
 
   async delete(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
+
     if (await this.passwordService.compare(data.password, user.password)) {
       await this.voteDBService.delete_all_user(user_id);
       await this.movieDBService.delete_all_proposed(user_id);

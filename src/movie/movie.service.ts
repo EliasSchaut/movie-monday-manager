@@ -83,8 +83,13 @@ export class MovieService {
 
   async delete(imdb_id: string, proposer_id: string) {
     const movie = await this.movieDBService.get(imdb_id) as Movie
+    const watchlist = await this.watchlistDBService.get_all()
+    const watchlist_imdbs = watchlist.map((movie) => movie.imdb_id)
 
-    if (movie.proposer_id === Number(proposer_id)) {
+    if (watchlist_imdbs.includes(imdb_id)) {
+      throw new ConflictException('Movie is in watchlist')
+    }
+    else if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
       await this.movieDBService.delete(imdb_id)
       return { success: true }
