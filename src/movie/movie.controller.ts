@@ -12,6 +12,16 @@ export class MovieController {
     return await this.movieService.get_all()
   }
 
+  @Get('watchlist')
+  async get_watchlist() {
+    return await this.movieService.get_watchlist()
+  }
+
+  @Get('history')
+  async get_history() {
+    return await this.movieService.get_history()
+  }
+
   @Get(':imdb_id')
   async get_media(@Param('imdb_id') imdb_id: string) {
     return await this.movieService.get(imdb_id)
@@ -27,15 +37,5 @@ export class MovieController {
   @Delete(':imdb_id')
   async delete_media(@Param('imdb_id') imdb_id: string, @Request() req: any) {
     return await this.movieService.delete(imdb_id, req.user.id)
-  }
-
-  @Get('watchlist')
-  async get_watchlist() {
-    return await this.movieService.get_watchlist()
-  }
-
-  @Get('history')
-  async get_history() {
-    return await this.movieService.get_history()
   }
 }
