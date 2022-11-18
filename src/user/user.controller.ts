@@ -50,7 +50,7 @@ export class UserController {
   }
 
   @Get(':user_id')
-  async get_user(@Param('user_id') user_id: number) {
-    return await this.userService.get_public(user_id);
+  async get_user(@Param('user_id') user_id: string) {
+    return await this.userService.get_public(Number(user_id));
   }
 }
