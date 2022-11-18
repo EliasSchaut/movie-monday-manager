@@ -99,7 +99,19 @@ export class MovieService {
   }
 
   async get_watchlist() {
-    return await this.watchlistDBService.get_all()
+    const watchlist = await this.watchlistDBService.get_all()
+
+    return await Promise.all(watchlist.map(async (watch_movie) => {
+      const movie = await this.movieDBService.get(watch_movie.imdb_id) as Movie
+      const votes = await this.voteDBService.get_votes_movie(movie.imdb_id)
+      return {
+        imdb_id: movie.imdb_id,
+        title: movie.title,
+        link: movie.link,
+        start_time: watch_movie.start_time,
+        interested: votes.map((vote) => vote.user.id)
+      }
+    }))
   }
 
   async get_history() {

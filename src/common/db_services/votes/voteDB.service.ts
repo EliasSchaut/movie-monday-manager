@@ -43,6 +43,13 @@ export class VoteDBService {
     });
   }
 
+  async get_votes_movie(imdb_id: string) {
+    return await this.prisma.vote.findMany({
+      where: { movie: { imdb_id } },
+      select: { user: true }
+    })
+  }
+
   async get_most_voted(count: number) {
     return await this.prisma.vote.groupBy({
       by: ['imdb_id'],
