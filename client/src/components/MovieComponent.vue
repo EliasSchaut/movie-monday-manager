@@ -28,10 +28,10 @@
             <i class="fas fa-edit">X</i>
           </button>
           <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">👍</i>
+            <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
           </button>
           <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">👍</i>
+            <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
           </button>
         </td>
       </tr>

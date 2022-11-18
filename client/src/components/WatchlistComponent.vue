@@ -7,7 +7,7 @@
         <td>
           <button class="btn btn-primary" @click="interested(movie.interested)"
                   data-bs-target="#modal_watchlist" data-bs-toggle="modal">
-            ?
+            <img src="../assets/svg/person-hearts.svg" alt="Heart" />
           </button>
         </td>
       </tr>
@@ -17,8 +17,8 @@
   <ModalComponent id="modal_watchlist" title="Interested">
     <TableComponent :head="head_modal">
       <tr v-for="user in interested_local">
-        <td><img v-if="user.use_gravatar" :src="user.gravatar_url" alt="avatar" />
-        <img v-else src="../assets/img/Portrait_Placeholder.png" alt="placeholder_avatar" /></td>
+        <td><img v-if="user.use_gravatar" :src="user.gravatar_url" alt="avatar" class="profile" />
+        <img v-else src="../assets/img/Portrait_Placeholder.png" alt="placeholder_avatar" class="profile" /></td>
         <td>{{ user.name }}</td>
       </tr>
     </TableComponent>
@@ -78,7 +78,7 @@ export default {
   font-size: larger;
 }
 
-img {
+.profile {
   width: 40px;
   height: 40px;
   border-radius: 50%;
