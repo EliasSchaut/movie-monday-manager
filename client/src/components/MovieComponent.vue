@@ -1,4 +1,5 @@
 <template>
+<WatchlistComponent />
 <div class="main table-responsive">
   <table class="table table-striped table-bordered table-active" >
     <thead>
@@ -71,12 +72,14 @@ import { ref } from "vue";
 import { store } from '@/util/store'
 import { call } from "@/util/api";
 import router from "@/router/router";
+import WatchlistComponent from "@/components/WatchlistComponent.vue";
 
 export default {
   name: "MovieComponent",
   data() {
     return { store }
   },
+  components: { WatchlistComponent },
   setup() {
     let movies = ref([] as any[]);
     let votes = ref([] as any[]);

@@ -2,7 +2,7 @@
   <CardComponent v-if="watchlist.length > 0" id="watchlist" header="Watchlist">
     <TableComponent :head="head">
       <tr v-for="movie in watchlist">
-        <td>{{ (new Date(movie.start_time)).toLocaleTimeString() }}</td>
+        <td>{{ (new Date(movie.start_time)).toLocaleString() }}</td>
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td>
           <button class="btn btn-primary" disabled>?</button>
