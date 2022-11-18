@@ -4,7 +4,7 @@
 </CardComponent>
 </template>
 
-<script>
+<script lang="ts">
 import CardComponent from "@/components/util/CardComponent.vue";
 export default {
 name: "WatchlistComponent",
