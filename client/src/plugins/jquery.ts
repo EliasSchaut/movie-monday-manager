@@ -1,6 +1,6 @@
-import jQuery from 'jquery'
+import $ from "jquery";
 
 // @ts-ignore
-window.$ = jQuery
+window.$ = $;
 // @ts-ignore
-window.jQuery = jQuery
+window.jQuery = $
