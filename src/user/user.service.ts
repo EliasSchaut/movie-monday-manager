@@ -25,6 +25,11 @@ export class UserService {
     return result
   }
 
+  async get_public(user_id: number) {
+    const { name, gravatar_url, use_gravatar } = await this.userDBService.get({ id: user_id }) as User;
+    return { name, gravatar_url, use_gravatar };
+  }
+
   async get_user_data(user_id: number) {
     const user = await this.userDBService.get({ id: user_id }) as User;
     const proposed_movies = await this.movieDBService.get_all_proposed(user_id);

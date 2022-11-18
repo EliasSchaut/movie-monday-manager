@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Request, Post, Delete } from "@nestjs/common";
+import { Controller, Get, UseGuards, Request, Post, Delete, Param } from "@nestjs/common";
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserService } from "./user.service";
 
@@ -47,5 +47,10 @@ export class UserController {
   @Get('check')
   async check_profile() {
     return true;
+  }
+
+  @Get(':user_id')
+  async get_user(@Param('user_id') user_id: number) {
+    return await this.userService.get_public(user_id);
   }
 }
