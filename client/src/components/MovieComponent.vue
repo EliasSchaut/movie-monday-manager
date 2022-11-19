@@ -25,7 +25,7 @@
         <td><p>{{ movie.votes }}</p></td>
         <td>
           <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id" class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">X</i>
+            <img class="fas fa-edit" src="../assets/svg/trash-fill.svg" alt="trash">
           </button>
           <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
             <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
