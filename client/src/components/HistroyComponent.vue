@@ -16,7 +16,7 @@ export default {
   components: { TableComponent },
   data() {
     return {
-      head: ["Title", "Watched At"]
+      head: ["Watched At", "Title"]
     }
   },
   setup() {
