@@ -124,7 +124,11 @@ export default {
     },
     delete_media(imdb_id: string) {
       call("api/movie/" + imdb_id, "DELETE")
-        .then(() => router.go(0))
+        .then((data) => {
+          if (!data.hasOwnProperty("statusCode")) {
+            router.go(0)
+          }
+        })
     },
     vote(imdb_id: string) {
       call("api/vote/" + imdb_id, "POST")
