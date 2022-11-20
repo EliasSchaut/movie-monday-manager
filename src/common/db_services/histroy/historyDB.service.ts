@@ -14,4 +14,8 @@ export class HistoryDBService {
   async add(data: Prisma.HistoryCreateInput) {
     return await this.prisma.history.create({ data });
   }
+
+  async has(imdb_id: string) {
+    return (await this.prisma.history.count({ where: { imdb_id } })) > 0;
+  }
 }

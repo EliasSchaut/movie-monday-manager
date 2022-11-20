@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable } from "@nestjs/common";
 import { UserDBService } from "../common/db_services/users/userDB.service";
-import { Prisma, User } from "@prisma/client";
+import { Movie, Prisma, User } from "@prisma/client";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
@@ -101,8 +101,15 @@ export class UserService {
   }
 
   async delete(user_id: number, data: any) {
-    const user = await this.userDBService.get({ id: user_id }) as User;
+    const watchlist = await this.watchListDBService.get_all()
+    const watchlist_proposer_ids = await Promise.all(watchlist.map(async wl => {
+      return ((await this.movieDBService.get(wl.imdb_id)) as Movie).proposer_id
+    }));
+    if (watchlist_proposer_ids.includes(user_id)) {
+      throw new ForbiddenException("You cannot delete your account while you have movies in the watchlist");
+    }
 
+    const user = await this.userDBService.get({ id: user_id }) as User;
     if (await this.passwordService.compare(data.password, user.password)) {
       await this.voteDBService.delete_all_user(user_id);
       await this.movieDBService.delete_all_proposed(user_id);
