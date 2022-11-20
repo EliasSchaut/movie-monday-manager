@@ -112,7 +112,15 @@ export default {
       const imdb_id = form.get("imdb_id") as string
 
       call(form_html.action + imdb_id, "POST")
-        .then(() => router.go(0))
+        .then((data) => {
+          if (data.hasOwnProperty("statusCode")) {
+            form_html.setAttribute("data-bs-dismiss", "modal");
+            form_html.click()
+            form_html.removeAttribute("data-bs-dismiss");
+          } else {
+            router.go(0)
+          }
+        })
     },
     delete_media(imdb_id: string) {
       call("api/movie/" + imdb_id, "DELETE")
