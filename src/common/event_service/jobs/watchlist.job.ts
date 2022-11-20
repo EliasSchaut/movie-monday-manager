@@ -4,6 +4,7 @@ import { VoteDBService } from "../../db_services/votes/voteDB.service";
 import { MovieDBService } from "../../db_services/movies/movieDB.service";
 import { parseExpression } from "cron-parser"
 import { Movie, Prisma } from "@prisma/client";
+import { Cron } from "@nestjs/schedule";
 
 @Injectable()
 export class WatchListJob {
@@ -15,13 +16,15 @@ export class WatchListJob {
               private readonly watchListDBService: WatchListDBService,
               private readonly movieDBService: MovieDBService) {}
 
+  @Cron(process.env.SCHEDULE_WATCHLIST as string)
   async run() {
+    console.log('Watchlist job started');
     const top_movies = await this.voteDBService.get_most_voted(this.num_of_movies)
     let start_time = parseExpression(process.env.SCHEDULE_START as string).next().toDate()
 
     for (const movie of top_movies) {
       const data = {
-        movie: movie.imdb_id,
+        movie: { connect: { imdb_id: movie.imdb_id } },
         start_time: start_time,
       } as Prisma.WatchListCreateInput
       await this.watchListDBService.add(data)

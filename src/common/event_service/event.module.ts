@@ -1,5 +1,4 @@
 import { Module } from "@nestjs/common";
-import { EventService } from "./event.service";
 import { HistoryJob } from "./jobs/history.job";
 import { WatchListJob } from "./jobs/watchlist.job";
 import { MovieDBModule } from "../db_services/movies/movieDB.module";
@@ -9,10 +8,6 @@ import { HistoryDBModule } from "../db_services/histroy/historyDB.module";
 
 @Module({
   imports: [MovieDBModule, WatchListDBModule, VoteDBModule, HistoryDBModule],
-  providers: [EventService, HistoryJob, WatchListJob]
+  providers: [HistoryJob, WatchListJob]
 })
-export class EventModule {
-  constructor(private readonly eventService: EventService) {
-    this.eventService.init()
-  }
-}
+export class EventModule {}

@@ -4,6 +4,7 @@ import { HistoryDBService } from "../../db_services/histroy/historyDB.service";
 import { WatchListDBService } from "../../db_services/watchlist/watchListDB.service";
 import { Movie, Prisma } from "@prisma/client";
 import { VoteDBService } from "../../db_services/votes/voteDB.service";
+import { Cron } from "@nestjs/schedule";
 
 @Injectable()
 export class HistoryJob {
@@ -13,7 +14,9 @@ export class HistoryJob {
               private readonly watchListDBService: WatchListDBService,
               private readonly voteDBService: VoteDBService) {}
 
+  @Cron(process.env.SCHEDULE_HISTORY as string)
   async run() {
+    console.log('History job started');
     const watch_list = await this.watchListDBService.get_all()
     for (const movie of watch_list) {
       const movie_data = await this.movieDBService.get(movie.imdb_id) as Movie
