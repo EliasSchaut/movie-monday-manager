@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import NotImplementedComponent from "@/components/err/NotImplementedComponent.vue";
+import HistroyComponent from "@/components/HistroyComponent.vue";
 </script>
 
 <template>
-  <NotImplementedComponent />
+  <HistroyComponent />
 </template>
 
 <style scoped>

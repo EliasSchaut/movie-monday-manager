@@ -5,6 +5,10 @@ import { Prisma, User, Movie } from "@prisma/client";
 import { UserDBService } from "../common/db_services/users/userDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
+import { HistoryDBService } from "../common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
+
+
 
 @Injectable()
 export class MovieService {
@@ -14,6 +18,8 @@ export class MovieService {
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
+              private readonly histroyDBService: HistoryDBService,
+              private readonly watchlistDBService: WatchListDBService,
               private readonly voteService: VoteService) {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
@@ -46,6 +52,10 @@ export class MovieService {
   }
 
   async save(imdb_id: string, proposer_id: string) {
+    if (await this.histroyDBService.has(imdb_id)) {
+      throw new ConflictException('Movie is already in history')
+    }
+
     const movie = await this.get(imdb_id)
     const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: Number(proposer_id)}) as User
 
@@ -55,7 +65,8 @@ export class MovieService {
       year: movie.year,
       genre: movie.genres,
       link: movie.imdburl,
-      proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput
+      proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
+      runtime: Number((movie.runtime.split(" "))[0])
     }
 
     try {
@@ -65,7 +76,7 @@ export class MovieService {
             return { movie, vote }
           })
           .catch((e) => {
-            this.movieDBService.delete({ imdb_id: movie.imdb_id })
+            this.movieDBService.delete(movie.imdb_id)
             throw e
           })
       })
@@ -76,13 +87,38 @@ export class MovieService {
 
   async delete(imdb_id: string, proposer_id: string) {
     const movie = await this.movieDBService.get(imdb_id) as Movie
+    const watchlist = await this.watchlistDBService.get_all()
+    const watchlist_imdbs = watchlist.map((movie) => movie.imdb_id)
 
-    if (movie.proposer_id === Number(proposer_id)) {
+    if (watchlist_imdbs.includes(imdb_id)) {
+      throw new ConflictException('Movie is in watchlist')
+    }
+    else if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
-      await this.movieDBService.delete({ imdb_id })
+      await this.movieDBService.delete(imdb_id)
       return { success: true }
     } else {
       throw new NotFoundException('Movie not found or you are not the proposer')
     }
+  }
+
+  async get_watchlist() {
+    const watchlist = await this.watchlistDBService.get_all()
+
+    return await Promise.all(watchlist.map(async (watch_movie) => {
+      const movie = await this.movieDBService.get(watch_movie.imdb_id) as Movie
+      const votes = await this.voteDBService.get_votes_movie(movie.imdb_id)
+      return {
+        imdb_id: movie.imdb_id,
+        title: movie.title,
+        link: movie.link,
+        start_time: watch_movie.start_time,
+        interested: votes.map((vote) => vote.user.id)
+      }
+    }))
+  }
+
+  async get_history() {
+    return await this.histroyDBService.get_all()
   }
 }

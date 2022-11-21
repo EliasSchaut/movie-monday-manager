@@ -25,17 +25,17 @@ model User {
 }
 
 model Movie {
-  imdb_id     String    @id
-  createdAt   DateTime  @default(now())
+  imdb_id     String     @id
+  createdAt   DateTime   @default(now())
   title       String
   year        Int
   genre       String
   link        String
   proposer_id Int
-  proposer    User      @relation(fields: [proposer_id], references: [id])
-  watched     Boolean   @default(false)
-  watchedAT   DateTime?
+  proposer    User       @relation(fields: [proposer_id], references: [id])
+  runtime     Int
   Vote        Vote[]
+  WatchList   WatchList?
 }
 
 model Vote {
@@ -47,4 +47,17 @@ model Vote {
   user      User     @relation(fields: [user_id], references: [id])
 
   @@unique([imdb_id, user_id])
+}
+
+model WatchList {
+  imdb_id    String   @id
+  start_time DateTime
+  movie      Movie    @relation(fields: [imdb_id], references: [imdb_id])
+}
+
+model History {
+  imdb_id    String   @id
+  watched_at DateTime @default(now())
+  title      String
+  link       String
 }

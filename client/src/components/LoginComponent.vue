@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import router from "@/router/router";
-import { call } from "@/components/ts/api";
+import { call } from "@/util/api";
 import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
 import EmailComponent from "@/components/util/form/EmailComponent.vue";
 import NameComponent from "@/components/util/form/NameComponent.vue";

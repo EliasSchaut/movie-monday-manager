@@ -14,6 +14,7 @@ async function bootstrap() {
     },
     crossOriginEmbedderPolicy: false
   }));
+
   await app.listen(process.env.PORT as string);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }

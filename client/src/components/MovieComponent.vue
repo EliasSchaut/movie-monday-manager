@@ -1,4 +1,5 @@
 <template>
+<WatchlistComponent />
 <div class="main table-responsive">
   <table class="table table-striped table-bordered table-active" >
     <thead>
@@ -24,13 +25,13 @@
         <td><p>{{ movie.votes }}</p></td>
         <td>
           <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id" class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">X</i>
+            <img class="fas fa-edit" src="../assets/svg/trash-fill.svg" alt="trash">
           </button>
           <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">👍</i>
+            <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
           </button>
           <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id)" :disabled="!store.logged_in">
-            <i class="fas fa-edit">👍</i>
+            <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
           </button>
         </td>
       </tr>
@@ -67,16 +68,18 @@
 </template>
 
 <script lang="ts">
-import { store } from './ts/store'
 import { ref } from "vue";
-import { call } from "@/components/ts/api";
+import { store } from '@/util/store'
+import { call } from "@/util/api";
 import router from "@/router/router";
+import WatchlistComponent from "@/components/WatchlistComponent.vue";
 
 export default {
   name: "MovieComponent",
   data() {
     return { store }
   },
+  components: { WatchlistComponent },
   setup() {
     let movies = ref([] as any[]);
     let votes = ref([] as any[]);
@@ -109,11 +112,23 @@ export default {
       const imdb_id = form.get("imdb_id") as string
 
       call(form_html.action + imdb_id, "POST")
-        .then(() => router.go(0))
+        .then((data) => {
+          if (data.hasOwnProperty("statusCode")) {
+            form_html.setAttribute("data-bs-dismiss", "modal");
+            form_html.click()
+            form_html.removeAttribute("data-bs-dismiss");
+          } else {
+            router.go(0)
+          }
+        })
     },
     delete_media(imdb_id: string) {
       call("api/movie/" + imdb_id, "DELETE")
-        .then(() => router.go(0))
+        .then((data) => {
+          if (!data.hasOwnProperty("statusCode")) {
+            router.go(0)
+          }
+        })
     },
     vote(imdb_id: string) {
       call("api/vote/" + imdb_id, "POST")

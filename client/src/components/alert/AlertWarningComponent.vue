@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { store } from "@/components/ts/store";
+import { store } from "@/util/store";
 import warn_svg from "@/assets/svg/exclamation-triangle-fill.svg";
 </script>
 

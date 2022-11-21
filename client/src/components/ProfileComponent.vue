@@ -1,9 +1,6 @@
 <template>
-<div id="card_profile" class="card text-center">
-  <div class="card-header">
-    Profile
-  </div>
-  <div class="card-body d-flex flex-column justify-content-between">
+<CardComponent id="card_profile" header="Profile">
+  <div class="d-flex flex-column justify-content-between">
     <div class="mb-3">
       <img v-if="user.use_gravatar" class="card-img-top" :src="user.gravatar_url" alt="Profile Picture" id="profile_picture">
       <img v-else class="card-img-top" src="../assets/img/Portrait_Placeholder.png" alt="Placeholder Picture" id="profile_picture">
@@ -22,17 +19,15 @@
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_password">Change Password</button>
       </div>
     </div>
-    <div class="card text-center">
-      <div class="card-header">
-        Options
-      </div>
+
+    <CardComponent header="Options" nobody>
       <ul class="list-group list-group-flush">
         <li class="list-group-item"><a @click.prevent="get_user_data" href="">Get all user data</a></li>
         <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">Delete account</a></li>
       </ul>
-    </div>
+    </CardComponent>
   </div>
-</div>
+</CardComponent>
 
 <!-- Modal: Change Profile -->
 <ModalComponent id="modal_profile" title="Edit Profile">
@@ -79,7 +74,7 @@
 </template>
 
 <script lang="ts">
-import { call } from "@/components/ts/api";
+import { call } from "@/util/api";
 import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
 import ModalComponent from "@/components/util/ModalComponent.vue";
 import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
@@ -88,11 +83,13 @@ import NameComponent from "@/components/util/form/NameComponent.vue";
 import InputComponent from "@/components/util/form/InputComponent.vue";
 import { ref } from "vue";
 import router from "@/router/router";
+import CardComponent from "@/components/util/CardComponent.vue";
 const user = ref({})
 
 export default {
   name: "ProfileComponent",
   components: {
+    CardComponent,
     InputComponent,
     NameComponent,
     EmailComponent,

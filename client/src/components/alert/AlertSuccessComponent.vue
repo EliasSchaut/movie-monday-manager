@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { store } from "@/components/ts/store";
+import { store } from "@/util/store";
 import check_svg from "@/assets/svg/check-circle-fill.svg";
 </script>
 

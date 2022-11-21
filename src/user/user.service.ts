@@ -1,12 +1,13 @@
 import { ConflictException, ForbiddenException, Injectable } from "@nestjs/common";
 import { UserDBService } from "../common/db_services/users/userDB.service";
-import { Prisma, User } from "@prisma/client";
+import { Movie, Prisma, User } from "@prisma/client";
 import { MovieDBService } from "../common/db_services/movies/movieDB.service";
 import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
 import { GravatarService } from "../common/util_services/gravatar_service";
+import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
+              private readonly watchListDBService: WatchListDBService,
               private readonly passwordService: PasswordService,
               private readonly emailService: EmailService,
               private readonly gravatarService: GravatarService) {}
@@ -21,6 +23,11 @@ export class UserService {
   async get(user_id: number) {
     const { password, verified, challenge, ...result } = await this.userDBService.get({ id: user_id }) as User;
     return result
+  }
+
+  async get_public(user_id: number) {
+    const { name, gravatar_url, use_gravatar } = await this.userDBService.get({ id: user_id }) as User;
+    return { name, gravatar_url, use_gravatar };
   }
 
   async get_user_data(user_id: number) {
@@ -68,7 +75,7 @@ export class UserService {
 
   async change_username(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (user.username === data.username) {
+    if ((user.username === data.username) || (await this.userDBService.has_user(data.username))) {
       throw new ConflictException("Email is already in use");
     }
 
@@ -94,6 +101,14 @@ export class UserService {
   }
 
   async delete(user_id: number, data: any) {
+    const watchlist = await this.watchListDBService.get_all()
+    const watchlist_proposer_ids = await Promise.all(watchlist.map(async wl => {
+      return ((await this.movieDBService.get(wl.imdb_id)) as Movie).proposer_id
+    }));
+    if (watchlist_proposer_ids.includes(user_id)) {
+      throw new ForbiddenException("You cannot delete your account while you have movies in the watchlist");
+    }
+
     const user = await this.userDBService.get({ id: user_id }) as User;
     if (await this.passwordService.compare(data.password, user.password)) {
       await this.voteDBService.delete_all_user(user_id);
