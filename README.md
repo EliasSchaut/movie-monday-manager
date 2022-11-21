@@ -1,4 +1,7 @@
-# Movie Monday Manager
+![](https://img.shields.io/github/v/release/EliasSchaut/Movie-Monday-Manager?color=purple&include_prereleases&label=Release)
+![](https://img.shields.io/github/license/EliasSchaut/Movie-Monday-Manager)
+
+# Movie Monday Manager 
 A full stack management application for voting movies for weekly movie events.
 
 ## Features
@@ -16,7 +19,7 @@ A full stack management application for voting movies for weekly movie events.
 3. Rename the .env file from ```.env.tmp``` to ```.env```
 4. Open the configuration file (now ```.env```) and set values.
 5. In ```client``` folder: run ```npm install``` and ```npm run build```
-6. In ```prisma``` folder: run prismas ```migrate``` command (e.g. ```npx prisma migrate dev --name init```)
+6. In ```prisma``` folder: run prismas ```migrate``` command (e.g. ```prisma migrate dev --name init```)
 7. In root folder: `npm install`.
 8. Run the server with `npm start`.
 
