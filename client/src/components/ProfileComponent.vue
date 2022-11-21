@@ -54,7 +54,7 @@
 
 <!-- Modal: Change Password -->
 <ModalComponent id="modal_change_password" title="Change Password">
-  <form @submit.prevent="on_submit" action="/api/suer/password" method="post"
+  <form @submit.prevent="on_submit" action="/api/user/password" method="post"
         class="d-flex flex-column justify-content-around was-validated">
     <PasswordComponent type="tripple" />
     <SubmitComponent inner_text="Update" />
