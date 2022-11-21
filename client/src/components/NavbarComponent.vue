@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-import { store } from './ts/store'
+import { store } from '@/util/store'
 </script>
 
 <script lang="ts">

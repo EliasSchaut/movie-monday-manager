@@ -33,8 +33,8 @@ export class MovieDBService {
     return await this.prisma.movie.create({ data });
   }
 
-  async delete(movie_id : Prisma.MovieWhereUniqueInput) {
-    return await this.prisma.movie.delete({ where: movie_id });
+  async delete(imdb_id: string) {
+    return await this.prisma.movie.delete({ where: { imdb_id } });
   }
 
   async delete_all_proposed(user_id : number) {

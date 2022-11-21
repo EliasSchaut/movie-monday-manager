@@ -16,6 +16,10 @@ export class UserDBService {
     });
   }
 
+  async has_user(username: string): Promise<boolean> {
+    return (await this.prisma.user.count({ where: {username} })) > 0;
+  }
+
   async get_all(): Promise<User[]> {
     return this.prisma.user.findMany();
   }
