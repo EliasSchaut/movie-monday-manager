@@ -17,6 +17,7 @@ model User {
   password     String
   name         String
   verified     Boolean  @default(false)
+  pw_reset     Boolean  @default(false)
   challenge    String   @unique @default(cuid())
   use_gravatar Boolean  @default(false)
   gravatar_url String?

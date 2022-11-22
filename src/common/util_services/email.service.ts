@@ -21,7 +21,7 @@ export class EmailService {
     } as TransportOptions);
   }
 
-  async sendChallenge(dest_mail: string, user_name: string, challenge_url: string) {
+  async send_challenge(dest_mail: string, user_name: string, challenge_url: string) {
     await this.transporter.sendMail({
       from: `"${this.project_name}" <noreply@schaut.dev>`,
       to: dest_mail,
@@ -29,6 +29,20 @@ export class EmailService {
       html: `<p>Hello ${user_name},</p>
         <p>
           please confirm your email by clicking the following link:<br>
+          <a href="${challenge_url}" target="_blank">${challenge_url}</a>
+        </p>
+        <p>Dear,<br>${this.project_name} Team</p>`
+    });
+  }
+
+  async send_password_reset(dest_mail: string, user_name: string, challenge_url: string) {
+    await this.transporter.sendMail({
+      from: `"${this.project_name}" <noreply@schaut.dev>`,
+      to: dest_mail,
+      subject: `[${this.project_name}] Password Reset Request!`,
+      html: `<p>Hello ${user_name},</p>
+        <p>
+          please reset your password by clicking the following link:<br>
           <a href="${challenge_url}" target="_blank">${challenge_url}</a>
         </p>
         <p>Dear,<br>${this.project_name} Team</p>`

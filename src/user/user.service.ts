@@ -90,7 +90,7 @@ export class UserService {
         }
       });
       const new_challenge_url = this.emailService.generate_challenge_url(new_challenge);
-      await this.emailService.sendChallenge(user.username, user.name, new_challenge_url);
+      await this.emailService.send_challenge(user.username, user.name, new_challenge_url);
       return { message: "Please confirm your new email address by clicking the link sent to your new inbox. " +
           "The next time you log in, you will need to log in with your new verified email address and password.",
         show_alert: true };
