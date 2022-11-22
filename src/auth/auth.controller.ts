@@ -1,4 +1,4 @@
-import { Controller, Request, Post, UseGuards, Get, Param, NotImplementedException } from "@nestjs/common";
+import { Controller, Request, Post, UseGuards, Get, Param } from "@nestjs/common";
 import { LocalAuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
@@ -29,6 +29,6 @@ export class AuthController {
 
   @Post('reset/:challenge')
   async pw_reset(@Param('challenge') challenge: string, @Request() req: any) {
-    throw new NotImplementedException()
+    return await this.authService.pw_reset(challenge, req.password)
   }
 }

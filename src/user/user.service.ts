@@ -21,7 +21,7 @@ export class UserService {
               private readonly gravatarService: GravatarService) {}
 
   async get(user_id: number) {
-    const { password, verified, challenge, ...result } = await this.userDBService.get({ id: user_id }) as User;
+    const { password, verified, challenge, pw_reset, ...result } = await this.userDBService.get({ id: user_id }) as User;
     return result
   }
 

@@ -95,4 +95,13 @@ export class AuthService {
       show_alert: true
     };
   }
+
+  async pw_reset(challenge: string, password: string) {
+    const user = await this.userDBService.get({ challenge })
+    if (user && user.pw_reset) {
+      await this.userDBService.update({ where: { challenge }, data: { password: await this.passwordService.hash(password), pw_reset: false } } )
+      return { message: "Password successfully reset! You can now log in.", show_alert: true };
+    }
+    throw new NotFoundException('Password already reset or challenge not found');
+  }
 }
