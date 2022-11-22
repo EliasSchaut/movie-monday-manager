@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
+
 const nodemailer = require("nodemailer");
 import { TransportOptions } from "nodemailer";
 
 @Injectable()
 export class EmailService {
 
-  private transporter
-  private readonly project_name = process.env.PROJECT_NAME
+  private transporter;
+  private readonly project_name = process.env.PROJECT_NAME;
 
   constructor() {
     this.transporter = nodemailer.createTransport({
@@ -15,9 +16,9 @@ export class EmailService {
       secure: false,
       auth: {
         user: process.env.EMAIL_HOST_USER,
-        pass: process.env.EMAIL_HOST_PASSWORD,
+        pass: process.env.EMAIL_HOST_PASSWORD
       }
-    } as TransportOptions)
+    } as TransportOptions);
   }
 
   async sendChallenge(dest_mail: string, user_name: string, challenge_url: string) {
@@ -25,9 +26,13 @@ export class EmailService {
       from: `"${this.project_name}" <noreply@schaut.dev>`,
       to: dest_mail,
       subject: `[${this.project_name}] Confirm your email!`,
-      text: `Hello ${user_name},\n\nplease confirm your email by clicking the following link:\n${challenge_url}
-      \n\nDear,\n${this.project_name} Team`,
-    })
+      html: `<p>Hello ${user_name},</p>
+        <p>
+          please confirm your email by clicking the following link:<br>
+          <a href="${challenge_url}" target="_blank">${challenge_url}</a>
+        </p>
+        <p>Dear,<br>${this.project_name} Team</p>`
+    });
   }
 
   generate_challenge_url(challenge: string) {
