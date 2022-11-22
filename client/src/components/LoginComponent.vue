@@ -60,21 +60,12 @@ export default {
             router.push("../login");
           }
         })
-    },
-    async check_password() {
-      const password = document.getElementById("form_password") as HTMLInputElement;
-      const password_confirm = document.getElementById("form_password_confirm") as HTMLInputElement;
-      if (password.value !== password_confirm.value) {
-        password_confirm.setCustomValidity("Should be the same as the password!");
-      } else {
-        password_confirm.setCustomValidity("");
-      }
     }
   },
   mounted() {
-    const confirm = router.currentRoute.value.params.confirm
-    if (confirm) {
-      call("/api/auth/confirm/" + confirm)
+    const challenge = router.currentRoute.value.params.challenge
+    if (challenge) {
+      call("/api/auth/confirm/" + challenge)
     }
   }
 };

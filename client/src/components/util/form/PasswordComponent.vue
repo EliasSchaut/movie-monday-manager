@@ -19,6 +19,7 @@
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
     :invalid_feedback="invalid_feedback.double"
     @input="check_password"
+    v-bind="$attrs"
     required />
 
   <InputComponent

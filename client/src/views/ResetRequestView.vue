@@ -1,28 +1,25 @@
 <template>
-  <h1 class="form-intro">Password Reset</h1>
+  <h1 class="form-intro">Password Reset Request</h1>
 
   <form :action="route" method="post" class="form was-validated">
-    <PasswordComponent type="double" label="Enter new Password" />
+    <EmailComponent />
     <SubmitComponent @submit.prevent="submit"/>
   </form>
 </template>
 
 <script lang="ts">
-import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
+import EmailComponent from "@/components/util/form/EmailComponent.vue";
 import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
 import { call } from "@/util/api";
 import router from "@/router/router";
-import { ref } from "vue";
-const challenge = ref("" as string)
-
 export default {
-  name: "ResetView",
+  name: "ResetRequestView",
   data() {
     return {
-      route: `/api/reset/${challenge}`
+      route: "/api/reset/"
     }
   },
-  components: { SubmitComponent, PasswordComponent },
+  components: { SubmitComponent, EmailComponent },
   methods: {
     submit(e: SubmitEvent) {
       const form_html = e.target as HTMLFormElement;
@@ -37,17 +34,10 @@ export default {
       });
 
       call(form_html.action, form_html.method, post)
-        .then((data) => {
-          if (data.hasOwnProperty("statusCode") && data.statusCode === 404) {
-            return
-          } else {
-            router.push("../login");
-          }
+        .then(() => {
+          router.push("../login");
         })
     }
-  },
-  setup() {
-    challenge.value = router.currentRoute.value.params.challenge as string
   }
 };
 </script>
