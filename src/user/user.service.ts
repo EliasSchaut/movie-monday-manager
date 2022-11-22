@@ -58,7 +58,7 @@ export class UserService {
 
   async change_password(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (await this.passwordService.compare(data.old_password, user.password)) {
+    if (await this.passwordService.compare(data.password_old, user.password)) {
       await this.userDBService.update({ where: { id: user_id },
         data: {
           password: await this.passwordService.hash(data.password),
