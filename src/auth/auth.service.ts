@@ -85,7 +85,7 @@ export class AuthService {
   async pw_reset_request(username: string) {
     const user = await this.userDBService.get({ username })
     if (user) {
-      const challenge_url = this.emailService.generate_challenge_url(cuid());
+      const challenge_url = this.emailService.generate_pw_challenge_url(cuid());
       await this.userDBService.update( {where: { username }, data: { pw_reset: true } } )
       await this.emailService.send_password_reset(user.username, user.name, challenge_url);
     }

@@ -52,4 +52,8 @@ export class EmailService {
   generate_challenge_url(challenge: string) {
     return `${process.env.FRONTEND_URL}login/${challenge}`;
   }
+
+  generate_pw_challenge_url(challenge: string) {
+    return `${process.env.FRONTEND_URL}reset/${challenge}`;
+  }
 }
