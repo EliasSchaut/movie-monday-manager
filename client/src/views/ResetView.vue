@@ -1,16 +1,13 @@
 <template>
-  <h1 class="form-intro">Password Reset</h1>
-
-  <form :action="route" method="post" class="form was-validated">
+  <FormComponent :title="title" :route="route" :callback="callback">
     <PasswordComponent type="double" label="Enter new Password" />
-    <SubmitComponent @submit.prevent="submit"/>
-  </form>
+  </FormComponent>
 </template>
 
 <script lang="ts">
 import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
 import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
-import { call } from "@/util/api";
+import FormComponent from "@/components/FormComponent.vue";
 import router from "@/router/router";
 import { ref } from "vue";
 const challenge = ref("" as string)
@@ -19,31 +16,18 @@ export default {
   name: "ResetView",
   data() {
     return {
-      route: `/api/reset/${challenge}`
+      title: "Password Reset",
+      route: `/api/auth/reset/${challenge.value}`
     }
   },
-  components: { SubmitComponent, PasswordComponent },
+  components: { FormComponent, SubmitComponent, PasswordComponent },
   methods: {
-    submit(e: SubmitEvent) {
-      const form_html = e.target as HTMLFormElement;
-      if (!form_html.checkValidity()) {
+    callback(e: SubmitEvent, post: any, data: any) {
+      if (data.hasOwnProperty("statusCode") && data.statusCode === 404) {
         return
+      } else {
+        router.push("../login");
       }
-
-      const form = new FormData(form_html);
-      const post = {} as any;
-      form.forEach((value, key) => {
-        post[key] = value;
-      });
-
-      call(form_html.action, form_html.method, post)
-        .then((data) => {
-          if (data.hasOwnProperty("statusCode") && data.statusCode === 404) {
-            return
-          } else {
-            router.push("../login");
-          }
-        })
     }
   },
   setup() {
@@ -53,16 +37,5 @@ export default {
 </script>
 
 <style scoped>
-.form-intro {
-  margin: 1em 0;
-  text-align: center;
-}
 
-.form {
-  margin: 30px auto 0;
-  width: min(400px, 80vw);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
 </style>
