@@ -2,6 +2,7 @@
   <FormComponent :title="title" :route="route" :callback="callback">
     <EmailComponent />
     <PasswordComponent type="single" />
+    <router-link class="mb-3" to="/reset/">Forgot Password?</router-link>
   </FormComponent>
 </template>
 
