@@ -22,6 +22,12 @@
 
       <CardComponent header="Options" nobody>
         <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class="form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="switch_emails" :checked="user.email_opt_in" name="email_opt_in" @click="opt_in_email">
+              <label class="form-check-label ms-2" for="switch_emails">Receive emails</label>
+            </div>
+          </li>
           <li class="list-group-item"><a @click.prevent="get_user_data" href="">Get all user data</a></li>
           <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">Delete account</a></li>
         </ul>
@@ -142,6 +148,10 @@ export default {
       call(form.action, "Delete", post).then(() => {
         router.push("/").then(() => router.push("/logout"));
       });
+    },
+    opt_in_email(e: Event) {
+      const checkbox = e.target as HTMLInputElement;
+      call("/api/user/email_opt_in", "post", { email_opt_in: checkbox.checked })
     }
   }
 };

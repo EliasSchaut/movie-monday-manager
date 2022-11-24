@@ -6,7 +6,7 @@ import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
-import { GravatarService } from "../common/util_services/gravatar_service";
+import { GravatarService } from "../common/util_services/gravatar.service";
 import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
 
 @Injectable()
@@ -54,6 +54,15 @@ export class UserService {
 
     await this.userDBService.update({ where: { id: user_id }, data: data_to_update });
     return { message: "Profile updated!", show_alert: true };
+  }
+
+  async email_opt_in(user_id: number, opt_in: boolean) {
+    await this.userDBService.update({ where: { id: user_id },
+      data: {
+        email_opt_in: opt_in
+      }
+    });
+    return { message: "Email option updated!", show_alert: true };
   }
 
   async change_password(user_id: number, data: any) {
