@@ -8,27 +8,21 @@ import { EmailService } from "../../util_services/email.service";
 @Injectable()
 export class AnnounceJob {
 
-  private readonly announce_text;
-  private readonly announce_html
+  private readonly announce_discord;
+  private readonly announce_email
 
   constructor(private readonly discordService: DiscordService,
               private readonly watchListDBService: WatchListDBService,
               private readonly movieDBService: MovieDBService,
               private readonly emailService: EmailService) {
-    this.announce_text = (watchlist: string[]) => `<@1041714399964041286>
-Die Wahl ist durch, diese Filme werden geschaut:
-${watchlist.join("\n")}
+    this.announce_discord = (watchlist: string[]) => `<@1041714399964041286>\n` +
+      `Die Wahl ist durch, diese Filme werden geschaut:\n${watchlist.join("\n")}\n` +
+      `Mehr Infos siehe auch ${process.env.FRONTEND_URL}\n\n` +
+      `Es gibt Getränke und Atmosphäre auf Spendenbasis!\n\n`
 
-Mehr Infos siehe auch <${process.env.FRONTEND_URL}>
-
-Es gibt Getränke und Atmosphäre auf Spendenbasis!
-  `;
-    this.announce_html = (watchlist: string[]) => `Die Wahl ist durch, diese Filme werden geschaut:
-${watchlist.join("\n")}
-
-Mehr Infos siehe auch <a href="${process.env.FRONTEND_URL}">${process.env.FRONTEND_URL}</a>
-
-Es gibt Getränke und Atmosphäre auf Spendenbasis!`
+    this.announce_email = (watchlist: string[]) => `Die Wahl ist durch, diese Filme werden geschaut:\n${watchlist.join("\n")}\n` +
+      `Mehr Infos siehe auch ${process.env.FRONTEND_URL}\n\n` +
+      `Es gibt Getränke und Atmosphäre auf Spendenbasis!\n\n`
   }
 
   async run() {
@@ -46,7 +40,7 @@ Es gibt Getränke und Atmosphäre auf Spendenbasis!`
   }
 
   private async send_announce(watchlist: string[]) {
-    await this.discordService.send_message(this.announce_text(watchlist));
-    await this.emailService.send_all_opt_in(this.announce_html(watchlist));
+    await this.discordService.send_message(this.announce_discord(watchlist));
+    await this.emailService.send_all_opt_in(this.announce_email(watchlist));
   }
 }

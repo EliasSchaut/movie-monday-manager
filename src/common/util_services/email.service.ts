@@ -27,12 +27,8 @@ export class EmailService {
       from: `"${this.project_name}" <noreply@schaut.dev>`,
       to: dest_mail,
       subject: `[${this.project_name}] Confirm your email!`,
-      html: `<p>Hello ${user_name},</p>
-        <p>
-          please confirm your email by clicking the following link:<br>
-          <a href="${challenge_url}" target="_blank">${challenge_url}</a>
-        </p>
-        <p>Dear,<br>${this.project_name} Team</p>`
+      text: `Hello ${user_name},\n\nplease confirm your email by clicking the following link:\n${challenge_url}\n\n` +
+        `Dear\n${this.project_name} Team\n`
     });
   }
 
@@ -41,27 +37,19 @@ export class EmailService {
       from: `"${this.project_name}" <noreply@schaut.dev>`,
       to: dest_mail,
       subject: `[${this.project_name}] Password Reset Request!`,
-      html: `<p>Hello ${user_name},</p>
-        <p>
-          please reset your password by clicking the following link:<br>
-          <a href="${challenge_url}" target="_blank">${challenge_url}</a>
-        </p>
-        <p>Dear,<br>${this.project_name} Team</p>`
+      text: `Hello ${user_name},\n\nplease reset your password by clicking the following link:\n` +
+        `${challenge_url}\n\nDear\n${this.project_name} Team\n`
     });
   }
 
-  async send_all_opt_in(body_html: string) {
+  async send_all_opt_in(body: string) {
     const opt_in_users = await this.userDBService.get_all_opt_in();
     for (const user of opt_in_users) {
       await this.transporter.sendMail({
         from: `"${this.project_name}" <noreply@schaut.dev>`,
         to: user.username,
         subject: `[${this.project_name}] Announcement!`,
-        html: `<p>Hello ${user.name},</p>
-        <p>
-          ${body_html}
-        </p>
-        <p>Dear,<br>${this.project_name} Team</p>`
+        text: `Hello ${user.name},\n\n${body}\nDear\n${this.project_name} Team\n`
       });
     }
   }
