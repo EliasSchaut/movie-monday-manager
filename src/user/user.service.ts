@@ -56,6 +56,15 @@ export class UserService {
     return { message: "Profile updated!", show_alert: true };
   }
 
+  async email_opt_in(user_id: number, opt_in: boolean) {
+    await this.userDBService.update({ where: { id: user_id },
+      data: {
+        email_opt_in: opt_in
+      }
+    });
+    return { message: "Email option updated!", show_alert: true };
+  }
+
   async change_password(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
     if (await this.passwordService.compare(data.password_old, user.password)) {
