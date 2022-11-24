@@ -7,10 +7,10 @@
 </template>
 
 <script lang="ts">
-import FormComponent from "@/components/FormComponent.vue";
-import NameComponent from "@/components/util/form/NameComponent.vue";
-import EmailComponent from "@/components/util/form/EmailComponent.vue";
-import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
+import FormComponent from "@/components/form/FormComponent.vue";
+import NameComponent from "@/components/form/NameComponent.vue";
+import EmailComponent from "@/components/form/EmailComponent.vue";
+import PasswordComponent from "@/components/form/PasswordComponent.vue";
 import router from "@/router/router";
 
 export default {

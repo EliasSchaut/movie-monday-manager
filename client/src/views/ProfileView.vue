@@ -75,15 +75,15 @@
 
 <script lang="ts">
 import { call } from "@/util/api";
-import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
-import ModalComponent from "@/components/util/ModalComponent.vue";
-import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
-import EmailComponent from "@/components/util/form/EmailComponent.vue";
-import NameComponent from "@/components/util/form/NameComponent.vue";
-import InputComponent from "@/components/util/form/InputComponent.vue";
+import PasswordComponent from "@/components/form/PasswordComponent.vue";
+import ModalComponent from "@/components/ModalComponent.vue";
+import SubmitComponent from "@/components/form/SubmitComponent.vue";
+import EmailComponent from "@/components/form/EmailComponent.vue";
+import NameComponent from "@/components/form/NameComponent.vue";
+import InputComponent from "@/components/form/InputComponent.vue";
 import { ref } from "vue";
 import router from "@/router/router";
-import CardComponent from "@/components/util/CardComponent.vue";
+import CardComponent from "@/components/CardComponent.vue";
 const user = ref({})
 
 export default {

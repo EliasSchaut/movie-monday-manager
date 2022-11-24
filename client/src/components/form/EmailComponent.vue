@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import InputComponent from "@/components/util/form/InputComponent.vue";
+import InputComponent from "@/components/form/InputComponent.vue";
 export default {
   name: "EmailComponent",
   components: { InputComponent },

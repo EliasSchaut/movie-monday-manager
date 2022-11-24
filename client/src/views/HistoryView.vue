@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import TableComponent from "@/components/util/TableComponent.vue";
+import TableComponent from "@/components/TableComponent.vue";
 import { ref } from "vue";
 import { call } from "@/util/api";
 export default {

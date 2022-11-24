@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import EmailComponent from "@/components/util/form/EmailComponent.vue";
-import FormComponent from "@/components/FormComponent.vue";
+import EmailComponent from "@/components/form/EmailComponent.vue";
+import FormComponent from "@/components/form/FormComponent.vue";
 import router from "@/router/router";
 import { call } from "@/util/api";
 

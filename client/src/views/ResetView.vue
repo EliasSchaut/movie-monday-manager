@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts">
-import PasswordComponent from "@/components/util/form/PasswordComponent.vue";
-import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
-import FormComponent from "@/components/FormComponent.vue";
+import PasswordComponent from "@/components/form/PasswordComponent.vue";
+import SubmitComponent from "@/components/form/SubmitComponent.vue";
+import FormComponent from "@/components/form/FormComponent.vue";
 import router from "@/router/router";
 import { ref } from "vue";
 const challenge = ref("" as string)

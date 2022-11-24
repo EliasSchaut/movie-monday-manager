@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import SubmitComponent from "@/components/util/form/SubmitComponent.vue";
+import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import { call } from "@/util/api";
 
 export default {
