@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 
 const nodemailer = require("nodemailer");
 import { TransportOptions } from "nodemailer";
+import { UserDBService } from "../db_services/users/userDB.service";
 
 @Injectable()
 export class EmailService {
@@ -9,7 +10,7 @@ export class EmailService {
   private transporter;
   private readonly project_name = process.env.PROJECT_NAME;
 
-  constructor() {
+  constructor(private readonly userDBService: UserDBService) {
     this.transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: process.env.EMAIL_PORT,
@@ -47,6 +48,22 @@ export class EmailService {
         </p>
         <p>Dear,<br>${this.project_name} Team</p>`
     });
+  }
+
+  async send_all_opt_in(body_html: string) {
+    const opt_in_users = await this.userDBService.get_all_opt_in();
+    for (const user of opt_in_users) {
+      await this.transporter.sendMail({
+        from: `"${this.project_name}" <noreply@schaut.dev>`,
+        to: user.username,
+        subject: `[${this.project_name}] Announcement!`,
+        html: `<p>Hello ${user.name},</p>
+        <p>
+          ${body_html}
+        </p>
+        <p>Dear,<br>${this.project_name} Team</p>`
+      });
+    }
   }
 
   generate_challenge_url(challenge: string) {

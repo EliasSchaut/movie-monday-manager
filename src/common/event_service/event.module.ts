@@ -7,9 +7,10 @@ import { VoteDBModule } from "../db_services/votes/voteDB.module";
 import { HistoryDBModule } from "../db_services/histroy/historyDB.module";
 import { DiscordService } from "../util_services/discord.service";
 import { AnnounceJob } from "./jobs/announce.job";
+import { EmailService } from "../util_services/email.service";
 
 @Module({
   imports: [MovieDBModule, WatchListDBModule, VoteDBModule, HistoryDBModule],
-  providers: [HistoryJob, WatchListJob, AnnounceJob, DiscordService]
+  providers: [HistoryJob, WatchListJob, AnnounceJob, DiscordService, EmailService]
 })
 export class EventModule {}
