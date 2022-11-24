@@ -6,7 +6,7 @@ import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
-import { GravatarService } from "../common/util_services/gravatar_service";
+import { GravatarService } from "../common/util_services/gravatar.service";
 import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
 
 @Injectable()
