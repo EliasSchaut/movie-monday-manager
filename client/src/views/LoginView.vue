@@ -11,6 +11,7 @@ import FormComponent from "@/components/form/FormComponent.vue";
 import EmailComponent from "@/components/form/EmailComponent.vue";
 import PasswordComponent from "@/components/form/PasswordComponent.vue";
 import router from "@/router/router";
+import { set_cookie } from "@/util/cookie"
 import { call } from "@/util/api";
 
 export default {
@@ -24,7 +25,7 @@ export default {
   methods: {
     callback(e: SubmitEvent, post: any, data: any) {
       if (data.hasOwnProperty("access_token")) {
-        localStorage.setItem("access_token", data.access_token);
+        set_cookie("access_token", data.access_token);
         router.push("/");
       } else if (data.hasOwnProperty("statusCode") && data.statusCode === 409) {
         return
