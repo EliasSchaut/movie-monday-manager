@@ -23,10 +23,7 @@ export default {
   components: { FormComponent, NameComponent, EmailComponent, PasswordComponent },
   methods: {
     callback(e: SubmitEvent, post: any, data: any) {
-      if (data.hasOwnProperty("access_token")) {
-        localStorage.setItem("access_token", data.access_token);
-        router.push("/");
-      } else if (data.hasOwnProperty("statusCode") && data.statusCode === 409) {
+      if (data.hasOwnProperty("statusCode") && data.statusCode === 409) {
         return
       } else {
         router.push("../login");

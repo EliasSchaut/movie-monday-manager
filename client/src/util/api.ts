@@ -1,4 +1,5 @@
 
+import { get_cookie } from '@/util/cookie'
 import { store } from './store';
 
 export function call(route: string, method?: string, body?: any) {
@@ -6,7 +7,7 @@ export function call(route: string, method?: string, body?: any) {
     method: method ?? "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": "Bearer " +  localStorage.getItem("access_token")
+      "Authorization": "Bearer " +  (get_cookie("access_token") ?? "")
     },
     body: body ? JSON.stringify(body) : undefined
   }).then(async (res) => {
