@@ -20,6 +20,12 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('email_opt_in')
+  async email_opt_in(@Request() req: any) {
+    return await this.userService.email_opt_in(Number(req.user.id), Boolean(req.body.email_opt_in));
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete()
   async delete(@Request() req: any) {
     return await this.userService.delete(Number(req.user.id), req.body);

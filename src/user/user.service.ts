@@ -6,7 +6,7 @@ import { VoteDBService } from "../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../common/util_services/password.service";
 import { EmailService } from "../common/util_services/email.service";
 import cuid from "cuid";
-import { GravatarService } from "../common/util_services/gravatar_service";
+import { GravatarService } from "../common/util_services/gravatar.service";
 import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
 
 @Injectable()
@@ -21,7 +21,7 @@ export class UserService {
               private readonly gravatarService: GravatarService) {}
 
   async get(user_id: number) {
-    const { password, verified, challenge, ...result } = await this.userDBService.get({ id: user_id }) as User;
+    const { password, verified, challenge, pw_reset, ...result } = await this.userDBService.get({ id: user_id }) as User;
     return result
   }
 
@@ -56,9 +56,18 @@ export class UserService {
     return { message: "Profile updated!", show_alert: true };
   }
 
+  async email_opt_in(user_id: number, opt_in: boolean) {
+    await this.userDBService.update({ where: { id: user_id },
+      data: {
+        email_opt_in: opt_in
+      }
+    });
+    return { message: "Email option updated!", show_alert: true };
+  }
+
   async change_password(user_id: number, data: any) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (await this.passwordService.compare(data.old_password, user.password)) {
+    if (await this.passwordService.compare(data.password_old, user.password)) {
       await this.userDBService.update({ where: { id: user_id },
         data: {
           password: await this.passwordService.hash(data.password),
@@ -90,7 +99,7 @@ export class UserService {
         }
       });
       const new_challenge_url = this.emailService.generate_challenge_url(new_challenge);
-      await this.emailService.sendChallenge(user.username, user.name, new_challenge_url);
+      await this.emailService.send_challenge(user.username, user.name, new_challenge_url);
       return { message: "Please confirm your new email address by clicking the link sent to your new inbox. " +
           "The next time you log in, you will need to log in with your new verified email address and password.",
         show_alert: true };

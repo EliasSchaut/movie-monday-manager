@@ -1,14 +1,16 @@
 <template>
-  <table class="table table-striped table-bordered table-active">
-    <thead>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-active">
+      <thead>
       <tr class="table-dark align-middle">
         <th v-for="column in head" :data-field="column" data-sortable="true">{{ column }}</th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <slot />
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,7 +21,7 @@ export default {
     head: {
       type: Array,
       required: true
-    },
+    }
   }
 };
 </script>

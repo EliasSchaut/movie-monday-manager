@@ -24,6 +24,10 @@ export class UserDBService {
     return this.prisma.user.findMany();
   }
 
+  async get_all_opt_in() : Promise<User[]> {
+    return this.prisma.user.findMany({ where: { email_opt_in: true } });
+  }
+
   async create(data: Prisma.UserCreateInput): Promise<User> {
     data.password = await this.passwordService.hash(data.password);
     return this.prisma.user.create({ data });

@@ -5,6 +5,7 @@ import { MovieDBService } from "../../db_services/movies/movieDB.service";
 import { parseExpression } from "cron-parser"
 import { Movie, Prisma } from "@prisma/client";
 import { Cron } from "@nestjs/schedule";
+import { AnnounceJob } from "./announce.job";
 
 @Injectable()
 export class WatchListJob {
@@ -14,7 +15,8 @@ export class WatchListJob {
 
   constructor(private readonly voteDBService: VoteDBService,
               private readonly watchListDBService: WatchListDBService,
-              private readonly movieDBService: MovieDBService) {}
+              private readonly movieDBService: MovieDBService,
+              private readonly announceJob: AnnounceJob) {}
 
   @Cron(process.env.SCHEDULE_WATCHLIST as string)
   async run() {
@@ -33,5 +35,7 @@ export class WatchListJob {
       const round_duration_ms = (Math.round(movie_data.runtime/15) * 15) * 60000
       start_time = new Date(start_time.getTime() + round_duration_ms + this.pause_time)
     }
+
+    await this.announceJob.run()
   }
 }

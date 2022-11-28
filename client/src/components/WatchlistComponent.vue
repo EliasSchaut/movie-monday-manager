@@ -26,9 +26,9 @@
 </template>
 
 <script lang="ts">
-import CardComponent from "@/components/util/CardComponent.vue";
-import TableComponent from "@/components/util/TableComponent.vue";
-import ModalComponent from "@/components/util/ModalComponent.vue";
+import CardComponent from "@/components/CardComponent.vue";
+import TableComponent from "@/components/TableComponent.vue";
+import ModalComponent from "@/components/ModalComponent.vue";
 import { call } from "@/util/api";
 import { ref } from "vue";
 const interested_local = ref([] as any);

@@ -21,4 +21,14 @@ export class AuthController {
   async confirm(@Param('challenge') challenge: string) {
     return await this.authService.confirm(challenge)
   }
+
+  @Get('reset/:username')
+  async pw_reset_request(@Param('username') username: string) {
+    return await this.authService.pw_reset_request(username)
+  }
+
+  @Post('reset/:challenge')
+  async pw_reset(@Param('challenge') challenge: string, @Request() req: any) {
+    return await this.authService.pw_reset(challenge, req.body.password)
+  }
 }

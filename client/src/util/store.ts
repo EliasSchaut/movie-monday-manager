@@ -1,4 +1,5 @@
 import { reactive } from  'vue';
+import { get_cookie } from "@/util/cookie";
 
 export const store = reactive({
   logged_in: false,
@@ -18,7 +19,7 @@ export const store = reactive({
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("access_token")
+        "Authorization": "Bearer " + (get_cookie("access_token") ?? ""),
       }
     }));
     const data = await check.text()
