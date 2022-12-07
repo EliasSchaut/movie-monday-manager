@@ -7,18 +7,34 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
+  /**
+   * GET private user data
+   * @param req contains the user id via the jwt auth guard
+   */
   @UseGuards(JwtAuthGuard)
   @Get()
   async get(@Request() req: any) {
     return await this.userService.get(Number(req.user.id));
   }
 
+  /**
+   * POST update profile information (name, gravatar)
+   * @param {Object} req contains the user id via the jwt auth guard and the new profile data
+   * @param {string} req.user.id the user id provided by the jwt auth guard
+   * @param {string} req.body.name the new name
+   * @param {string} [req.body.use_gravatar] the new gravatar
+   * @returns {Object} the response object
+   */
   @UseGuards(JwtAuthGuard)
   @Post()
   async update_profile(@Request() req: any) {
     return await this.userService.change_profile(Number(req.user.id), req.body);
   }
 
+  /**
+   * POST update username (email)
+   * @param req
+   */
   @UseGuards(JwtAuthGuard)
   @Post('email_opt_in')
   async email_opt_in(@Request() req: any) {
