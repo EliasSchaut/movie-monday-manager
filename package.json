@@ -8,7 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "build:all": "npm i --prefix ./client && npm run build --prefix ./client && prisma migrate dev --schema=./prisma/schema.prisma && npm i && npm run build",
+    "build:all": "npm i --prefix ./client && npm run build --prefix ./client && npm i && prisma migrate dev --schema=./prisma/schema.prisma && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
