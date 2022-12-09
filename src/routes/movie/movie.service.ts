@@ -7,8 +7,8 @@ import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
 import { HistoryDBService } from "../../common/db_services/histroy/historyDB.service";
 import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
-import { MovieType } from "../../types/movie.types/movie_pub.type";
-import { WatchlistType } from "../../types/movie.types/watchlist_pub.type";
+import { MovieExtType } from "../../types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { ResDto } from "../../types/res.dto";
 
 
@@ -51,7 +51,7 @@ export class MovieService {
         proposer_id: user.id,
         createdAt: movie.createdAt,
         votes
-      } as MovieType;
+      } as MovieExtType;
     }));
   }
 
@@ -118,7 +118,7 @@ export class MovieService {
         link: movie.link,
         start_time: watch_movie.start_time,
         interested: votes.map((vote) => vote.user.id)
-      } as WatchlistType
+      } as WatchlistExtType
     }))
   }
 
