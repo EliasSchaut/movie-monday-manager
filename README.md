@@ -15,13 +15,11 @@ A full stack management application for voting movies for weekly movie events.
 
 ## Installation
 1. You need [node.js](https://nodejs.org/en/) installed (version 18.12.1 or newer).
-2. Download the [newest version](https://github.com/EliasSchaut/Movie-Monday-Managerreleases) of the code
+2. Download the [newest version](https://github.com/EliasSchaut/Movie-Monday-Manager/releases) of the code
 3. Rename the .env file from ```.env.tmp``` to ```.env```
 4. Open the configuration file (now ```.env```) and set values.
-5. In ```client``` folder: run ```npm install``` and ```npm run build```
-6. In ```prisma``` folder: run prismas ```migrate``` command (e.g. ```prisma migrate dev --name init```)
-7. In root folder: `npm install`.
-8. Run the server with `npm start`.
+5. Build the project with ```npm run build:all```
+6. Run the server with ```npm run start:prod```.
 
 ## Dev-Docs & API-Docs
 This documentation is still work in progress.
