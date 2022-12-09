@@ -1,5 +1,5 @@
 
-export interface WatchlistType {
+export interface WatchlistExtType {
   imdb_id: string,
   title: string,
   link: string,

@@ -1,5 +1,5 @@
 
-export interface MovieType {
+export interface MovieExtType {
   imdb_id: string,
   title: string,
   link: string,

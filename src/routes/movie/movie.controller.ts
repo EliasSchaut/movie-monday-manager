@@ -3,8 +3,8 @@ import { MovieService } from "./movie.service";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { User } from "../../common/decorators/user.decorator";
 import { JwtUser } from "../../types/jwtuser.type";
-import { MovieType } from "../../types/movie.types/movie_pub.type";
-import { WatchlistType } from "../../types/movie.types/watchlist_pub.type";
+import { MovieExtType } from "../../types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { History, Vote, Movie } from "@prisma/client";
 import imdb from "imdb-api";
 import { ResDto } from "../../types/res.dto";
@@ -21,7 +21,7 @@ export class MovieController {
    * PUBLIC GET all movies with its related data
    */
   @Get('all')
-  async get_all_media() : Promise<MovieType[]> {
+  async get_all_media() : Promise<MovieExtType[]> {
     return await this.movieService.get_all()
   }
 
@@ -29,7 +29,7 @@ export class MovieController {
    * PUBLIC GET all movies from watchlist with its related data
    */
   @Get('watchlist')
-  async get_watchlist() : Promise<WatchlistType[]> {
+  async get_watchlist() : Promise<WatchlistExtType[]> {
     return await this.movieService.get_watchlist()
   }
 
