@@ -10,8 +10,8 @@ A full stack management application for voting movies for weekly movie events.
 - Users can manage own profile
 - Clean and responsive Bootstrap-UI
 - 100% useable without client (via REST-API)
-- **(soon)** automatic management of voted movies around movie events
-- **(soon)** automatic notifications for movie events with the list of interested users
+- automatic management of voted movies around movie events
+- automatic notifications for movie events with the list of interested users
 
 ## Installation
 1. You need [node.js](https://nodejs.org/en/) installed (version 18.12.1 or newer).
