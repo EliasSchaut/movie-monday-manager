@@ -1,14 +1,14 @@
 import { ConflictException, ForbiddenException, Injectable } from "@nestjs/common";
-import { UserDBService } from "../common/db_services/users/userDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
 import { Movie, Prisma, User } from "@prisma/client";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
-import { PasswordService } from "../common/util_services/password.service";
-import { EmailService } from "../common/util_services/email.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
+import { PasswordService } from "../../common/util_services/password.service";
+import { EmailService } from "../../common/util_services/email.service";
 import cuid from "cuid";
-import { GravatarService } from "../common/util_services/gravatar.service";
-import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
-import { ProfileDto } from "../common/types/user.dto/profile.dto";
+import { GravatarService } from "../../common/util_services/gravatar.service";
+import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
+import { ProfileDto } from "../../types/user.dto/profile.dto";
 
 @Injectable()
 export class UserService {

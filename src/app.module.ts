@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './routes/auth/auth.module';
+import { UserModule } from './routes/user/user.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
-import { MovieModule } from './movie/movie.module';
-import { VoteModule } from './vote/vote.module';
+import { MovieModule } from './routes/movie/movie.module';
+import { VoteModule } from './routes/vote/vote.module';
 import { EventModule } from "./common/event_service/event.module";
 import { ScheduleModule } from "@nestjs/schedule";
 

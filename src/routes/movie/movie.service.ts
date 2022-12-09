@@ -1,12 +1,12 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
-import { UserDBService } from "../common/db_services/users/userDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
-import { HistoryDBService } from "../common/db_services/histroy/historyDB.service";
-import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
+import { HistoryDBService } from "../../common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
 
 
 

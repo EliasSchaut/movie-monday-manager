@@ -5,11 +5,11 @@ import {
   InternalServerErrorException,
   NotFoundException
 } from "@nestjs/common";
-import { UserDBService } from '../common/db_services/users/userDB.service';
+import { UserDBService } from '../../common/db_services/users/userDB.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { EmailService } from "../common/util_services/email.service";
-import { PasswordService } from "../common/util_services/password.service";
+import { EmailService } from "../../common/util_services/email.service";
+import { PasswordService } from "../../common/util_services/password.service";
 import cuid from "cuid";
 
 @Injectable()

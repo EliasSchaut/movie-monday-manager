@@ -1,14 +1,14 @@
 import { Controller, Get, UseGuards, Post, Delete, Param, Body } from "@nestjs/common";
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UserService } from "./user.service";
-import { User } from "../common/decorators/user.decorator";
-import { JwtUser } from "../common/types/jwtuser.type";
-import { ProfileDto } from "../common/types/user.dto/profile.dto";
-import { EmailOptInDto } from "../common/types/user.dto/email_opt_in.dto";
-import { PasswordDto } from "../common/types/user.dto/password.dto";
-import { LoginDto } from "../common/types/user.dto/login.dto";
-import { PasswordNewDto } from "../common/types/user.dto/password_new.dto";
-import { ResDto } from "../common/types/res.dto";
+import { User } from "../../common/decorators/user.decorator";
+import { JwtUser } from "../../types/jwtuser.type";
+import { ProfileDto } from "../../types/user.dto/profile.dto";
+import { EmailOptInDto } from "../../types/user.dto/email_opt_in.dto";
+import { PasswordDto } from "../../types/user.dto/password.dto";
+import { LoginDto } from "../../types/user.dto/login.dto";
+import { PasswordNewDto } from "../../types/user.dto/password_new.dto";
+import { ResDto } from "../../types/res.dto";
 
 /**
  * Controller for user related routes
