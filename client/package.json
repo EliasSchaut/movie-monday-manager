@@ -1,6 +1,6 @@
 {
   "name": "movie-monday-client",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.4",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
@@ -13,6 +13,7 @@
     "bootstrap-table": "^1.21.1",
     "jquery": "^3.6.1",
     "js-cookie": "^3.0.1",
+    "movie-monday-manager": "file:..",
     "vue": "^3.2.37",
     "vue-router": "^4.1.3"
   },

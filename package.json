@@ -1,6 +1,6 @@
 {
   "name": "movie-monday-manager",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.4",
   "description": "",
   "author": "EliasSchaut",
   "private": true,
@@ -8,6 +8,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "build:all": "npm i --prefix ./client && npm run build --prefix ./client && prisma migrate dev --schema=./prisma/schema.prisma && npm i && npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
