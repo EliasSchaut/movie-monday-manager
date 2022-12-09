@@ -19,7 +19,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   /**
-   * GET user data
+   * PRIVATE GET user data
    * @param user
    */
   @UseGuards(JwtAuthGuard)
@@ -29,7 +29,7 @@ export class UserController {
   }
 
   /**
-   * POST update profile information (name, gravatar)
+   * PRIVATE POST update profile information (name, gravatar)
    * @param user
    * @param body
    */
@@ -40,7 +40,7 @@ export class UserController {
   }
 
   /**
-   * POST update email_opt_in (set/unset on newsletter)
+   * PRIVATE POST update email_opt_in (set/unset on newsletter)
    * @param user
    * @param body
    */
@@ -51,7 +51,7 @@ export class UserController {
   }
 
   /**
-   * DELETE user
+   * PRIVATE DELETE user
    * @param user
    * @param body
    */
@@ -62,7 +62,7 @@ export class UserController {
   }
 
   /**
-   * GET all saved user data
+   * PRIVATE GET all saved user data
    * @param user
    */
   @UseGuards(JwtAuthGuard)
@@ -72,7 +72,7 @@ export class UserController {
   }
 
   /**
-   * POST update username (email)
+   * PRIVATE POST update username (email)
    * @param user
    * @param body
    */
@@ -83,7 +83,7 @@ export class UserController {
   }
 
   /**
-   * POST update password
+   * PRIVATE POST update password
    * @param user
    * @param body
    */
@@ -94,7 +94,7 @@ export class UserController {
   }
 
   /**
-   * GET check if bearer token is valid
+   * PRIVATE GET check if bearer token is valid
    */
   @UseGuards(JwtAuthGuard)
   @Get('check')
@@ -103,7 +103,7 @@ export class UserController {
   }
 
   /**
-   * GET public user data from given user_id
+   * PUBLIC GET public user data from given user_id
    * @param user_id
    */
   @Get(':user_id')
