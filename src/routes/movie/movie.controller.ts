@@ -3,6 +3,11 @@ import { MovieService } from "./movie.service";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { User } from "../../common/decorators/user.decorator";
 import { JwtUser } from "../../types/jwtuser.type";
+import { MovieType } from "../../types/movie.types/movie_pub.type";
+import { WatchlistType } from "../../types/movie.types/watchlist_pub.type";
+import { History, Vote, Movie } from "@prisma/client";
+import imdb from "imdb-api";
+import { ResDto } from "../../types/res.dto";
 
 /**
  * Controller for movie related routes
@@ -16,7 +21,7 @@ export class MovieController {
    * PUBLIC GET all movies with its related data
    */
   @Get('all')
-  async get_all_media() {
+  async get_all_media() : Promise<MovieType[]> {
     return await this.movieService.get_all()
   }
 
@@ -24,7 +29,7 @@ export class MovieController {
    * PUBLIC GET all movies from watchlist with its related data
    */
   @Get('watchlist')
-  async get_watchlist() {
+  async get_watchlist() : Promise<WatchlistType[]> {
     return await this.movieService.get_watchlist()
   }
 
@@ -32,16 +37,17 @@ export class MovieController {
    * PUBLIC GET all movies from history with its related data
    */
   @Get('history')
-  async get_history() {
+  async get_history() : Promise<History[]> {
     return await this.movieService.get_history()
   }
 
   /**
-   * PUBLIC GET information about a specific movie given by its imdb_id
+   * PRIVATE GET information about a specific movie given by its imdb_id
    * @param imdb_id
    */
+  @UseGuards(JwtAuthGuard)
   @Get(':imdb_id')
-  async get_media(@Param('imdb_id') imdb_id: string) {
+  async get_media(@Param('imdb_id') imdb_id: string) : Promise<imdb.Movie> {
     return await this.movieService.get(imdb_id)
   }
 
@@ -54,7 +60,7 @@ export class MovieController {
    */
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
-  async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) {
+  async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string): Promise<{movie: Movie, vote: Vote}> {
     return await this.movieService.save(imdb_id, user.id)
   }
 
@@ -65,7 +71,7 @@ export class MovieController {
    */
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
-  async delete_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) {
+  async delete_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<ResDto> {
     return await this.movieService.delete(imdb_id, user.id)
   }
 }

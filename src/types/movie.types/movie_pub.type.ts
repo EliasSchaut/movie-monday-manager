@@ -1,9 +1,9 @@
 
-export interface MovieAll {
-  imdb_id: string;
+export interface MovieType {
+  imdb_id: string,
   title: string,
   link: string,
-  year: string,
+  year: number,
   genre: string,
   proposer: string,
   proposer_id: number,
