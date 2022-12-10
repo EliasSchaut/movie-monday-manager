@@ -2,13 +2,13 @@
 ![](https://img.shields.io/github/license/EliasSchaut/Movie-Monday-Manager)
 
 # Movie Monday Manager 
-A full stack management application for voting movies for weekly movie events.
+A full stack management application for voting movies for cyclic movie events.
 
 ## Features
-- Account-registration with email verification
-- Users can vote, add and remove movies
-- Users can manage own profile
-- Clean and responsive Bootstrap-UI
+- account-registration with email verification
+- users can vote, add and remove movies
+- users can manage own profile
+- clean and responsive Bootstrap-UI
 - 100% usable without client (via REST-API)
 - automatic management of voted movies around movie events
 - automatic notifications for movie events with the list of interested users
