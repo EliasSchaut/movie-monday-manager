@@ -7,11 +7,14 @@ import { VoteModule } from './routes/vote/vote.module';
 import { EventModule } from "./common/event_service/event.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ConfigModule } from "@nestjs/config";
+import { config_validation_schema } from "./common/validation/config.validation";
 import { join } from "path";
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      validationSchema: config_validation_schema
     }),
     AuthModule, UserModule, MovieModule, VoteModule, EventModule,
     ServeStaticModule.forRoot({
