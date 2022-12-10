@@ -22,7 +22,7 @@ A full stack management application for voting movies for cyclic movie events.
 6. Run the server with ```npm run start:prod```
 
 ## Configuration
-This Doc is still work in process
+The configuration file is located in the root directory of the project and is called ```.env```. It will be validated on startup via the [Joi](https://joi.dev/) library. To see the validation schema, see the [config.validation.ts](./src/common/validation/config.validation.ts) file.
 
 ## API-Docs
 This project is 100% usable without client via a REST-API!
