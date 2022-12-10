@@ -19,7 +19,7 @@
             <router-link class="nav-link" to="/privacy">Privacy</router-link>
           </li>
           <li>
-            <a class="nav-link" href="https://eliasschaut.github.io/Movie-Monday-Manager/" target="_blank">Docs</a>
+            <a class="nav-link" href="/docs" target="_blank">Docs</a>
           </li>
           <li>
             <a class="nav-link" href="https://github.com/EliasSchaut/Movie-Monday-Manager" target="_blank">GitHub</a>
