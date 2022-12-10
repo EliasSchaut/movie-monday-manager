@@ -9,6 +9,8 @@ async function bootstrap() {
     contentSecurityPolicy: {
       directives: {
         imgSrc: ["'self'", "data:", "https://www.gravatar.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        objectSrc: ["'self'"],
       }
     },
     crossOriginEmbedderPolicy: false

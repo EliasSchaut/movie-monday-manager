@@ -8,13 +8,16 @@ import { EventModule } from "./common/event_service/event.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ConfigModule } from "@nestjs/config";
 import { join } from "path";
-
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
     AuthModule, UserModule, MovieModule, VoteModule, EventModule,
+    ServeStaticModule.forRoot({
+      serveRoot: '/docs',
+      rootPath: join(__dirname, '..', 'docs'),
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client/dist'),
     }),
