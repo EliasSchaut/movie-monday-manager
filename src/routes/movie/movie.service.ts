@@ -1,12 +1,15 @@
 import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
-import { UserDBService } from "../common/db_services/users/userDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
-import { HistoryDBService } from "../common/db_services/histroy/historyDB.service";
-import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
+import { HistoryDBService } from "../../common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
+import { MovieExtType } from "../../types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
+import { ResDto } from "../../types/res.dto";
 
 
 
@@ -36,6 +39,7 @@ export class MovieService {
     const movies = await this.movieDBService.get_all()
     return await Promise.all(movies.map(async (movie) => {
       const user = await this.userDBService.get({ id: movie.proposer_id }) as User
+      const votes = await this.voteDBService.get_num_of_votes(movie.imdb_id)
 
       return {
         imdb_id: movie.imdb_id,
@@ -46,8 +50,8 @@ export class MovieService {
         proposer: user.name,
         proposer_id: user.id,
         createdAt: movie.createdAt,
-        votes: await this.voteDBService.get_num_of_votes(movie.imdb_id)
-      };
+        votes
+      } as MovieExtType;
     }));
   }
 
@@ -96,7 +100,7 @@ export class MovieService {
     else if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
       await this.movieDBService.delete(imdb_id)
-      return { success: true }
+      return { message: "Successfully deleted movie: " + movie.title, show_alert: true } as ResDto
     } else {
       throw new NotFoundException('Movie not found or you are not the proposer')
     }
@@ -114,7 +118,7 @@ export class MovieService {
         link: movie.link,
         start_time: watch_movie.start_time,
         interested: votes.map((vote) => vote.user.id)
-      }
+      } as WatchlistExtType
     }))
   }
 

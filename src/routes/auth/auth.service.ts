@@ -5,12 +5,13 @@ import {
   InternalServerErrorException,
   NotFoundException
 } from "@nestjs/common";
-import { UserDBService } from '../common/db_services/users/userDB.service';
+import { UserDBService } from '../../common/db_services/users/userDB.service';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { EmailService } from "../common/util_services/email.service";
-import { PasswordService } from "../common/util_services/password.service";
+import { EmailService } from "../../common/util_services/email.service";
+import { PasswordService } from "../../common/util_services/password.service";
 import cuid from "cuid";
+import { RegisterDto } from "../../types/user.dto/register.dto";
 
 @Injectable()
 export class AuthService {
@@ -46,7 +47,7 @@ export class AuthService {
     };
   }
 
-  async register(user: any) {
+  async register(user: RegisterDto) {
     const payload = { username: user.username, name: user.name, password: user.password };
     try {
       const userDB = await this.userDBService.create(payload);

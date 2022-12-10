@@ -15,7 +15,7 @@ export class AnnounceJob {
               private readonly watchListDBService: WatchListDBService,
               private readonly movieDBService: MovieDBService,
               private readonly emailService: EmailService) {
-    this.announce_discord = (watchlist: string[]) => `<@1041714399964041286>\n` +
+    this.announce_discord = (watchlist: string[]) => `<@&1041714399964041286>\n` +
       `Die Wahl ist durch, diese Filme werden geschaut:\n${watchlist.join("\n")}\n` +
       `Mehr Infos siehe auch ${process.env.FRONTEND_URL}\n\n` +
       `Es gibt Getränke und Atmosphäre auf Spendenbasis!\n\n`

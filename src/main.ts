@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import 'dotenv/config'
 import helmet from 'helmet';
 
 async function bootstrap() {
@@ -10,6 +9,8 @@ async function bootstrap() {
     contentSecurityPolicy: {
       directives: {
         imgSrc: ["'self'", "data:", "https://www.gravatar.com"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        objectSrc: ["'self'"],
       }
     },
     crossOriginEmbedderPolicy: false

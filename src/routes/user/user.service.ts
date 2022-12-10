@@ -1,13 +1,14 @@
 import { ConflictException, ForbiddenException, Injectable } from "@nestjs/common";
-import { UserDBService } from "../common/db_services/users/userDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
 import { Movie, Prisma, User } from "@prisma/client";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
-import { PasswordService } from "../common/util_services/password.service";
-import { EmailService } from "../common/util_services/email.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
+import { PasswordService } from "../../common/util_services/password.service";
+import { EmailService } from "../../common/util_services/email.service";
 import cuid from "cuid";
-import { GravatarService } from "../common/util_services/gravatar.service";
-import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
+import { GravatarService } from "../../common/util_services/gravatar.service";
+import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
+import { ProfileDto } from "../../types/user.dto/profile.dto";
 
 @Injectable()
 export class UserService {
@@ -37,7 +38,7 @@ export class UserService {
     return { user, movies: proposed_movies, votes };
   }
 
-  async change_profile(user_id: number, data: any) {
+  async change_profile(user_id: number, data: ProfileDto) {
     const user = await this.userDBService.get({ id: user_id }) as User;
     const data_to_update = {
       name: data.name
@@ -65,12 +66,12 @@ export class UserService {
     return { message: "Email option updated!", show_alert: true };
   }
 
-  async change_password(user_id: number, data: any) {
+  async change_password(user_id: number, password_new: string, password_old: string) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (await this.passwordService.compare(data.password_old, user.password)) {
+    if (await this.passwordService.compare(password_old, user.password)) {
       await this.userDBService.update({ where: { id: user_id },
         data: {
-          password: await this.passwordService.hash(data.password),
+          password: await this.passwordService.hash(password_new),
         }
       });
       return { message: "Password updated! " +
@@ -82,20 +83,20 @@ export class UserService {
     }
   }
 
-  async change_username(user_id: number, data: any) {
+  async change_username(user_id: number, new_username: string, password: string) {
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if ((user.username === data.username) || (await this.userDBService.has_user(data.username))) {
+    if ((user.username === new_username) || (await this.userDBService.has_user(new_username))) {
       throw new ConflictException("Email is already in use");
     }
 
-    if (await this.passwordService.compare(data.password, user.password)) {
+    if (await this.passwordService.compare(password, user.password)) {
       const new_challenge = cuid();
       await this.userDBService.update({ where: { id: user_id },
         data: {
-          username: data.username,
+          username: new_username,
           verified: false,
           challenge: new_challenge,
-          gravatar_url: this.gravatarService.generate_gravatar_url(data.username)
+          gravatar_url: this.gravatarService.generate_gravatar_url(new_username)
         }
       });
       const new_challenge_url = this.emailService.generate_challenge_url(new_challenge);
@@ -109,7 +110,7 @@ export class UserService {
     }
   }
 
-  async delete(user_id: number, data: any) {
+  async delete(user_id: number, password: string) {
     const watchlist = await this.watchListDBService.get_all()
     const watchlist_proposer_ids = await Promise.all(watchlist.map(async wl => {
       return ((await this.movieDBService.get(wl.imdb_id)) as Movie).proposer_id
@@ -119,7 +120,7 @@ export class UserService {
     }
 
     const user = await this.userDBService.get({ id: user_id }) as User;
-    if (await this.passwordService.compare(data.password, user.password)) {
+    if (await this.passwordService.compare(password, user.password)) {
       await this.voteDBService.delete_all_user(user_id);
       await this.movieDBService.delete_all_proposed(user_id);
       await this.userDBService.delete({ id: user_id });
