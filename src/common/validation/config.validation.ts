@@ -1,7 +1,6 @@
 import * as Joi from 'joi'
-
-const cron_pattern = /(@(annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})/
-const discord_webhook_pattern = /^https:\/\/discord.com\/api\/webhooks\/[0-9]+\/.+$/
+import { cron_pattern } from "./patterns/cron.pattern";
+import { discord_webhook_pattern } from "./patterns/discord_webhook.pattern";
 
 export const config_validation_schema = Joi.object({
   PROJECT_NAME: Joi.string().required()

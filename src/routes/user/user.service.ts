@@ -5,10 +5,13 @@ import { MovieDBService } from "../../common/db_services/movies/movieDB.service"
 import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { PasswordService } from "../../common/util_services/password.service";
 import { EmailService } from "../../common/util_services/email.service";
-import cuid from "cuid";
 import { GravatarService } from "../../common/util_services/gravatar.service";
 import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
 import { ProfileDto } from "../../types/user.dto/profile.dto";
+import { name_pattern } from "../../common/validation/patterns/name.pattern";
+import { username_pattern } from "../../common/validation/patterns/username.pattern";
+import { password_pattern } from "../../common/validation/patterns/password.pattern";
+import cuid from "cuid";
 
 @Injectable()
 export class UserService {
@@ -39,6 +42,10 @@ export class UserService {
   }
 
   async change_profile(user_id: number, data: ProfileDto) {
+    if (!name_pattern.test(data.name)) {
+      throw new ForbiddenException("Invalid name! Name must be between 3 and 20 characters and start with a capital letter!");
+    }
+
     const user = await this.userDBService.get({ id: user_id }) as User;
     const data_to_update = {
       name: data.name
@@ -67,6 +74,10 @@ export class UserService {
   }
 
   async change_password(user_id: number, password_new: string, password_old: string) {
+    if (!password_pattern.test(password_new)) {
+      throw new ForbiddenException("Invalid password! Password must be minimum eight characters, at least one letter and one number!");
+    }
+
     const user = await this.userDBService.get({ id: user_id }) as User;
     if (await this.passwordService.compare(password_old, user.password)) {
       await this.userDBService.update({ where: { id: user_id },
@@ -84,6 +95,10 @@ export class UserService {
   }
 
   async change_username(user_id: number, new_username: string, password: string) {
+    if (!username_pattern.test(new_username)) {
+      throw new ForbiddenException("Invalid username! Username must be a valid email address!");
+    }
+
     const user = await this.userDBService.get({ id: user_id }) as User;
     if ((user.username === new_username) || (await this.userDBService.has_user(new_username))) {
       throw new ConflictException("Email is already in use");
