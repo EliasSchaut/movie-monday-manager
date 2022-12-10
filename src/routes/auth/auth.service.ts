@@ -12,6 +12,9 @@ import { EmailService } from "../../common/util_services/email.service";
 import { PasswordService } from "../../common/util_services/password.service";
 import cuid from "cuid";
 import { RegisterDto } from "../../types/user.dto/register.dto";
+import { name_pattern } from "../../common/validation/patterns/name.pattern";
+import { username_pattern } from "../../common/validation/patterns/username.pattern";
+import { password_pattern } from "../../common/validation/patterns/password.pattern";
 
 @Injectable()
 export class AuthService {
@@ -48,6 +51,10 @@ export class AuthService {
   }
 
   async register(user: RegisterDto) {
+    if (!name_pattern.test(user.name) || !username_pattern.test(user.username) || !password_pattern.test(user.password)) {
+      throw new ForbiddenException('Invalid input. Your inputs failed to pass the validation checks.');
+    }
+
     const payload = { username: user.username, name: user.name, password: user.password };
     try {
       const userDB = await this.userDBService.create(payload);
@@ -99,6 +106,10 @@ export class AuthService {
   }
 
   async pw_reset(challenge: string, password: string) {
+    if (!password_pattern.test(password)) {
+      throw new ForbiddenException('Invalid new password. Password must be minimum eight characters, at least one letter and one number!');
+    }
+
     const user = await this.userDBService.get({ challenge })
     if (user && user.pw_reset) {
       const hashed_password = await this.passwordService.hash(password);

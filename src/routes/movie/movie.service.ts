@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
@@ -10,8 +10,7 @@ import { WatchListDBService } from "../../common/db_services/watchlist/watchList
 import { MovieExtType } from "../../types/movie.types/movie_ext.type";
 import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { ResDto } from "../../types/res.dto";
-
-
+import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 
 @Injectable()
 export class MovieService {
@@ -56,6 +55,10 @@ export class MovieService {
   }
 
   async save(imdb_id: string, proposer_id: string) {
+    if (!imdb_id_pattern.test(imdb_id)) {
+      throw new ForbiddenException('Invalid imdb id. The id must start with tt and contain only numbers!')
+    }
+
     if (await this.histroyDBService.has(imdb_id)) {
       throw new ConflictException('Movie is already in history')
     }
