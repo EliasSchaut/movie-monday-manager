@@ -1,5 +1,5 @@
 <template>
-  <FormComponent :title="title" :route="route" :method="method" :callback="callback" :skip_call="skip_call">
+  <FormComponent :title="$t('reset_request.title')" :route="route" :method="method" :callback="callback" :skip_call="skip_call">
     <EmailComponent />
   </FormComponent>
 </template>
@@ -14,7 +14,6 @@ export default {
   name: "ResetRequestView",
   data() {
     return {
-      title: "Password Reset Request",
       route: "/api/auth/reset/",
       method: "get",
       skip_call: true

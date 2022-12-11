@@ -1,5 +1,5 @@
 <template>
-  <FormComponent :title="title" :route="route" :callback="callback">
+  <FormComponent :title="$t('reset.title')" :route="route" :callback="callback">
     <PasswordComponent type="double" label="Enter new Password" />
   </FormComponent>
 </template>
@@ -16,7 +16,6 @@ export default {
   name: "ResetView",
   data() {
     return {
-      title: "Password Reset",
       route: `/api/auth/reset/${challenge.value}`
     }
   },

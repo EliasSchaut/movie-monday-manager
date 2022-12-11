@@ -107,5 +107,13 @@
 
   "register": {
     "title": "Title"
+  },
+
+  "reset_request": {
+    "title": "Password Reset Request"
+  },
+
+  "reset": {
+    "title": "Password Reset"
   }
 }
