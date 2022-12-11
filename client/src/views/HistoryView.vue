@@ -11,12 +11,15 @@
 import TableComponent from "@/components/TableComponent.vue";
 import { ref } from "vue";
 import { call } from "@/util/api";
+import { useTranslation } from "i18next-vue";
+const { t } = useTranslation()
+
 export default {
   name: "HistroyComponent",
   components: { TableComponent },
   data() {
     return {
-      head: ["Watched At", "Title"]
+      head: [t('history.watched_at'), t('history.title')]
     }
   },
   setup() {

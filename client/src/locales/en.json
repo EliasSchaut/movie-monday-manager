@@ -39,5 +39,10 @@
         "invalid_feedback": "Should be a valid IMDB ID, e.g. tt1234567"
       }
     }
+  },
+
+  "history": {
+    "title": "Title",
+    "watched_at": "Watched At"
   }
 }
