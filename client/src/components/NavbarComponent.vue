@@ -25,13 +25,20 @@
             <a class="nav-link" href="https://github.com/EliasSchaut/Movie-Monday-Manager" target="_blank">GitHub</a>
           </li>
         </ul>
-        <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
-          <span class="visually-hidden">Loading...</span>
+
+        <div class="d-flex justify-content-end">
+          <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <select class="form-select" aria-label="Default select example">
+            <option value="en">🇬🇧 English</option>
+            <option value="de">🇩🇪 German</option>
+          </select>
+          <router-link class="btn btn-success" type="button" to="/login" v-if="!store.logged_in">Login</router-link>
+          <router-link class="btn btn-primary" type="button" to="/register" v-if="!store.logged_in">Register</router-link>
+          <router-link class="btn btn-outline-primary" type="button" to="/profile" v-if="store.logged_in">Profile</router-link>
+          <router-link class="btn btn-danger" type="button" to="/logout" v-if="store.logged_in">Logout</router-link>
         </div>
-        <router-link class="btn btn-success" type="button" to="/login" v-if="!store.logged_in">Login</router-link>
-        <router-link class="btn btn-primary" type="button" to="/register" v-if="!store.logged_in">Register</router-link>
-        <router-link class="btn btn-outline-primary" type="button" to="/profile" v-if="store.logged_in">Profile</router-link>
-        <router-link class="btn btn-danger" type="button" to="/logout" v-if="store.logged_in">Logout</router-link>
       </div>
     </div>
   </nav>
