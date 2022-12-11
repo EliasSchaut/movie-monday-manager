@@ -2,7 +2,7 @@
   <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
     <img class="bi flex-shrink-0 me-2" aria-label="Danger:" :src="warn_svg" alt="img_danger" />
     <div>
-      <strong>Danger! </strong>
+      <strong>{{ $t('common.alert.danger') }} </strong>
       <slot></slot>
       <button type="button" class="btn-close" @click="store.hide_alert()" aria-label="Close"></button>
     </div>

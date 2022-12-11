@@ -2,7 +2,7 @@
   <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
     <img class="bi flex-shrink-0 me-2" aria-label="Success:" :src="check_svg" alt="img_success" />
     <div>
-      <strong>Success! </strong>
+      <strong>{{ $t('common.alert.success') }} </strong>
       <slot></slot>
       <button type="button" class="btn-close" @click="store.hide_alert()" aria-label="Close"></button>
     </div>

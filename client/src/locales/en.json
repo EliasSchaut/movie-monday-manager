@@ -2,11 +2,37 @@
   "common": {
     "loading": "Loading...",
     "form": {
+      "username": {
+        "label": "E-Mail",
+        "invalid_feedback": "Please enter a valid email address!"
+      },
+      "name": {
+        "label": "Name",
+        "invalid_feedback": "Must be between 3 and 20 characters and start with a capital letter!"
+      },
+      "password": {
+        "label": {
+          "single": "Password",
+          "retype": "Retype password",
+          "old": "Old password"
+        },
+        "invalid_feedback": {
+          "single": "Minimum eight characters, at least one letter and one number!",
+          "double": "- At least 8 characters<br>- Contains an uppercase letter, lowercase letter, and a number<br>- Can contain special characters",
+          "double_retype": "Should be the same as the password!"
+        }
+      },
       "valid_feedback": "Looks good!",
       "submit": "Submit"
     },
     "modal": {
       "close": "Close"
+    },
+    "alert": {
+      "info": "Info!",
+      "success": "Success!",
+      "warning": "Warning!",
+      "danger": "Danger!"
     }
   },
 
@@ -46,6 +72,35 @@
     "watched_at": "Watched At"
   },
 
+  "profile": {
+    "header": "Profile",
+    "avatar": {
+      "placeholder": "Placeholder Picture",
+      "gravatar": "Profile Picture"
+    },
+    "button": {
+      "profile": "Edit Profile",
+      "username": "Change E-Mail",
+      "password": "Change Password"
+    },
+    "form": {
+      "profile": {
+        "gravatar": "Use Gravatar"
+      },
+      "username": {
+        "new": "New E-Mail"
+      },
+      "delete_account": {
+        "desc": "All your proposed movies, votes and user data will be irretrievable lost!"
+      }
+    },
+    "option": {
+      "email_opt_in": "Receive emails",
+      "get_user_data": "Get all user data",
+      "delete_account": "Delete account"
+    }
+  },
+
   "login": {
     "title": "Title"
   },
@@ -53,6 +108,4 @@
   "register": {
     "title": "Title"
   }
-
-
 }
