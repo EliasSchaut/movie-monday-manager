@@ -16,6 +16,7 @@ import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.patter
 export class MovieService {
 
   private readonly imdb: Client
+  private readonly max_proposed_movies = Number(process.env.MAX_PROPOSED_MOVIES)
 
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
@@ -54,7 +55,7 @@ export class MovieService {
     }));
   }
 
-  async save(imdb_id: string, proposer_id: string) {
+  async save(imdb_id: string, proposer_id: number) {
     if (!imdb_id_pattern.test(imdb_id)) {
       throw new ForbiddenException('Invalid imdb id. The id must start with tt and contain only numbers!')
     }
@@ -67,8 +68,13 @@ export class MovieService {
       throw new ConflictException('Movie is already in database')
     }
 
+    if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposed_movies) {
+      throw new ConflictException('You have reached the maximum number of proposed movies! ' +
+        'You can only propose ' + this.max_proposed_movies + ' movies!')
+    }
+
     const movie = await this.get(imdb_id)
-    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: Number(proposer_id)}) as User
+    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
@@ -82,7 +88,7 @@ export class MovieService {
 
     try {
       return this.movieDBService.add(movieDB_data).then((movie) => {
-        return this.voteService.vote(movie.imdb_id, Number(proposer_id))
+        return this.voteService.vote(movie.imdb_id, proposer_id)
           .then((vote) => {
             return { movie, vote }
           })

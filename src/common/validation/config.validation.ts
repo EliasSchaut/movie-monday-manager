@@ -18,8 +18,10 @@ export const config_validation_schema = Joi.object({
     .description('The expiration time of the JWT tokens'),
   OMDB_API_KEY: Joi.string().required().token()
     .description('The API key for the OMDB API. Request a free key at https://www.omdbapi.com/apikey.aspx'),
-  MAX_VOTES: Joi.number().required().default("5")
+  MAX_VOTES: Joi.number().required().default("20")
     .description('The maximum number of votes a user can cast in total for all movies'),
+  MAX_PROPOSED_MOVIES: Joi.number().required().default("5")
+    .description('The maximum number of movies a user can propose'),
 
   SCHEDULE_WATCHLIST: Joi.string().required().default("0 15 * * 1").pattern(cron_pattern)
     .description('The cron pattern for the schedule that creates the watchlist for new movies and sends notifications per mail and Discord webhook'),

@@ -61,7 +61,7 @@ export class MovieController {
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string): Promise<{movie: Movie, vote: Vote}> {
-    return await this.movieService.save(imdb_id, user.id)
+    return await this.movieService.save(imdb_id, Number(user.id))
   }
 
   /**
