@@ -25,11 +25,11 @@
           <li class="list-group-item">
             <div class="form-switch">
               <input class="form-check-input" type="checkbox" role="switch" id="switch_emails" :checked="user.email_opt_in" name="email_opt_in" @click="opt_in_email">
-              <label class="form-check-label ms-2" for="switch_emails">{{ $t('profile.oprion.email_opt_in') }}</label>
+              <label class="form-check-label ms-2" for="switch_emails">{{ $t('profile.option.email_opt_in') }}</label>
             </div>
           </li>
-          <li class="list-group-item"><a @click.prevent="get_user_data" href="">{{ $t('profile.oprion.get_user_data') }}</a></li>
-          <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">{{ $t('profile.oprion.delete_account') }}</a></li>
+          <li class="list-group-item"><a @click.prevent="get_user_data" href="">{{ $t('profile.option.get_user_data') }}</a></li>
+          <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">{{ $t('profile.option.delete_account') }}</a></li>
         </ul>
       </CardComponent>
     </div>

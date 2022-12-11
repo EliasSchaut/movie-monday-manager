@@ -102,11 +102,11 @@
   },
 
   "login": {
-    "title": "Title"
+    "title": "Login"
   },
 
   "register": {
-    "title": "Title"
+    "title": "Register"
   },
 
   "reset_request": {
