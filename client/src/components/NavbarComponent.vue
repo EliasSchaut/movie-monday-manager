@@ -30,7 +30,7 @@
           <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" @change="change_lang">
             <option value="en">🇬🇧 English</option>
             <option value="de">🇩🇪 German</option>
           </select>
@@ -49,8 +49,16 @@ import { store } from '@/util/store'
 </script>
 
 <script lang="ts">
+import { store } from "@/util/store";
+
 export default {
   name: "NavbarComponent",
+  methods: {
+    change_lang: function (event: any) {
+      const new_lang = event.target.value as "en" | "de"
+      store.update_lang(new_lang)
+    }
+  }
 };
 </script>
 
