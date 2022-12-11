@@ -16,7 +16,7 @@ import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.patter
 export class MovieService {
 
   private readonly imdb: Client
-  private readonly max_proposed_movies = Number(process.env.MAX_PROPOSED_MOVIES)
+  private readonly max_proposeable_movies = Number(process.env.MAX_PROPOSEABLE_MOVIES)
 
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
@@ -68,9 +68,9 @@ export class MovieService {
       throw new ConflictException('Movie is already in database')
     }
 
-    if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposed_movies) {
+    if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposeable_movies) {
       throw new ConflictException('You have reached the maximum number of proposed movies! ' +
-        'You can only propose ' + this.max_proposed_movies + ' movies!')
+        'You can only propose ' + this.max_proposeable_movies + ' movies!')
     }
 
     const movie = await this.get(imdb_id)
