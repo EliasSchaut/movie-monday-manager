@@ -1,6 +1,39 @@
 {
   "common": {
-    "loading": "Lade..."
+    "loading": "Lade...",
+    "form": {
+      "username": {
+        "label": "E-Mail",
+        "invalid_feedback": "Bitte gib eine gültige E-Mail Adresse ein!"
+      },
+      "name": {
+        "label": "Name",
+        "invalid_feedback": "Muss zwischen 3 und 20 Zeichen lang sein und mit einem Großbuchstaben beginnen!"
+      },
+      "password": {
+        "label": {
+          "single": "Passwort",
+          "retype": "Passwort erneut eingeben",
+          "old": "Altes Passwort"
+        },
+        "invalid_feedback": {
+          "single": "Mindestens acht Zeichen, mindestens ein Buchstabe und eine Zahl!",
+          "double": "- Mindestens 8 Zeichen<br>- Enthält einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl<br>- Kann Sonderzeichen enthalten",
+          "double_retype": "Sollte mit dem Passwort identisch sein!"
+        }
+      },
+      "valid_feedback": "Sieht gut aus!",
+      "submit": "Bestätigen"
+    },
+    "modal": {
+      "close": "Schließen"
+    },
+    "alert": {
+      "info": "Info!",
+      "success": "Erfolg!",
+      "warning": "Warnung!",
+      "danger": "Gefahr!"
+    }
   },
 
   "nav": {
@@ -18,7 +51,71 @@
     "logout": "Abmelden"
   },
 
+  "movie": {
+    "title": "Titel",
+    "year": "Jahr",
+    "genre": "Genre",
+    "proposer": "Vorschlagende*r",
+    "proposed_on": "Vorgeschlagen&nbsp;am",
+    "interested": "Interessiert",
+    "modal": {
+      "title": "Film hinzufügen",
+      "form": {
+        "title": "IMDB ID:",
+        "invalid_feedback": "Sollte eine gültige IMDB ID sein, z.B. tt1234567"
+      }
+    }
+  },
 
+  "history": {
+    "title": "Titel",
+    "watched_at": "Geschaut am"
+  },
+
+  "profile": {
+    "header": "Profil",
+    "avatar": {
+      "placeholder": "Platzhalterbild",
+      "gravatar": "Profilbild"
+    },
+    "button": {
+      "profile": "Profil bearbeiten",
+      "username": "E-Mail ändern",
+      "password": "Passwort ändern"
+    },
+    "form": {
+      "profile": {
+        "gravatar": "Gravatar verwenden"
+      },
+      "username": {
+        "new": "Neue E-Mail"
+      },
+      "delete_account": {
+        "desc": "Alle von Ihnen vorgeschlagenen Filme, Stimmen und Benutzerdaten gehen unwiederbringlich verloren!"
+      }
+    },
+    "option": {
+      "email_opt_in": "Empfange E-Mails",
+      "get_user_data": "Alle Benutzerdaten abrufen",
+      "delete_account": "Konto löschen"
+    }
+  },
+
+  "login": {
+    "title": "Anmeldung"
+  },
+
+  "register": {
+    "title": "Registrierung"
+  },
+
+  "reset_request": {
+    "title": "Anfrage auf Passwortrücksetzung"
+  },
+
+  "reset": {
+    "title": "Passwortrücksetzung"
+  },
 
   "privacy": {
     "imprint": {
