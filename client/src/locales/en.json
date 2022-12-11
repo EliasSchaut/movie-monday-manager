@@ -44,5 +44,15 @@
   "history": {
     "title": "Title",
     "watched_at": "Watched At"
+  },
+
+  "login": {
+    "title": "Title"
+  },
+
+  "register": {
+    "title": "Title"
   }
+
+
 }

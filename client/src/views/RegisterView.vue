@@ -1,5 +1,5 @@
 <template>
-  <FormComponent :title="title" :route="route" :callback="callback">
+  <FormComponent :title="$t('register.title')" :route="route" :callback="callback">
     <NameComponent />
     <EmailComponent />
     <PasswordComponent type="double" />
@@ -16,7 +16,6 @@ import router from "@/router/router";
 export default {
   data() {
     return {
-      title: "Register!",
       route: "/api/auth/register",
     }
   },
