@@ -1,3 +1,22 @@
 {
+  "common": {
+    "loading": "Loading..."
+  },
 
+  "lel": "Test",
+
+  "nav": {
+    "home": "Home",
+    "history": "History",
+    "privacy": "Privacy",
+    "docs": "Docs",
+    "lang": {
+      "de": "\uD83C\uDDE9\uD83C\uDDEA German",
+      "en": "\uD83C\uDDEC\uD83C\uDDE7 English"
+    },
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout"
+  }
 }

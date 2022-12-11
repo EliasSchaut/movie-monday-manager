@@ -10,16 +10,16 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <router-link class="nav-link" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">{{ $t("nav.home") }}</router-link>
           </li>
           <li>
-            <router-link class="nav-link" to="/history">History</router-link>
+            <router-link class="nav-link" to="/history">{{ $t("nav.history") }}</router-link>
           </li>
           <li>
-            <router-link class="nav-link" to="/privacy">Privacy</router-link>
+            <router-link class="nav-link" to="/privacy">{{ $t("nav.privacy") }}</router-link>
           </li>
           <li>
-            <a class="nav-link" href="/docs" target="_blank">Docs</a>
+            <a class="nav-link" href="/docs" target="_blank">{{ $t("nav.docs") }}</a>
           </li>
           <li>
             <a class="nav-link" href="https://github.com/EliasSchaut/Movie-Monday-Manager" target="_blank">GitHub</a>
@@ -31,13 +31,13 @@
             <span class="visually-hidden">Loading...</span>
           </div>
           <select class="form-select" aria-label="Default select example" @change="change_lang">
-            <option value="en">🇬🇧 English</option>
-            <option value="de">🇩🇪 German</option>
+            <option value="en">{{ $t("nav.lang.en") }}</option>
+            <option value="de">{{ $t("nav.lang.de") }}</option>
           </select>
-          <router-link class="btn btn-success" type="button" to="/login" v-if="!store.logged_in">Login</router-link>
-          <router-link class="btn btn-primary" type="button" to="/register" v-if="!store.logged_in">Register</router-link>
-          <router-link class="btn btn-outline-primary" type="button" to="/profile" v-if="store.logged_in">Profile</router-link>
-          <router-link class="btn btn-danger" type="button" to="/logout" v-if="store.logged_in">Logout</router-link>
+          <router-link class="btn btn-success" type="button" to="/login" v-if="!store.logged_in">{{ $t("nav.login") }}</router-link>
+          <router-link class="btn btn-primary" type="button" to="/register" v-if="!store.logged_in">{{ $t("nav.register") }}</router-link>
+          <router-link class="btn btn-outline-primary" type="button" to="/profile" v-if="store.logged_in">{{ $t("nav.profile") }}</router-link>
+          <router-link class="btn btn-danger" type="button" to="/logout" v-if="store.logged_in">{{ $t("nav.logout") }}</router-link>
         </div>
       </div>
     </div>
