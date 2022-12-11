@@ -63,6 +63,10 @@ export class MovieService {
       throw new ConflictException('Movie is already in history')
     }
 
+    if (await this.movieDBService.has(imdb_id)) {
+      throw new ConflictException('Movie is already in database')
+    }
+
     const movie = await this.get(imdb_id)
     const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: Number(proposer_id)}) as User
 
