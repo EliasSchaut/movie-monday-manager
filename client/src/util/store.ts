@@ -2,7 +2,7 @@ import { reactive } from  'vue';
 import { get_cookie } from "@/util/cookie";
 
 export const store = reactive({
-  logged_in: false,
+  logged_in: true,
   loading: false,
   lang: "en" as "en" | "de",
   alert: {

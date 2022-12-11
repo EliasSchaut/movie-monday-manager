@@ -5,14 +5,14 @@
       <thead>
       <tr class="table-dark align-middle">
         <th data-field="title" data-sortable="true" scope="col" class="d-flex justify-content-between align-items-baseline" style="min-width: 100px">
-          <div>Title</div>
+          <div>{{ $t('movie.title') }}</div>
           <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>+</b></button>
         </th>
-        <th data-field="year" data-sortable="true" scope="col">Year</th>
-        <th data-field="gerne" data-sortable="true" scope="col">Genre</th>
-        <th data-field="proposer" data-sortable="true" scope="col">Proposer</th>
-        <th data-field="proposed_on" data-sortable="true" scope="col">Proposed&nbsp;on</th>
-        <th data-field="interested" data-sortable="true" scope="col" colspan="2">Interested</th>
+        <th data-field="year" data-sortable="true" scope="col">{{ $t('movie.year') }}</th>
+        <th data-field="gerne" data-sortable="true" scope="col">{{ $t('movie.genre') }}</th>
+        <th data-field="proposer" data-sortable="true" scope="col">{{ $t('movie.proposer') }}</th>
+        <th data-field="proposed_on" data-sortable="true" scope="col" v-html="$t('movie.proposed_on')" />
+        <th data-field="interested" data-sortable="true" scope="col" colspan="2">{{ $t('movie.interested') }}</th>
       </tr>
       </thead>
       <tbody>
@@ -43,23 +43,23 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Add Movie</h5>
+          <h5 class="modal-title">{{ $t('movie.modal.title') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_register" class="form was-validated" novalidate>
           <div class="modal-body">
-            <b>IMDB ID:</b>
+            <b>{{ $t('movie.modal.form.title') }}</b>
             <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
             <div class="valid-feedback">
               Looks good!
             </div>
             <div class="invalid-feedback">
-              Should be a valid IMDB ID, e.g. tt1234567
+              {{ $t('movie.modal.form.invalid_feedback') }}
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('common.modal.close') }}</button>
+            <button type="submit" class="btn btn-primary">{{ $t('common.form.submit') }}</button>
           </div>
         </form>
       </div>
@@ -73,13 +73,15 @@ import { store } from '@/util/store'
 import { call } from "@/util/api";
 import router from "@/router/router";
 import WatchlistComponent from "@/components/WatchlistComponent.vue";
+import ModalComponent from "@/components/ModalComponent.vue";
+import FormComponent from "@/components/form/FormComponent.vue";
 
 export default {
   name: "MovieComponent",
   data() {
     return { store }
   },
-  components: { WatchlistComponent },
+  components: { FormComponent, WatchlistComponent, ModalComponent },
   setup() {
     let movies = ref([] as any[]);
     let votes = ref([] as any[]);
