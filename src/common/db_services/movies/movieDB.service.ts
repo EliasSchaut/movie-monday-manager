@@ -23,6 +23,10 @@ export class MovieDBService {
     return await this.prisma.movie.findMany();
   }
 
+  async has(imdb_id: string) {
+    return (await this.prisma.movie.count({ where: { imdb_id } })) > 0;
+  }
+
   async get_all_proposed(user_id : number) {
     return await this.prisma.movie.findMany({
       where: { proposer_id: user_id }

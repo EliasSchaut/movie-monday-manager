@@ -1,11 +1,13 @@
 import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
-import { UserDBService } from "../common/db_services/users/userDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { Movie, Prisma } from "@prisma/client";
 
 @Injectable()
 export class VoteService {
+
+  private readonly max_votes = Number(process.env.MAX_VOTES)
 
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
@@ -29,8 +31,8 @@ export class VoteService {
 
   async vote(imdb_id: string, user_id: number) {
     const num_of_votes = await this.voteDBService.num_of(user_id)
-    if (num_of_votes >= Number(process.env.MAX_VOTES)) {
-      throw new ConflictException(`You have already voted for the maximum number (${process.env.MAX_VOTES}) of movies`)
+    if (num_of_votes >= this.max_votes) {
+      throw new ConflictException(`You have already voted for the maximum number of movies! You can only vote for ${this.max_votes} movies`)
     }
 
     const voteDB_data: Prisma.VoteCreateInput = {

@@ -1,19 +1,22 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { Client } from "imdb-api";
-import { MovieDBService } from "../common/db_services/movies/movieDB.service";
+import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
-import { UserDBService } from "../common/db_services/users/userDB.service";
-import { VoteDBService } from "../common/db_services/votes/voteDB.service";
+import { UserDBService } from "../../common/db_services/users/userDB.service";
+import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
-import { HistoryDBService } from "../common/db_services/histroy/historyDB.service";
-import { WatchListDBService } from "../common/db_services/watchlist/watchListDB.service";
-
-
+import { HistoryDBService } from "../../common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
+import { MovieExtType } from "../../types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
+import { ResDto } from "../../types/res.dto";
+import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 
 @Injectable()
 export class MovieService {
 
   private readonly imdb: Client
+  private readonly max_proposeable_movies = Number(process.env.MAX_PROPOSEABLE_MOVIES)
 
   constructor(private readonly movieDBService: MovieDBService,
               private readonly userDBService: UserDBService,
@@ -36,6 +39,7 @@ export class MovieService {
     const movies = await this.movieDBService.get_all()
     return await Promise.all(movies.map(async (movie) => {
       const user = await this.userDBService.get({ id: movie.proposer_id }) as User
+      const votes = await this.voteDBService.get_num_of_votes(movie.imdb_id)
 
       return {
         imdb_id: movie.imdb_id,
@@ -46,18 +50,31 @@ export class MovieService {
         proposer: user.name,
         proposer_id: user.id,
         createdAt: movie.createdAt,
-        votes: await this.voteDBService.get_num_of_votes(movie.imdb_id)
-      };
+        votes
+      } as MovieExtType;
     }));
   }
 
-  async save(imdb_id: string, proposer_id: string) {
+  async save(imdb_id: string, proposer_id: number) {
+    if (!imdb_id_pattern.test(imdb_id)) {
+      throw new ForbiddenException('Invalid imdb id. The id must start with tt and contain only numbers!')
+    }
+
     if (await this.histroyDBService.has(imdb_id)) {
       throw new ConflictException('Movie is already in history')
     }
 
+    if (await this.movieDBService.has(imdb_id)) {
+      throw new ConflictException('Movie is already in database')
+    }
+
+    if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposeable_movies) {
+      throw new ConflictException('You have reached the maximum number of proposed movies! ' +
+        'You can only propose ' + this.max_proposeable_movies + ' movies!')
+    }
+
     const movie = await this.get(imdb_id)
-    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: Number(proposer_id)}) as User
+    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
@@ -71,7 +88,7 @@ export class MovieService {
 
     try {
       return this.movieDBService.add(movieDB_data).then((movie) => {
-        return this.voteService.vote(movie.imdb_id, Number(proposer_id))
+        return this.voteService.vote(movie.imdb_id, proposer_id)
           .then((vote) => {
             return { movie, vote }
           })
@@ -96,7 +113,7 @@ export class MovieService {
     else if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
       await this.movieDBService.delete(imdb_id)
-      return { success: true }
+      return { message: "Successfully deleted movie: " + movie.title, show_alert: true } as ResDto
     } else {
       throw new NotFoundException('Movie not found or you are not the proposer')
     }
@@ -114,7 +131,7 @@ export class MovieService {
         link: movie.link,
         start_time: watch_movie.start_time,
         interested: votes.map((vote) => vote.user.id)
-      }
+      } as WatchlistExtType
     }))
   }
 
