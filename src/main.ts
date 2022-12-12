@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import * as process from "process";
+const { version } = require('./../package.json')
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,8 +21,8 @@ async function bootstrap() {
     crossOriginEmbedderPolicy: false
   }));
   const config = new DocumentBuilder()
-    .setTitle('MoMoMat Api Documentation')
-    .setVersion('1.0')
+    .setTitle(`${process.env.PROJECT_NAME} Api Documentation`)
+    .setVersion(version)
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
