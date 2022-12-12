@@ -9,7 +9,7 @@ import { PasswordDto } from "../../types/user.dto/password.dto";
 import { LoginDto } from "../../types/user.dto/login.dto";
 import { PasswordNewDto } from "../../types/user.dto/password_new.dto";
 import { ResDto } from "../../types/res.dto";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for user related routes
@@ -20,10 +20,7 @@ export class UserController {
 
   constructor(private readonly userService: UserService) {}
 
-  /**
-   * PRIVATE GET user data
-   * @param user
-   */
+  @ApiOperation({ summary: 'GET user data' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
@@ -31,11 +28,7 @@ export class UserController {
     return await this.userService.get(Number(user.id));
   }
 
-  /**
-   * PRIVATE POST update profile information (name, gravatar)
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST update profile information (name, gravatar)' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -43,11 +36,7 @@ export class UserController {
     return await this.userService.change_profile(Number(user.id), body);
   }
 
-  /**
-   * PRIVATE POST update email_opt_in (set/unset on newsletter)
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST update email_opt_in (set/unset on newsletter)' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('email_opt_in')
@@ -55,11 +44,7 @@ export class UserController {
     return await this.userService.email_opt_in(Number(user.id), Boolean(body.email_opt_in));
   }
 
-  /**
-   * PRIVATE DELETE user
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'DELETE user' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete()
@@ -67,10 +52,7 @@ export class UserController {
     return await this.userService.delete(Number(user.id), body.password);
   }
 
-  /**
-   * PRIVATE GET all saved user data
-   * @param user
-   */
+  @ApiOperation({ summary: 'GET all saved user data' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('data')
@@ -78,11 +60,7 @@ export class UserController {
     return await this.userService.get_user_data(Number(user.id));
   }
 
-  /**
-   * PRIVATE POST update username (email)
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST update username (email)' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('username')
@@ -90,11 +68,7 @@ export class UserController {
     return await this.userService.change_username(Number(user.id), body.username, body.password);
   }
 
-  /**
-   * PRIVATE POST update password
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST update password' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('password')
@@ -102,9 +76,7 @@ export class UserController {
     return await this.userService.change_password(Number(user.id), body.password, body.password_old);
   }
 
-  /**
-   * PRIVATE GET check if bearer token is valid
-   */
+  @ApiOperation({ summary: 'GET check if bearer token is valid' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('check')
@@ -112,10 +84,7 @@ export class UserController {
     return true;
   }
 
-  /**
-   * PUBLIC GET public user data from given user_id
-   * @param user_id
-   */
+  @ApiOperation({ summary: 'GET public user data from given user_id' })
   @Get(':user_id')
   async get_user(@Param('user_id') user_id: string) {
     return await this.userService.get_public(Number(user_id));

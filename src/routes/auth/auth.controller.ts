@@ -7,7 +7,7 @@ import { PasswordDto } from "../../types/user.dto/password.dto";
 import { RegisterDto } from "../../types/user.dto/register.dto";
 import { ResDto } from "../../types/res.dto";
 import { LoginDto } from "../../types/user.dto/login.dto";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for authentication related routes
@@ -17,49 +17,32 @@ import { ApiTags } from "@nestjs/swagger";
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  /**
-   * PRIVATE POST issue jwt access token by providing username (email) and password
-   * @param user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST issue jwt access token by providing username (email) and password' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@User() user: JwtUser, @Body() body: LoginDto): Promise<{access_token: string}> {
     return await this.authService.login(user);
   }
 
-  /**
-   * PUBLIC POST register new user
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST register new user' })
   @Post('register')
   async register(@Body() body: RegisterDto): Promise<ResDto> {
     return await this.authService.register(body)
   }
 
-  /**
-   * PUBLIC GET confirm email address by providing user challenge
-   * @param challenge
-   */
+  @ApiOperation({ summary: 'GET confirm email address by providing user challenge' })
   @Get('confirm/:challenge')
   async confirm(@Param('challenge') challenge: string): Promise<ResDto> {
     return await this.authService.confirm(challenge)
   }
 
-  /**
-   * PUBLIC GET request a password reset by providing an username (email)
-   * @param username
-   */
+  @ApiOperation({ summary: 'GET request a password reset by providing an username (email)' })
   @Get('reset/:username')
   async pw_reset_request(@Param('username') username: string): Promise<ResDto> {
     return await this.authService.pw_reset_request(username)
   }
 
-  /**
-   * PUBLIC POST reset password by providing user challenge and new password
-   * @param challenge
-   * @param body
-   */
+  @ApiOperation({ summary: 'POST reset password by providing user challenge and new password' })
   @Post('reset/:challenge')
   async pw_reset(@Param('challenge') challenge: string, @Body() body: PasswordDto): Promise<ResDto> {
     return await this.authService.pw_reset(challenge, body.password)
