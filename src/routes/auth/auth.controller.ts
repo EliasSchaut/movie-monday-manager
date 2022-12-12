@@ -6,10 +6,13 @@ import { User } from "../../common/decorators/user.decorator";
 import { PasswordDto } from "../../types/user.dto/password.dto";
 import { RegisterDto } from "../../types/user.dto/register.dto";
 import { ResDto } from "../../types/res.dto";
+import { LoginDto } from "../../types/user.dto/login.dto";
+import { ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for authentication related routes
  */
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -17,10 +20,11 @@ export class AuthController {
   /**
    * PRIVATE POST issue jwt access token by providing username (email) and password
    * @param user
+   * @param body
    */
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@User() user: JwtUser): Promise<{access_token: string}> {
+  async login(@User() user: JwtUser, @Body() body: LoginDto): Promise<{access_token: string}> {
     return await this.authService.login(user);
   }
 

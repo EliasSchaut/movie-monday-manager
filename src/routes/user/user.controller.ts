@@ -9,10 +9,12 @@ import { PasswordDto } from "../../types/user.dto/password.dto";
 import { LoginDto } from "../../types/user.dto/login.dto";
 import { PasswordNewDto } from "../../types/user.dto/password_new.dto";
 import { ResDto } from "../../types/res.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for user related routes
  */
+@ApiTags('user')
 @Controller('user')
 export class UserController {
 
@@ -22,6 +24,7 @@ export class UserController {
    * PRIVATE GET user data
    * @param user
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
   async get(@User() user: JwtUser) {
@@ -33,6 +36,7 @@ export class UserController {
    * @param user
    * @param body
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
   async update_profile(@User() user: JwtUser, @Body() body: ProfileDto): Promise<ResDto> {
@@ -44,6 +48,7 @@ export class UserController {
    * @param user
    * @param body
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('email_opt_in')
   async email_opt_in(@User() user: JwtUser, @Body() body: EmailOptInDto): Promise<ResDto> {
@@ -55,6 +60,7 @@ export class UserController {
    * @param user
    * @param body
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete()
   async delete(@User() user: JwtUser, @Body() body: PasswordDto): Promise<ResDto> {
@@ -65,6 +71,7 @@ export class UserController {
    * PRIVATE GET all saved user data
    * @param user
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('data')
   async get_data(@User() user: JwtUser) {
@@ -76,6 +83,7 @@ export class UserController {
    * @param user
    * @param body
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('username')
   async change_username(@User() user: JwtUser, @Body() body: LoginDto): Promise<ResDto> {
@@ -87,6 +95,7 @@ export class UserController {
    * @param user
    * @param body
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('password')
   async change_password(@User() user: JwtUser, @Body() body: PasswordNewDto): Promise<ResDto> {
@@ -96,6 +105,7 @@ export class UserController {
   /**
    * PRIVATE GET check if bearer token is valid
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('check')
   async check_profile() {

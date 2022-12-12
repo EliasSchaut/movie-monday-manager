@@ -8,10 +8,12 @@ import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { History, Vote, Movie } from "@prisma/client";
 import imdb from "imdb-api";
 import { ResDto } from "../../types/res.dto";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for movie related routes
  */
+@ApiTags('movie')
 @Controller('movie')
 export class MovieController {
 
@@ -45,6 +47,7 @@ export class MovieController {
    * PRIVATE GET information about a specific movie given by its imdb_id
    * @param imdb_id
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get(':imdb_id')
   async get_media(@Param('imdb_id') imdb_id: string) : Promise<imdb.Movie> {
@@ -58,6 +61,7 @@ export class MovieController {
    * @param user
    * @param imdb_id
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string): Promise<{movie: Movie, vote: Vote}> {
@@ -69,6 +73,7 @@ export class MovieController {
    * @param user
    * @param imdb_id
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
   async delete_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<ResDto> {

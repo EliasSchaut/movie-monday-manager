@@ -4,10 +4,12 @@ import { VoteService } from "./vote.service";
 import { User } from "../../common/decorators/user.decorator";
 import { JwtUser } from "../../types/jwtuser.type";
 import { Vote } from "@prisma/client";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for the vote routes
  */
+@ApiTags('vote')
 @Controller('vote')
 export class VoteController {
 
@@ -17,6 +19,7 @@ export class VoteController {
    * PRIVATE GET imdb_ids for the movies, the given user voted for
    * @param user
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
   async get_votes(@User() user: JwtUser): Promise<string[]> {
@@ -37,6 +40,7 @@ export class VoteController {
    * @param user
    * @param imdb_id
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async save_vote(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<Vote> {
@@ -48,6 +52,7 @@ export class VoteController {
    * @param user
    * @param imdb_id
    */
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
   async unvote(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<Vote> {
