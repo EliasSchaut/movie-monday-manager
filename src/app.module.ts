@@ -18,7 +18,7 @@ import { join } from "path";
     }),
     AuthModule, UserModule, MovieModule, VoteModule, EventModule,
     ServeStaticModule.forRoot({
-      serveRoot: '/docs',
+      serveRoot: '/docs/backend',
       rootPath: join(__dirname, '..', 'docs'),
     }),
     ServeStaticModule.forRoot({
