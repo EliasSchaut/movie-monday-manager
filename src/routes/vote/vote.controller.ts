@@ -4,50 +4,41 @@ import { VoteService } from "./vote.service";
 import { User } from "../../common/decorators/user.decorator";
 import { JwtUser } from "../../types/jwtuser.type";
 import { Vote } from "@prisma/client";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 /**
  * Controller for the vote routes
  */
+@ApiTags('vote')
 @Controller('vote')
 export class VoteController {
 
   constructor(private readonly voteService: VoteService) {}
 
-  /**
-   * PRIVATE GET imdb_ids for the movies, the given user voted for
-   * @param user
-   */
+  @ApiOperation({ summary: 'GET imdb_ids for the movies, the given user voted for' })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get()
   async get_votes(@User() user: JwtUser): Promise<string[]> {
     return this.voteService.get_votes_user(Number(user.id));
   }
 
-  /**
-   * PUBLIC GET number of votes for a movie
-   * @param imdb_id
-   */
+  @ApiOperation({ summary: 'GET number of votes for a movie' })
   @Get(':imdb_id')
   async get_vote(@Param('imdb_id') imdb_id: string) : Promise<number> {
     return this.voteService.get_votes(imdb_id);
   }
 
-  /**
-   * PRIVATE POST vote for a movie
-   * @param user
-   * @param imdb_id
-   */
+  @ApiOperation({ summary: 'POST vote for a movie' })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async save_vote(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<Vote> {
     return this.voteService.vote(imdb_id, Number(user.id));
   }
 
-  /**
-   * PRIVATE DELETE unvote for a movie
-   * @param user
-   * @param imdb_id
-   */
+  @ApiOperation({ summary: 'DELETE unvote for a movie' })
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
   async unvote(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<Vote> {

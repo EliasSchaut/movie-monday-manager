@@ -1,5 +1,5 @@
 
-export interface PasswordDto {
-  password: string;
+export class PasswordDto {
+  password!: string;
   password_confirm?: string;
 }

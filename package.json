@@ -1,6 +1,6 @@
 {
   "name": "movie-monday-manager",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "A website for adding and voting movies for the next watch party",
   "author": "EliasSchaut",
   "private": true,
@@ -34,6 +34,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/schedule": "^2.1.0",
     "@nestjs/serve-static": "^3.0.0",
+    "@nestjs/swagger": "^6.1.4",
     "@prisma/client": "^4.5.0",
     "bcrypt": "^5.0.1",
     "cron-parser": "^4.7.0",
