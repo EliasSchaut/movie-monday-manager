@@ -1,5 +1,5 @@
 
-export interface ProfileDto {
-  name: string;
+export class ProfileDto {
+  name!: string;
   use_gravatar?: boolean;
 }

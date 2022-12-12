@@ -27,14 +27,14 @@ The configuration file is located in the root directory of the project and is ca
 ## API-Docs
 This project is 100% usable without client via a REST-API!
 The routes start with the prefix ```/api``` (e.g. `http://[::1]:3000/api`). 
-The api is documented at ```/docs``` route of the website (e.g. `http://[::1]:3000/docs`) visible in the controller-section.
+The api is documented with [Swagger](https://swagger.io/) at ```/docs/api``` route of the website (e.g. `http://[::1]:3000/docs/api`).
 
 ## Dev-Docs
 This small guide assumes, that you have already some knowledge about node.js and the used frameworks. 
 The whole project is written in [Typescript](https://www.typescriptlang.org/).
 
 ### MoMoMat (Backend)
-The backend uses the [NestJS](https://nestjs.com/) framework to handle the REST-API with all its corresponding services.
+The backend uses the [NestJS](https://nestjs.com/) framework to handle the REST-API with all its corresponding services. It is also documented with [compodoc](https://compodoc.app/) at ```/docs/backend``` route of the website (e.g. `http://[::1]:3000/docs/backend`).
 This project (`/src` folder) is dived into 3 main parts: 
 The routes (controllers) to handle incoming requests; 
 a common section with lots of usefully functions and classes to support the other parts; 

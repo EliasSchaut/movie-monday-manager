@@ -9,6 +9,7 @@ import HistoryView from '../views/HistoryView.vue'
 import PrivacyView from '../views/PrivacyView.vue'
 import { store } from "@/util/store";
 import { get_cookie, remove_cookie } from "@/util/cookie";
+import DocsView from "@/views/DocsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       path: '/privacy',
       name: 'privacy',
       component: PrivacyView
+    },
+    {
+      path: '/docs',
+      name: 'docs',
+      component: DocsView
     }
   ]
 })
