@@ -9,9 +9,10 @@ import '@/assets/css/main.css'
 
 import en from '@/locales/en.json'
 import de from '@/locales/de.json'
+import { get_cookie } from "@/util/cookie";
 
 i18next.init({
-  lng: 'en',
+  lng: get_cookie("lang") || "en",
   resources: {
     en: { translation: en },
     de: { translation: de },
