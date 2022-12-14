@@ -11,7 +11,7 @@ import en from '@/locales/en.json'
 import de from '@/locales/de.json'
 
 i18next.init({
-  lng: 'de',
+  lng: 'en',
   resources: {
     en: { translation: en },
     de: { translation: de },

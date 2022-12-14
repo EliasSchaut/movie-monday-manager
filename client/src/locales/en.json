@@ -14,7 +14,8 @@
         "label": {
           "single": "Password",
           "retype": "Retype password",
-          "old": "Old password"
+          "old": "Old password",
+          "submit": "Confirm with password"
         },
         "invalid_feedback": {
           "single": "Minimum eight characters, at least one letter and one number!",
@@ -58,6 +59,7 @@
     "proposer": "Proposer",
     "proposed_on": "Proposed&nbsp;on",
     "interested": "Interested",
+    "start": "Start",
     "modal": {
       "title": "Add Movie",
       "form": {
@@ -72,9 +74,16 @@
     "watched_at": "Watched At"
   },
 
+  "docs": {
+    "title": "Available documentation",
+    "api": "Api Docs",
+    "backend": "Backend Docs"
+  },
+
   "profile": {
     "header": "Profile",
     "avatar": {
+      "title": "Avatar",
       "placeholder": "Placeholder Picture",
       "gravatar": "Profile Picture"
     },
@@ -95,6 +104,7 @@
       }
     },
     "option": {
+      "title": "Options",
       "email_opt_in": "Receive emails",
       "get_user_data": "Get all user data",
       "delete_account": "Delete account"

@@ -9,18 +9,18 @@
       </div>
       <div class="d-flex flex-row justify-content-around mb-3">
         <div class="d-flex flex-column align-items-start">
-          <strong>Email:</strong>
+          <strong>{{ $t('common.form.username.label') }}:</strong>
           <p>{{ user.username }}</p>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_email">{{ $t('profile.button.username') }}</button>
         </div>
         <div class="d-flex flex-column align-items-start">
-          <strong>Password:</strong>
+          <strong>{{ $t('common.form.password.label.single') }}:</strong>
           <p class="card-text">***</p>
           <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_password">{{ $t('profile.button.password') }}</button>
         </div>
       </div>
 
-      <CardComponent header="Options" nobody>
+      <CardComponent :header="$t('profile.option.title')" nobody>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <div class="form-switch">
@@ -41,7 +41,7 @@
           class="d-flex flex-column was-validated">
       <NameComponent :value="user.name" />
       <InputComponent id="check" _class="form-check-input" type="checkbox" role="switch"
-                      label="Use Gravatar" help="https://en.gravatar.com/"
+                      :label="$t('profile.form.profile.gravatar')" help="https://en.gravatar.com/"
                       name="use_gravatar" :checked="user.use_gravatar" />
       <SubmitComponent inner_text="Update" />
     </form>
@@ -52,8 +52,8 @@
   <ModalComponent id="modal_change_email" :title="$t('profile.button.username')">
     <form @submit.prevent="on_submit" action="/api/user/username" method="post"
           class="d-flex flex-column justify-content-around was-validated">
-      <EmailComponent label="New email" :value="user.username"/>
-      <PasswordComponent label="Confirm with password" />
+      <EmailComponent :label="$t('profile.form.username.new')" :value="user.username"/>
+      <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Update" />
     </form>
   </ModalComponent>
@@ -73,7 +73,7 @@
     <br>
     <form @submit.prevent="delete_account" action="/api/user" method="post"
           class="d-flex flex-column justify-content-around was-validated">
-      <PasswordComponent label="Confirm with password" />
+      <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Delete" class="btn btn-danger form-submit" />
     </form>
   </ModalComponent>

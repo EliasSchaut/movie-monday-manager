@@ -14,7 +14,8 @@
         "label": {
           "single": "Passwort",
           "retype": "Passwort erneut eingeben",
-          "old": "Altes Passwort"
+          "old": "Altes Passwort",
+          "submit": "Mit Passwort bestätigen"
         },
         "invalid_feedback": {
           "single": "Mindestens acht Zeichen, mindestens ein Buchstabe und eine Zahl!",
@@ -58,6 +59,7 @@
     "proposer": "Vorschlagende*r",
     "proposed_on": "Vorgeschlagen&nbsp;am",
     "interested": "Interessiert",
+    "start": "Start",
     "modal": {
       "title": "Film hinzufügen",
       "form": {
@@ -72,9 +74,16 @@
     "watched_at": "Geschaut am"
   },
 
+  "docs": {
+    "title": "Verfügbare Dokumentation",
+    "api": "Api Doks",
+    "backend": "Backend Doks"
+  },
+
   "profile": {
     "header": "Profil",
     "avatar": {
+      "title": "Avatar",
       "placeholder": "Platzhalterbild",
       "gravatar": "Profilbild"
     },
@@ -95,6 +104,7 @@
       }
     },
     "option": {
+      "title": "Optionen",
       "email_opt_in": "Empfange E-Mails",
       "get_user_data": "Alle Benutzerdaten abrufen",
       "delete_account": "Konto löschen"

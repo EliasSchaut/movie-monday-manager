@@ -4,7 +4,6 @@ import { get_cookie } from "@/util/cookie";
 export const store = reactive({
   logged_in: false,
   loading: false,
-  lang: "en" as "en" | "de",
   alert: {
     show: false,
     msg: "",
@@ -13,10 +12,6 @@ export const store = reactive({
 
   update_loading(loading: boolean) {
     this.loading = loading;
-  },
-
-  update_lang(lang: "en" | "de" ) {
-    this.lang = lang;
   },
 
   async update_logged_in() {

@@ -1,11 +1,11 @@
 <template>
-<CardComponent header="Docs" id="card_docs" nobody>
+<CardComponent :header="$t('docs.title')" id="card_docs" nobody>
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
-      <a href="/docs/api" target="_blank">Api Docs</a>
+      <a href="/docs/api" target="_blank">{{ $t('docs.api') }}</a>
     </li>
     <li class="list-group-item">
-      <a href="/docs/backend" target="_blank">Backend Docs</a>
+      <a href="/docs/backend" target="_blank">{{ $t('docs.backend') }}</a>
     </li>
   </ul>
 </CardComponent>
