@@ -14,7 +14,7 @@
     </TableComponent>
   </CardComponent>
 
-  <ModalComponent id="modal_watchlist" title="Interested">
+  <ModalComponent id="modal_watchlist" :title="$t('movie.interested')">
     <TableComponent :head="[$t('profile.avatar.title'), $t('common.form.name.label')]">
       <tr v-for="user in interested_local">
         <td><img v-if="user.use_gravatar" :src="user.gravatar_url" alt="avatar" class="profile" />
