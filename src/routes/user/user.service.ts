@@ -13,6 +13,7 @@ import { username_pattern } from "../../common/validation/patterns/username.patt
 import { password_pattern } from "../../common/validation/patterns/password.pattern";
 import cuid from "cuid";
 import { I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from "../../types/generated/i18n.generated";
 
 @Injectable()
 export class UserService {
@@ -42,7 +43,7 @@ export class UserService {
     return { user, movies: proposed_movies, votes };
   }
 
-  async change_profile(user_id: number, data: ProfileDto, i18n: I18nContext) {
+  async change_profile(user_id: number, data: ProfileDto, i18n: I18nContext<I18nTranslations>) {
     if (!name_pattern.test(data.name)) {
       throw new ForbiddenException(i18n.t("user.exception.invalid_name"));
     }
@@ -65,7 +66,7 @@ export class UserService {
     return { message: i18n.t("user.success.profile"), show_alert: true };
   }
 
-  async email_opt_in(user_id: number, opt_in: boolean, i18n: I18nContext) {
+  async email_opt_in(user_id: number, opt_in: boolean, i18n: I18nContext<I18nTranslations>) {
     await this.userDBService.update({ where: { id: user_id },
       data: {
         email_opt_in: opt_in
@@ -74,7 +75,7 @@ export class UserService {
     return { message: i18n.t("user.success.email_opt_in"), show_alert: true };
   }
 
-  async change_password(user_id: number, password_new: string, password_old: string, i18n: I18nContext) {
+  async change_password(user_id: number, password_new: string, password_old: string, i18n: I18nContext<I18nTranslations>) {
     if (!password_pattern.test(password_new)) {
       throw new ForbiddenException(i18n.t("user.exception.invalid_password"));
     }
@@ -93,7 +94,7 @@ export class UserService {
     }
   }
 
-  async change_username(user_id: number, new_username: string, password: string, i18n: I18nContext) {
+  async change_username(user_id: number, new_username: string, password: string, i18n: I18nContext<I18nTranslations>) {
     if (!username_pattern.test(new_username)) {
       throw new ForbiddenException(i18n.t("user.exception.invalid_username"));
     }
@@ -122,7 +123,7 @@ export class UserService {
     }
   }
 
-  async delete(user_id: number, password: string, i18n: I18nContext) {
+  async delete(user_id: number, password: string, i18n: I18nContext<I18nTranslations>) {
     const watchlist = await this.watchListDBService.get_all()
     const watchlist_proposer_ids = await Promise.all(watchlist.map(async wl => {
       return ((await this.movieDBService.get(wl.imdb_id)) as Movie).proposer_id

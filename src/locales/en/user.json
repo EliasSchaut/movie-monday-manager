@@ -1,5 +1,4 @@
 {
-  "test": "klasedrf",
   "exception": {
     "invalid_name": "Invalid name! Name must be between 3 and 20 characters and start with a capital letter!",
     "invalid_username": "Invalid email! Username must be a valid email address!",

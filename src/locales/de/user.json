@@ -1,5 +1,4 @@
 {
-  "test": "kla",
   "exception": {
     "invalid_name": "Ungültiger Name! Der Name muss zwischen 3 und 20 Zeichen lang sein und mit einem Großbuchstaben beginnen!",
     "invalid_username": "Ungültige E-Mail! Der Benutzername muss eine gültige E-Mail Adresse sein!",

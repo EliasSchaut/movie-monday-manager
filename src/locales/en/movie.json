@@ -1,0 +1,15 @@
+{
+  "exception": {
+    "invalid_imdb_id": "Invalid imdb id! The id must start with tt and contain only numbers!",
+    "conflict_movie": "Movie is already in database!",
+    "conflict_history": "Movie is already in history!",
+    "conflict_watchlist": "Movie is already in watchlist!",
+    "conflict_max_proposed": "You have reached the maximum number of proposed movies! You can only propose {max_proposeable_movies} movies!",
+    "not_found": "Movie not found!",
+    "not_found_or_not_proposer": "Movie not found or you are not the proposer!"
+  },
+  "success": {
+    "save": "Movie {title} added successfully to the list!",
+    "delete": "Successfully deleted movie {title}!"
+  }
+}
