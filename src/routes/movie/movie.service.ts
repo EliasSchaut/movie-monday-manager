@@ -91,7 +91,7 @@ export class MovieService {
 
     try {
       return this.movieDBService.add(movieDB_data).then((movie) => {
-        return this.voteService.vote(movie.imdb_id, proposer_id)
+        return this.voteService.vote(movie.imdb_id, proposer_id, i18n)
           .then((vote) => {
             return { movie, vote, message: i18n.t('movie.success.save'), show_alert: true }
           })
