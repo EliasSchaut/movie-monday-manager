@@ -41,6 +41,3 @@ dev.db*
 
 # Docs
 /docs
-
-# Build
-*.generated.ts
