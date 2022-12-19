@@ -15,6 +15,8 @@ import { RegisterDto } from "../../types/user.dto/register.dto";
 import { name_pattern } from "../../common/validation/patterns/name.pattern";
 import { username_pattern } from "../../common/validation/patterns/username.pattern";
 import { password_pattern } from "../../common/validation/patterns/password.pattern";
+import { I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from "../../types/generated/i18n.generated";
 
 @Injectable()
 export class AuthService {
@@ -26,7 +28,7 @@ export class AuthService {
   ) {
   }
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, password: string, i18n: I18nContext<I18nTranslations>): Promise<any> {
     const user = await this.userDBService.get({
       username: username
     });
@@ -34,13 +36,13 @@ export class AuthService {
       if (!user.verified) {
         const challenge_url = this.emailService.generate_challenge_url(user.challenge);
         await this.emailService.send_challenge(user.username, user.name, challenge_url);
-        throw new ForbiddenException('Email not verified. Please check your inbox! If you did not receive an email, please check your spam folder. If you still cannot find it, please contact us.');
+        throw new ForbiddenException(i18n.t('auth.exception.forbidden_not_verified'));
       }
 
       const { password, ...result } = user;
       return result;
     }
-    throw new ForbiddenException('Invalid username or password');
+    throw new ForbiddenException(i18n.t('auth.exception.forbidden_login'));
   }
 
   async login(user: any) {
@@ -50,9 +52,9 @@ export class AuthService {
     };
   }
 
-  async register(user: RegisterDto) {
+  async register(user: RegisterDto, i18n: I18nContext<I18nTranslations>) {
     if (!name_pattern.test(user.name) || !username_pattern.test(user.username) || !password_pattern.test(user.password)) {
-      throw new ForbiddenException('Invalid input. Your inputs failed to pass the validation checks.');
+      throw new ForbiddenException(i18n.t('auth.exception.forbidden_invalid_registration'));
     }
 
     const payload = { username: user.username, name: user.name, password: user.password };
@@ -60,23 +62,18 @@ export class AuthService {
       const userDB = await this.userDBService.create(payload);
       const challenge_url = `${process.env.FRONTEND_URL}login/${userDB.challenge}`;
       await this.emailService.send_challenge(user.username, user.name, challenge_url);
-      return {
-        message: "Please confirm you email address by clicking the link that was sent to your inbox. " +
-          "If you did not receive an email, please check your spam folder. " +
-          "If you still cannot find it, try to log in to receive another confirmation mail!",
-        show_alert: true
-      };
+      return { message: i18n.t('auth.success.register'), show_alert: true };
 
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
-        throw new ConflictException('E-Mail already exists');
+        throw new ConflictException(i18n.t('auth.exception.conflict_username_exists'));
       } else {
-        throw new InternalServerErrorException('Unable to create user');
+        throw new InternalServerErrorException(i18n.t('auth.exception.internal_server_error_register'));
       }
     }
   }
 
-  async confirm(challenge: string) {
+  async confirm(challenge: string, i18n: I18nContext<I18nTranslations>) {
     const user = await this.userDBService.get({
       challenge: challenge,
     });
@@ -85,12 +82,12 @@ export class AuthService {
         where: { challenge },
         data: { verified: true },
       })
-      return { message: "Email successfully verified! You can now log in.", show_alert: true };
+      return { message: i18n.t('auth.success.verified'), show_alert: true };
     }
-    throw new NotFoundException('Email already verified or challenge not found');
+    throw new NotFoundException(i18n.t('auth.exception.not_found_challenge'));
   }
 
-  async pw_reset_request(username: string) {
+  async pw_reset_request(username: string, i18n: I18nContext<I18nTranslations>) {
     const user = await this.userDBService.get({ username })
     if (user) {
       const challenge = cuid();
@@ -100,22 +97,22 @@ export class AuthService {
     }
 
     return {
-      message: "A password reset request was sent to the given email if this user account exists",
+      message: i18n.t('auth.success.password_reset_request'),
       show_alert: true
     };
   }
 
-  async pw_reset(challenge: string, password: string) {
+  async pw_reset(challenge: string, password: string, i18n: I18nContext<I18nTranslations>) {
     if (!password_pattern.test(password)) {
-      throw new ForbiddenException('Invalid new password. Password must be minimum eight characters, at least one letter and one number!');
+      throw new ForbiddenException(i18n.t('auth.exception.invalid_password'));
     }
 
     const user = await this.userDBService.get({ challenge })
     if (user && user.pw_reset) {
       const hashed_password = await this.passwordService.hash(password);
       await this.userDBService.update({ where: { challenge }, data: { password: hashed_password, pw_reset: false } } )
-      return { message: "Password successfully reset! You can now log in.", show_alert: true };
+      return { message: i18n.t('auth.success.password_reset'), show_alert: true };
     }
-    throw new NotFoundException('Password already reset or challenge not found');
+    throw new NotFoundException(i18n.t('auth.exception.not_found_password_reset'));
   }
 }

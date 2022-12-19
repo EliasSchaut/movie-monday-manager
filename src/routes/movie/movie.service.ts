@@ -11,6 +11,8 @@ import { MovieExtType } from "../../types/movie.types/movie_ext.type";
 import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { ResDto } from "../../types/res.dto";
 import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
+import { I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from 'src/types/generated/i18n.generated';
 
 @Injectable()
 export class MovieService {
@@ -27,11 +29,11 @@ export class MovieService {
     this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
   }
 
-  async get(imdb_id: string) {
+  async get(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
     try {
       return await this.imdb.get({ id: imdb_id })
     } catch (e) {
-      throw new NotFoundException('Movie not found')
+      throw new NotFoundException(i18n.t('movie.exception.not_found'))
     }
   }
 
@@ -55,25 +57,26 @@ export class MovieService {
     }));
   }
 
-  async save(imdb_id: string, proposer_id: number) {
+  async save(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
     if (!imdb_id_pattern.test(imdb_id)) {
-      throw new ForbiddenException('Invalid imdb id. The id must start with tt and contain only numbers!')
+      throw new ForbiddenException(i18n.t('movie.exception.invalid_imdb_id'))
     }
 
     if (await this.histroyDBService.has(imdb_id)) {
-      throw new ConflictException('Movie is already in history')
+      throw new ConflictException(i18n.t('movie.exception.conflict_history'))
     }
 
     if (await this.movieDBService.has(imdb_id)) {
-      throw new ConflictException('Movie is already in database')
+      throw new ConflictException(i18n.t('movie.exception.conflict_movie'))
     }
 
     if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposeable_movies) {
-      throw new ConflictException('You have reached the maximum number of proposed movies! ' +
-        'You can only propose ' + this.max_proposeable_movies + ' movies!')
+      throw new ConflictException(i18n.t('movie.exception.conflict_max_proposed', { args: {
+        max_proposeable_movies: this.max_proposeable_movies
+      } }))
     }
 
-    const movie = await this.get(imdb_id)
+    const movie = await this.get(imdb_id, i18n)
     const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
@@ -88,9 +91,9 @@ export class MovieService {
 
     try {
       return this.movieDBService.add(movieDB_data).then((movie) => {
-        return this.voteService.vote(movie.imdb_id, proposer_id)
+        return this.voteService.vote(movie.imdb_id, proposer_id, i18n)
           .then((vote) => {
-            return { movie, vote }
+            return { movie, vote, message: i18n.t('movie.success.save'), show_alert: true }
           })
           .catch((e) => {
             this.movieDBService.delete(movie.imdb_id)
@@ -98,24 +101,24 @@ export class MovieService {
           })
       })
     } catch (e) {
-      throw new ConflictException('Movie already exists')
+      throw new ConflictException(i18n.t('movie.exception.conflict_movie'))
     }
   }
 
-  async delete(imdb_id: string, proposer_id: string) {
+  async delete(imdb_id: string, proposer_id: string, i18n: I18nContext<I18nTranslations>) {
     const movie = await this.movieDBService.get(imdb_id) as Movie
     const watchlist = await this.watchlistDBService.get_all()
     const watchlist_imdbs = watchlist.map((movie) => movie.imdb_id)
 
     if (watchlist_imdbs.includes(imdb_id)) {
-      throw new ConflictException('Movie is in watchlist')
+      throw new ConflictException(i18n.t('movie.exception.conflict_watchlist'))
     }
     else if (movie.proposer_id === Number(proposer_id)) {
       await this.voteDBService.delete_all(imdb_id)
       await this.movieDBService.delete(imdb_id)
-      return { message: "Successfully deleted movie: " + movie.title, show_alert: true } as ResDto
+      return { message: i18n.t('movie.success.delete', {args: { title: movie.title }}), show_alert: true } as ResDto
     } else {
-      throw new NotFoundException('Movie not found or you are not the proposer')
+      throw new NotFoundException(i18n.t('movie.exception.not_found_or_not_proposer'))
     }
   }
 

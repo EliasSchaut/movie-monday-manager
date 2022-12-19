@@ -1,0 +1,12 @@
+{
+  "exception": {
+    "internal_server_error": "Error getting votes",
+    "conflict_exists": "Vote already exists",
+    "conflict_not_exists": "Vote does not exist",
+    "conflict_unvote_proposed": "You cannot unvote a movie you proposed",
+    "conflict_max_voted": "You have already voted for the maximum number of movies! You can only vote for {max_votes} movies"
+  },
+  "success": {
+
+  }
+}
