@@ -10,6 +10,7 @@ A full stack management application for voting movies for cyclic movie events.
 - users can manage own profile
 - clean and responsive Bootstrap-UI
 - 100% usable without client (via REST-API)
+- multi lang support (currently english and german)
 - automatic management of voted movies around movie events
 - automatic notifications for movie events with the list of interested users
 
