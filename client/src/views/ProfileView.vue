@@ -1,47 +1,47 @@
 <template>
-  <CardComponent id="card_profile" header="Profile">
+  <CardComponent id="card_profile" :header="$t('profile.header')">
     <div class="d-flex flex-column justify-content-between">
       <div class="mb-3">
-        <img v-if="user.use_gravatar" class="card-img-top" :src="user.gravatar_url" alt="Profile Picture" id="profile_picture">
-        <img v-else class="card-img-top" src="../assets/img/Portrait_Placeholder.png" alt="Placeholder Picture" id="profile_picture">
+        <img v-if="user.use_gravatar" class="card-img-top" :src="user.gravatar_url" :alt="$t('profile.avatar.gravatar')" id="profile_picture">
+        <img v-else class="card-img-top" src="../assets/img/Portrait_Placeholder.png" :alt="$t('profile.avatar.placeholder')" id="profile_picture">
         <h5 class="card-title">{{ user.name }}</h5>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_profile">Edit Profile</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_profile">{{ $t('profile.button.profile') }}</button>
       </div>
       <div class="d-flex flex-row justify-content-around mb-3">
         <div class="d-flex flex-column align-items-start">
-          <strong>Email:</strong>
+          <strong>{{ $t('common.form.username.label') }}:</strong>
           <p>{{ user.username }}</p>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_email">Change Email</button>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_email">{{ $t('profile.button.username') }}</button>
         </div>
         <div class="d-flex flex-column align-items-start">
-          <strong>Password:</strong>
+          <strong>{{ $t('common.form.password.label.single') }}:</strong>
           <p class="card-text">***</p>
-          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_password">Change Password</button>
+          <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_change_password">{{ $t('profile.button.password') }}</button>
         </div>
       </div>
 
-      <CardComponent header="Options" nobody>
+      <CardComponent :header="$t('profile.option.title')" nobody>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">
             <div class="form-switch">
               <input class="form-check-input" type="checkbox" role="switch" id="switch_emails" :checked="user.email_opt_in" name="email_opt_in" @click="opt_in_email">
-              <label class="form-check-label ms-2" for="switch_emails">Receive emails</label>
+              <label class="form-check-label ms-2" for="switch_emails">{{ $t('profile.option.email_opt_in') }}</label>
             </div>
           </li>
-          <li class="list-group-item"><a @click.prevent="get_user_data" href="">Get all user data</a></li>
-          <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">Delete account</a></li>
+          <li class="list-group-item"><a @click.prevent="get_user_data" href="">{{ $t('profile.option.get_user_data') }}</a></li>
+          <li class="list-group-item"><a @click.prevent="" data-bs-toggle="modal" data-bs-target="#modal_delete_account" style="color: red" href="">{{ $t('profile.option.delete_account') }}</a></li>
         </ul>
       </CardComponent>
     </div>
   </CardComponent>
 
   <!-- Modal: Change Profile -->
-  <ModalComponent id="modal_profile" title="Edit Profile">
+  <ModalComponent id="modal_profile" :title="$t('profile.button.profile')">
     <form @submit.prevent="on_submit" action="/api/user" method="post"
           class="d-flex flex-column was-validated">
       <NameComponent :value="user.name" />
       <InputComponent id="check" _class="form-check-input" type="checkbox" role="switch"
-                      label="Use Gravatar" help="https://en.gravatar.com/"
+                      :label="$t('profile.form.profile.gravatar')" help="https://en.gravatar.com/"
                       name="use_gravatar" :checked="user.use_gravatar" />
       <SubmitComponent inner_text="Update" />
     </form>
@@ -49,17 +49,17 @@
 
 
   <!-- Modal: Change Email -->
-  <ModalComponent id="modal_change_email" title="Change Email">
+  <ModalComponent id="modal_change_email" :title="$t('profile.button.username')">
     <form @submit.prevent="on_submit" action="/api/user/username" method="post"
           class="d-flex flex-column justify-content-around was-validated">
-      <EmailComponent label="New email" :value="user.username"/>
-      <PasswordComponent label="Confirm with password" />
+      <EmailComponent :label="$t('profile.form.username.new')" :value="user.username"/>
+      <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Update" />
     </form>
   </ModalComponent>
 
   <!-- Modal: Change Password -->
-  <ModalComponent id="modal_change_password" title="Change Password">
+  <ModalComponent id="modal_change_password" :title="$t('profile.button.password')">
     <form @submit.prevent="on_submit" action="/api/user/password" method="post"
           class="d-flex flex-column justify-content-around was-validated">
       <PasswordComponent type="tripple" />
@@ -68,12 +68,12 @@
   </ModalComponent>
 
   <!-- Modal: Delete Account -->
-  <ModalComponent id="modal_delete_account" title="Delete Account?">
-    <p style="color: red">All your proposed movies, votes and user data will be irretrievable lost!</p>
+  <ModalComponent id="modal_delete_account" :title="$t('profile.option.delete_account')">
+    <p style="color: red">{{ $t('profile.form.delete_account.desc') }}</p>
     <br>
     <form @submit.prevent="delete_account" action="/api/user" method="post"
           class="d-flex flex-column justify-content-around was-validated">
-      <PasswordComponent label="Confirm with password" />
+      <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Delete" class="btn btn-danger form-submit" />
     </form>
   </ModalComponent>

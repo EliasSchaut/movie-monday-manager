@@ -9,6 +9,8 @@ import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { History, Vote, Movie } from "@prisma/client";
 import { ResDto } from "../../types/res.dto";
 import imdb from "imdb-api";
+import { I18n, I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from "../../types/generated/i18n.generated";
 
 /**
  * Controller for movie related routes
@@ -41,23 +43,23 @@ export class MovieController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get(':imdb_id')
-  async get_media(@Param('imdb_id') imdb_id: string) : Promise<imdb.Movie> {
-    return await this.movieService.get(imdb_id)
+  async get_media(@Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<imdb.Movie> {
+    return await this.movieService.get(imdb_id, i18n)
   }
 
   @ApiOperation({ summary: 'POST add a movie to the movie database by a given imdb_id. This is only possible if the movie is not already in the movie, watchlist or history database! The given user will be the proposer of the movie' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
-  async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string): Promise<{movie: Movie, vote: Vote}> {
-    return await this.movieService.save(imdb_id, Number(user.id))
+  async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>): Promise<{movie: Movie, vote: Vote}> {
+    return await this.movieService.save(imdb_id, Number(user.id), i18n)
   }
 
   @ApiOperation({ summary: "DEL remove a movie from the movie database by a given imdb_id, when the given user is the proposer" })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete(':imdb_id')
-  async delete_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string) : Promise<ResDto> {
-    return await this.movieService.delete(imdb_id, user.id)
+  async delete_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<ResDto> {
+    return await this.movieService.delete(imdb_id, user.id, i18n)
   }
 }

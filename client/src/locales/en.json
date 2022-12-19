@@ -1,0 +1,159 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "form": {
+      "username": {
+        "label": "E-Mail",
+        "invalid_feedback": "Please enter a valid email address!"
+      },
+      "name": {
+        "label": "Name",
+        "invalid_feedback": "Must be between 3 and 20 characters and start with a capital letter!"
+      },
+      "password": {
+        "label": {
+          "single": "Password",
+          "retype": "Retype password",
+          "old": "Old password",
+          "submit": "Confirm with password"
+        },
+        "invalid_feedback": {
+          "single": "Minimum eight characters, at least one letter and one number!",
+          "double": "- At least 8 characters<br>- Contains an uppercase letter, lowercase letter, and a number<br>- Can contain special characters",
+          "double_retype": "Should be the same as the password!"
+        }
+      },
+      "valid_feedback": "Looks good!",
+      "submit": "Submit"
+    },
+    "modal": {
+      "close": "Close"
+    },
+    "alert": {
+      "info": "Info!",
+      "success": "Success!",
+      "warning": "Warning!",
+      "danger": "Danger!"
+    }
+  },
+
+  "nav": {
+    "home": "Home",
+    "history": "History",
+    "privacy": "Privacy",
+    "docs": "Docs",
+    "lang": {
+      "de": "\uD83C\uDDE9\uD83C\uDDEA German",
+      "en": "\uD83C\uDDEC\uD83C\uDDE7 English"
+    },
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "logout": "Logout"
+  },
+
+  "movie": {
+    "title": "Title",
+    "year": "Year",
+    "genre": "Genre",
+    "proposer": "Proposer",
+    "proposed_on": "Proposed&nbsp;on",
+    "interested": "Interested",
+    "start": "Start",
+    "modal": {
+      "title": "Add Movie",
+      "form": {
+        "title": "IMDB ID:",
+        "invalid_feedback": "Should be a valid IMDB ID, e.g. tt1234567"
+      }
+    }
+  },
+
+  "history": {
+    "title": "Title",
+    "watched_at": "Watched At"
+  },
+
+  "docs": {
+    "title": "Available documentation",
+    "api": "Api Docs",
+    "backend": "Backend Docs"
+  },
+
+  "profile": {
+    "header": "Profile",
+    "avatar": {
+      "title": "Avatar",
+      "placeholder": "Placeholder Picture",
+      "gravatar": "Profile Picture"
+    },
+    "button": {
+      "profile": "Edit Profile",
+      "username": "Change E-Mail",
+      "password": "Change Password"
+    },
+    "form": {
+      "profile": {
+        "gravatar": "Use Gravatar"
+      },
+      "username": {
+        "new": "New E-Mail"
+      },
+      "delete_account": {
+        "desc": "All your proposed movies, votes and user data will be irretrievable lost!"
+      }
+    },
+    "option": {
+      "title": "Options",
+      "email_opt_in": "Receive emails",
+      "get_user_data": "Get all user data",
+      "delete_account": "Delete account"
+    }
+  },
+
+  "login": {
+    "title": "Login",
+    "forgot_password": "Forgot Password"
+  },
+
+  "register": {
+    "title": "Register"
+  },
+
+  "reset_request": {
+    "title": "Password Reset Request"
+  },
+
+  "reset": {
+    "title": "Password Reset"
+  },
+
+  "privacy": {
+    "imprint": {
+      "title": "Imprint",
+      "declaration": "Information according to § 5 TMG",
+      "contact": "Contact",
+      "email": "E-Mail",
+      "phone": "Phone"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "registration": {
+        "title": "What happens to the information I provide during registration?",
+        "body": "If \"Confirm\" is clicked during registration, all information provided here will be sent to a database on a dedicated server of IONOS SE in Frankfurt, Germany and stored there at the latest until the end of the operation of this website."
+      },
+      "access": {
+        "title": "Who has access to my data and why?",
+        "body": "Only the above-mentioned operator of this website has access to all data. The password provided is only stored in encrypted form and cannot be viewed. The e-mail address is only used for communication with the user and is not passed on to third parties. The respective given name is publicly viewable! If a user account is deleted, all data associated with this account will also be deleted. This also includes the film suggestions and film choices that the user has made."
+      },
+      "cookies": {
+        "title": "Analytics/Cookies/External Resources etc.?",
+        "body": "This website does not use analytical tracking of any kind. This website uses cookies. These are small text files that the web browser stores on the end device. Cookies help to make the website more user-friendly, effective and secure. Some cookies are \"session cookies.\" Such cookies are deleted by themselves at the end of the browser session. In contrast, other cookies remain on your terminal device until they are manually deleted by yourself. Such cookies help to reuse settings made when returning to the website. With a modern web browser, the setting of cookies can be monitored, restricted or prevented. Many web browsers can be configured to automatically delete cookies when the program is closed. Disabling cookies may result in limited functionality of the website."
+      },
+      "rights": {
+        "title": "What are my rights?",
+        "body": "According to DSGVO and BDSG, you can request information, updating, blocking or deletion of all your data at any time. Your contact person for this is the above-mentioned operator of this website. In addition, I am obliged to remind you of your right to object to this consent at any time and, if necessary, to complain to a supervisory authority about me."
+      }
+    }
+  }
+}

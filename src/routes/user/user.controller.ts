@@ -10,6 +10,8 @@ import { LoginDto } from "../../types/user.dto/login.dto";
 import { PasswordNewDto } from "../../types/user.dto/password_new.dto";
 import { ResDto } from "../../types/res.dto";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { I18n, I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from "../../types/generated/i18n.generated";
 
 /**
  * Controller for user related routes
@@ -32,24 +34,24 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post()
-  async update_profile(@User() user: JwtUser, @Body() body: ProfileDto): Promise<ResDto> {
-    return await this.userService.change_profile(Number(user.id), body);
+  async update_profile(@User() user: JwtUser, @Body() body: ProfileDto, @I18n() i18n: I18nContext<I18nTranslations>): Promise<ResDto> {
+    return await this.userService.change_profile(Number(user.id), body, i18n);
   }
 
   @ApiOperation({ summary: 'POST update email_opt_in (set/unset on newsletter)' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('email_opt_in')
-  async email_opt_in(@User() user: JwtUser, @Body() body: EmailOptInDto): Promise<ResDto> {
-    return await this.userService.email_opt_in(Number(user.id), Boolean(body.email_opt_in));
+  async email_opt_in(@User() user: JwtUser, @Body() body: EmailOptInDto, @I18n() i18n: I18nContext<I18nTranslations>): Promise<ResDto> {
+    return await this.userService.email_opt_in(Number(user.id), Boolean(body.email_opt_in), i18n);
   }
 
   @ApiOperation({ summary: 'DELETE user' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Delete()
-  async delete(@User() user: JwtUser, @Body() body: PasswordDto): Promise<ResDto> {
-    return await this.userService.delete(Number(user.id), body.password);
+  async delete(@User() user: JwtUser, @Body() body: PasswordDto, @I18n() i18n: I18nContext<I18nTranslations>): Promise<ResDto> {
+    return await this.userService.delete(Number(user.id), body.password, i18n);
   }
 
   @ApiOperation({ summary: 'GET all saved user data' })
@@ -64,16 +66,16 @@ export class UserController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('username')
-  async change_username(@User() user: JwtUser, @Body() body: LoginDto): Promise<ResDto> {
-    return await this.userService.change_username(Number(user.id), body.username, body.password);
+  async change_username(@User() user: JwtUser, @Body() body: LoginDto, @I18n() i18n: I18nContext<I18nTranslations>): Promise<ResDto> {
+    return await this.userService.change_username(Number(user.id), body.username, body.password, i18n);
   }
 
   @ApiOperation({ summary: 'POST update password' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('password')
-  async change_password(@User() user: JwtUser, @Body() body: PasswordNewDto): Promise<ResDto> {
-    return await this.userService.change_password(Number(user.id), body.password, body.password_old);
+  async change_password(@User() user: JwtUser, @Body() body: PasswordNewDto, @I18n() i18n: I18nContext<I18nTranslations>): Promise<ResDto> {
+    return await this.userService.change_password(Number(user.id), body.password, body.password_old, i18n);
   }
 
   @ApiOperation({ summary: 'GET check if bearer token is valid' })

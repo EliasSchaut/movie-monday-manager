@@ -1,6 +1,6 @@
 <template>
   <CardComponent v-if="watchlist.length > 0" id="watchlist" header="Watchlist">
-    <TableComponent :head="head">
+    <TableComponent :head="[$t('movie.start'), $t('movie.title'), $t('movie.interested')]">
       <tr v-for="movie in watchlist">
         <td>{{ (new Date(movie.start_time)).toLocaleString() }}</td>
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
@@ -14,8 +14,8 @@
     </TableComponent>
   </CardComponent>
 
-  <ModalComponent id="modal_watchlist" title="Interested">
-    <TableComponent :head="head_modal">
+  <ModalComponent id="modal_watchlist" :title="$t('movie.interested')">
+    <TableComponent :head="[$t('profile.avatar.title'), $t('common.form.name.label')]">
       <tr v-for="user in interested_local">
         <td><img v-if="user.use_gravatar" :src="user.gravatar_url" alt="avatar" class="profile" />
         <img v-else src="../assets/img/Portrait_Placeholder.png" alt="placeholder_avatar" class="profile" /></td>
@@ -38,8 +38,6 @@ export default {
   components: { TableComponent, CardComponent, ModalComponent },
   data() {
     return {
-      head: ["Start", "Title", "Interested"],
-      head_modal: ["Profile", "Name"],
       interested_local: interested_local
     };
   },

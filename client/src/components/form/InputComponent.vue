@@ -6,7 +6,7 @@
     <input v-if="_class !== 'form-control'" v-bind="$attrs" :name="name" :class="_class">
     <input v-else v-bind="$attrs" :name="name" class="form-control">
     <div class="valid-feedback">
-      Looks good!
+      {{ $t('common.form.valid_feedback') }}
     </div>
     <div class="invalid-feedback" v-html="invalid_feedback" />
   </div>

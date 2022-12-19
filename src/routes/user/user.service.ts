@@ -12,6 +12,8 @@ import { name_pattern } from "../../common/validation/patterns/name.pattern";
 import { username_pattern } from "../../common/validation/patterns/username.pattern";
 import { password_pattern } from "../../common/validation/patterns/password.pattern";
 import cuid from "cuid";
+import { I18nContext } from "nestjs-i18n";
+import { I18nTranslations } from "../../types/generated/i18n.generated";
 
 @Injectable()
 export class UserService {
@@ -41,9 +43,9 @@ export class UserService {
     return { user, movies: proposed_movies, votes };
   }
 
-  async change_profile(user_id: number, data: ProfileDto) {
+  async change_profile(user_id: number, data: ProfileDto, i18n: I18nContext<I18nTranslations>) {
     if (!name_pattern.test(data.name)) {
-      throw new ForbiddenException("Invalid name! Name must be between 3 and 20 characters and start with a capital letter!");
+      throw new ForbiddenException(i18n.t("user.exception.invalid_name"));
     }
 
     const user = await this.userDBService.get({ id: user_id }) as User;
@@ -61,21 +63,21 @@ export class UserService {
     }
 
     await this.userDBService.update({ where: { id: user_id }, data: data_to_update });
-    return { message: "Profile updated!", show_alert: true };
+    return { message: i18n.t("user.success.profile"), show_alert: true };
   }
 
-  async email_opt_in(user_id: number, opt_in: boolean) {
+  async email_opt_in(user_id: number, opt_in: boolean, i18n: I18nContext<I18nTranslations>) {
     await this.userDBService.update({ where: { id: user_id },
       data: {
         email_opt_in: opt_in
       }
     });
-    return { message: "Email option updated!", show_alert: true };
+    return { message: i18n.t("user.success.email_opt_in"), show_alert: true };
   }
 
-  async change_password(user_id: number, password_new: string, password_old: string) {
+  async change_password(user_id: number, password_new: string, password_old: string, i18n: I18nContext<I18nTranslations>) {
     if (!password_pattern.test(password_new)) {
-      throw new ForbiddenException("Invalid password! Password must be minimum eight characters, at least one letter and one number!");
+      throw new ForbiddenException(i18n.t("user.exception.invalid_password"));
     }
 
     const user = await this.userDBService.get({ id: user_id }) as User;
@@ -85,23 +87,21 @@ export class UserService {
           password: await this.passwordService.hash(password_new),
         }
       });
-      return { message: "Password updated! " +
-          "The next time you log in, you will need to log in with your email address and new password.",
-        show_alert: true };
+      return { message: i18n.t("user.success.password"), show_alert: true };
 
     } else {
-      throw new ForbiddenException("Invalid password");
+      throw new ForbiddenException(i18n.t("user.exception.forbidden_password"));
     }
   }
 
-  async change_username(user_id: number, new_username: string, password: string) {
+  async change_username(user_id: number, new_username: string, password: string, i18n: I18nContext<I18nTranslations>) {
     if (!username_pattern.test(new_username)) {
-      throw new ForbiddenException("Invalid username! Username must be a valid email address!");
+      throw new ForbiddenException(i18n.t("user.exception.invalid_username"));
     }
 
     const user = await this.userDBService.get({ id: user_id }) as User;
     if ((user.username === new_username) || (await this.userDBService.has_user(new_username))) {
-      throw new ConflictException("Email is already in use");
+      throw new ConflictException(i18n.t("user.exception.conflict_username"));
     }
 
     if (await this.passwordService.compare(password, user.password)) {
@@ -116,22 +116,20 @@ export class UserService {
       });
       const new_challenge_url = this.emailService.generate_challenge_url(new_challenge);
       await this.emailService.send_challenge(user.username, user.name, new_challenge_url);
-      return { message: "Please confirm your new email address by clicking the link sent to your new inbox. " +
-          "The next time you log in, you will need to log in with your new verified email address and password.",
-        show_alert: true };
+      return { message: i18n.t("user.success.username"), show_alert: true };
 
     } else {
-      throw new ForbiddenException("Invalid password");
+      throw new ForbiddenException(i18n.t("user.exception.forbidden_password"));
     }
   }
 
-  async delete(user_id: number, password: string) {
+  async delete(user_id: number, password: string, i18n: I18nContext<I18nTranslations>) {
     const watchlist = await this.watchListDBService.get_all()
     const watchlist_proposer_ids = await Promise.all(watchlist.map(async wl => {
       return ((await this.movieDBService.get(wl.imdb_id)) as Movie).proposer_id
     }));
     if (watchlist_proposer_ids.includes(user_id)) {
-      throw new ForbiddenException("You cannot delete your account while you have movies in the watchlist");
+      throw new ForbiddenException(i18n.t("user.exception.conflict_delete"));
     }
 
     const user = await this.userDBService.get({ id: user_id }) as User;
@@ -139,10 +137,10 @@ export class UserService {
       await this.voteDBService.delete_all_user(user_id);
       await this.movieDBService.delete_all_proposed(user_id);
       await this.userDBService.delete({ id: user_id });
-      return { message: "Your account, votes and proposed movies has been deleted.", show_alert: true };
+      return { message: i18n.t("user.success.delete"), show_alert: true };
 
     } else {
-      throw new ForbiddenException("Invalid password");
+      throw new ForbiddenException(i18n.t("user.exception.forbidden_password"));
     }
   }
 }

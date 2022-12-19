@@ -1,0 +1,12 @@
+{
+  "exception": {
+    "internal_server_error": "Fehler beim Erhalten von Stimmen",
+    "conflict_exists": "Stimme existiert bereits",
+    "conflict_not_exists": "Stimme existiert nicht",
+    "conflict_unvote_proposed": "Ein selbst vorgeschlagener Film kann nicht abgewählt werden!",
+    "conflict_max_voted": "Du hast bereits für die maximale Anzahl von Filmen gestimmt! Du kannst nur für maximal {max_votes} Filme stimmen!"
+  },
+  "success": {
+
+  }
+}

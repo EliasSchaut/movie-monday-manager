@@ -1,23 +1,23 @@
 <template>
   <InputComponent
     v-if="type === 'tripple'"
-    :label="label.old"
+    :label="$t('common.form.password.label.old')"
     type="password"
     placeholder="•••"
     name="password_old"
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-    :invalid_feedback="invalid_feedback.single"
+    :invalid_feedback="$t('common.form.password.invalid_feedback.single')"
     required />
 
   <InputComponent
     v-if="type === 'double' || type === 'tripple'"
     id="form_input_password"
-    :label="label.single"
+    :label="$t('common.form.password.label.single')"
     type="password"
     placeholder="•••"
     name="password"
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-    :invalid_feedback="invalid_feedback.double"
+    :invalid_feedback="$t('common.form.password.invalid_feedback.double')"
     @input="check_password"
     v-bind="$attrs"
     required />
@@ -25,23 +25,23 @@
   <InputComponent
     v-if="type === 'double' || type === 'tripple'"
     id="form_input_password_confirm"
-    :label="label.retype"
+    :label="$t('common.form.password.label.retype')"
     type="password"
     placeholder="•••"
     name="password_confirm"
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-    :invalid_feedback="invalid_feedback.double_retype"
+    :invalid_feedback="$t('common.form.password.invalid_feedback.double_retype')"
     @input="check_password"
     required />
 
   <InputComponent
     v-if="type === 'single'"
-    :label="label.single"
+    :label="$t('common.form.password.label.single')"
     type="password"
     placeholder="•••"
     name="password"
     pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
-    :invalid_feedback="invalid_feedback.single"
+    :invalid_feedback="$t('common.form.password.invalid_feedback.single')"
     v-bind="$attrs"
     required />
 </template>
@@ -53,22 +53,6 @@ export default {
   name: "PasswordComponent",
   components: { InputComponent },
   inheritAttrs: false,
-  data() {
-    return {
-      label: {
-        single: "Password",
-        retype: "Retype password",
-        old: "Old password"
-      },
-      invalid_feedback: {
-        single: "Minimum eight characters, at least one letter and one number!",
-        double: "- At least 8 characters<br>" +
-          "- Contains an uppercase letter, lowercase letter, and a number<br>" +
-          "- Can contain special characters",
-        double_retype: "Should be the same as the password!"
-      }
-    };
-  },
   props: {
     type: {
       type: String,
