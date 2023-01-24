@@ -63,9 +63,10 @@
     "modal": {
       "title": "Film hinzufügen",
       "form": {
-        "title": "IMDB ID:",
+        "title": "Titel oder IMDB ID:",
         "invalid_feedback": "Sollte eine gültige IMDB ID sein, z.B. tt1234567"
-      }
+      },
+      "no_suggestion": "Kein Filmvorschlag"
     }
   },
 

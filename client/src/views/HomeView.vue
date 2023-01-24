@@ -46,16 +46,18 @@
           <h5 class="modal-title">{{ $t('movie.modal.title') }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_register" class="form was-validated" novalidate>
+        <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_post_movie" class="form was-validated" novalidate>
           <div class="modal-body">
             <b>{{ $t('movie.modal.form.title') }}</b>
-            <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
+            <input type="text" class="form-control dropdown" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" @input="search_media" required>
             <div class="valid-feedback">
               Looks good!
             </div>
             <div class="invalid-feedback">
               {{ $t('movie.modal.form.invalid_feedback') }}
             </div>
+
+            <MovieSearchComponent :movies="search_movies" />
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('common.modal.close') }}</button>
@@ -75,13 +77,21 @@ import router from "@/router/router";
 import WatchlistComponent from "@/components/WatchlistComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
 import FormComponent from "@/components/form/FormComponent.vue";
+import MovieSearchElementComponent from "@/components/movie/MovieSearchElementComponent.vue";
+import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
+const search_movies = ref([] as any[])
+const sm = [{title: 'That Obscure Object of Desire', year: '1977'},
+{title: 'The Object of My Affection', year: '1998'},
+{title: 'Love Object', year: '2003'},
+{title: 'The Object of Beauty', year: '1991'},
+{title: 'Mysterious Object at Noon', year: '2000'}]
 
 export default {
   name: "MovieComponent",
   data() {
-    return { store }
+    return { store, search_movies, sm }
   },
-  components: { FormComponent, WatchlistComponent, ModalComponent },
+  components: { MovieSearchComponent, MovieSearchElementComponent, FormComponent, WatchlistComponent, ModalComponent },
   setup() {
     let movies = ref([] as any[]);
     let votes = ref([] as any[]);
@@ -104,6 +114,16 @@ export default {
     }
   },
   methods: {
+    search_media(e: InputEvent) {
+      const search_input = (e.target as HTMLInputElement).value
+      if (search_input.length < 3) return
+      if (/^tt[0-9]+$/.test(search_input)) return
+
+      call("api/movie/search", "POST", { search_input })
+        .then((data) => {
+          search_movies.value = data
+        })
+    },
     add_media(e: Event) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
