@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { MovieService } from "./movie.service";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
@@ -11,6 +11,7 @@ import { ResDto } from "../../types/res.dto";
 import imdb from "imdb-api";
 import { I18n, I18nContext } from "nestjs-i18n";
 import { I18nTranslations } from "../../types/generated/i18n.generated";
+import { MovieSearchType } from "../../types/movie.types/movie_search.type";
 
 /**
  * Controller for movie related routes
@@ -37,6 +38,14 @@ export class MovieController {
   @Get('history')
   async get_history() : Promise<History[]> {
     return await this.movieService.get_history()
+  }
+
+  @ApiOperation({ summary: '' })
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('search')
+  async search_movie(@Body() data: { search_input: string }, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<MovieSearchType[]> {
+    return await this.movieService.search(data.search_input, i18n)
   }
 
   @ApiOperation({ summary: 'GET information about a specific movie given by its imdb_id' })

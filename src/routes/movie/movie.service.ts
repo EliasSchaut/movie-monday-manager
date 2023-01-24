@@ -1,4 +1,10 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException
+} from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
@@ -13,6 +19,9 @@ import { ResDto } from "../../types/res.dto";
 import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 import { I18nContext } from "nestjs-i18n";
 import { I18nTranslations } from 'src/types/generated/i18n.generated';
+import { MovieSearchType } from "../../types/movie.types/movie_search.type";
+import * as process from "process";
+import { OmdbSearchDto } from "../../types/movie.dto/omdb_search.dto";
 
 @Injectable()
 export class MovieService {
@@ -55,6 +64,31 @@ export class MovieService {
         votes
       } as MovieExtType;
     }));
+  }
+
+  async search(search_input: string, i18n: I18nContext<I18nTranslations>) : Promise<MovieSearchType[]> {
+    if (search_input.length < 3) {
+      throw new ForbiddenException(i18n.t('movie.exception.invalid_search_length'))
+    }
+
+    let movies = []
+    try {
+      const res = await (await fetch(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${search_input}&type=movie`)).json() as any
+      if (res.Response === 'False') return []
+      movies = res.Search as OmdbSearchDto[]
+
+    } catch (e) {
+      console.log(e)
+      throw new InternalServerErrorException()
+    }
+
+    return movies.map((movie) => {
+      return {
+        imdb_id: movie.imdbID,
+        title: movie.Title,
+        year: movie.Year
+      }
+    }) as MovieSearchType[]
   }
 
   async save(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
