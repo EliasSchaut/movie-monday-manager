@@ -3,7 +3,7 @@
     <table :id="id" class="table table-striped table-bordered table-active">
       <thead>
       <tr class="table-dark align-middle">
-        <th v-if="sortable" v-for="column in head" @click="(e) => sort(e, id)">
+        <th v-if="sortable" v-for="column in head" @click="(e) => { sort_dir = sort_loop[sort_dir]; sort(e, id, sort_dir)}">
           <div class="d-flex justify-content-between flex-row">
             <div/>
             <div v-html="column" />
@@ -25,18 +25,16 @@
 <script lang="ts">
 import { ref } from "vue";
 
-const sort_dir = ref("none")
-const sort_loop = {
-  none: "asc",
-  asc: "desc",
-  desc: "asc"
-} as any
-
 export default {
   name: "TableComponent",
   data() {
     return {
-      sort_dir
+      sort_dir: ref("none"),
+      sort_loop: {
+        none: "asc",
+        asc: "desc",
+        desc: "asc"
+      }
     }
   },
   props: {
@@ -51,12 +49,14 @@ export default {
     sortable: {
       type: Boolean,
       default: false
+    },
+    filterable: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
-    sort(e: Event, table_id: string) {
-      sort_dir.value = sort_loop[sort_dir.value]
-
+    sort(e: Event, table_id: string, sort_dir: string) {
       const table = document.getElementById(table_id) as HTMLTableElement
       const th = e.currentTarget as HTMLTableCellElement
       const clicked_col = th.cellIndex
@@ -68,15 +68,25 @@ export default {
         not_sorted = false;
 
         for (let i = 1; i < (rows.length - 1); i++) {
-          const x = rows[i].getElementsByTagName("td")[clicked_col];
-          const y = rows[i + 1].getElementsByTagName("td")[clicked_col];
+          let x = rows[i].getElementsByTagName("td")[clicked_col] as HTMLElement;
+          let y = rows[i + 1].getElementsByTagName("td")[clicked_col] as HTMLElement;
 
-          if (sort_dir.value === "asc") {
+          const x_link = x.getElementsByTagName("a")
+          const y_link = y.getElementsByTagName("a")
+          if (x_link.length !== 0) {
+            x = x_link[0]
+          }
+
+          if (y_link.length !== 0) {
+            y = y_link[0]
+          }
+
+          if (sort_dir === "asc") {
             if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i])
               not_sorted = true;
             }
-          } else if (sort_dir.value === "desc") {
+          } else if (sort_dir === "desc") {
             if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i])
               not_sorted = true;
