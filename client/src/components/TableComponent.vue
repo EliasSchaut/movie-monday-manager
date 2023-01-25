@@ -6,13 +6,13 @@
         <th v-if="sortable" v-for="column in head" @click="(e) => sort(e, id)">
           <div class="d-flex justify-content-between flex-row">
             <div/>
-            <div>{{ column }}</div>
+            <div v-html="column" />
             <img v-if="sort_dir === 'asc'" src="../assets/svg/sort-alpha-down.svg" alt="sort_icon_down">
             <img v-else-if="sort_dir === 'desc'" src="../assets/svg/sort-alpha-up.svg" alt="sort_icon_up">
             <img v-else src="../assets/svg/filter.svg" alt="sort_icon_none">
           </div>
         </th>
-        <th v-else v-for="column in head">{{ column }}</th>
+        <th v-else v-for="column in head" v-html="column" />
       </tr>
       </thead>
       <tbody>
