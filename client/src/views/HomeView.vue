@@ -2,7 +2,7 @@
   <WatchlistComponent />
 
   <div class="main">
-    <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>+</b></button>
+    <button class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>{{ $t('movie.modal.title') }} +</b></button>
     <TableComponent :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
                     id="table_movie" sortable filterable>
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">

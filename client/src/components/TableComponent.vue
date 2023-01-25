@@ -1,4 +1,16 @@
 <template>
+  <div v-if="filterable" class="dropdown mb-2 float-end">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+      <img src="../assets/svg/filter.svg" alt="filter_icon">
+    </button>
+    <ul class="dropdown-menu">
+      <li v-for="column in head" class="dropdown-item d-flex justify-content-between">
+        <input :id="'movie_filter_' + column" type="checkbox" checked>
+        <div v-html="column" :data-bs-target="'movie_filter_' + column" />
+      </li>
+    </ul>
+  </div>
+
   <div class="table-responsive">
     <table :id="id" class="table table-striped table-bordered table-active">
       <thead>
