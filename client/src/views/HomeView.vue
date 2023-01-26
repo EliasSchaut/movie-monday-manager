@@ -13,15 +13,15 @@
         <td><p>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</p></td>
         <td>
           <div class="d-flex justify-content-between flex-row">
-            <div>{{ movie.votes }}</div>
+            <div :id="'table_movie_votes_' + movie.imdb_id">{{ movie.votes }}</div>
             <div>
               <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id" class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/trash-fill.svg" alt="trash">
               </button>
-              <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id)" :disabled="!store.logged_in">
+              <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id, votes)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
               </button>
-              <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id)" :disabled="!store.logged_in">
+              <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
               </button>
             </div>
@@ -113,17 +113,33 @@ export default {
       call("api/movie/" + imdb_id, "DELETE")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
-            router.go(0)
+            const table = document.getElementById("table_movie") as HTMLTableElement
+            const tr = document.getElementById(imdb_id) as HTMLTableRowElement
+            table.deleteRow(tr.rowIndex)
           }
         })
     },
-    vote(imdb_id: string) {
+    vote(imdb_id: string, votes: string[]) {
       call("api/vote/" + imdb_id, "POST")
-        .then(() => router.go(0))
+        .then((data) => {
+            if (!data.hasOwnProperty("statusCode")) {
+              const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement
+              vote_div.innerHTML = String(Number(vote_div.innerHTML) + 1)
+              votes.push(imdb_id)
+            }
+        })
     },
-    unvote(imdb_id: string) {
+    unvote(imdb_id: string, votes: any[]) {
       call("api/vote/" + imdb_id, "DELETE")
-        .then(() => router.go(0))
+        .then((data) => {
+          if (!data.hasOwnProperty("statusCode")) {
+            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement
+            vote_div.innerHTML = String(Number(vote_div.innerHTML) - 1)
+
+            const slice_index = votes.indexOf(imdb_id)
+            delete votes[slice_index]
+          }
+        })
     }
   },
 };
