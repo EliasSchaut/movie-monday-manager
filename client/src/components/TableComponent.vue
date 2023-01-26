@@ -6,9 +6,9 @@
         <img src="../assets/svg/filter.svg" alt="filter_icon">
       </button>
       <div class="dropdown-menu">
-        <label v-for="column in head" class="dropdown-item d-flex justify-content-between"
+        <label v-for="(column, index) in head" class="dropdown-item d-flex justify-content-between"
                :for="'movie_filter_' + column">
-          <input :id="'movie_filter_' + column" type="checkbox" checked>
+          <input :id="'movie_filter_' + column" type="checkbox" checked @input="(e) => filter(e, id, index)">
           <div v-html="'&nbsp;&nbsp;' + column" />
         </label>
       </div>
@@ -110,6 +110,16 @@ export default {
             }
           }
         }
+      }
+    },
+    filter(e: InputEvent, table_id: string, cell_index: number) {
+      const toggle = (e.target as HTMLInputElement).checked
+      const table = document.getElementById(table_id) as HTMLTableElement
+      const rows = table.rows
+
+      for (const row of rows) {
+        const td = row.cells[cell_index]
+        td.style.display = (toggle) ? "" : "none"
       }
     }
   }
