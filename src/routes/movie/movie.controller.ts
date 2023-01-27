@@ -8,7 +8,6 @@ import { MovieExtType } from "../../types/movie.types/movie_ext.type";
 import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { History, Vote, Movie } from "@prisma/client";
 import { ResDto } from "../../types/res.dto";
-import imdb from "imdb-api";
 import { I18n, I18nContext } from "nestjs-i18n";
 import { I18nTranslations } from "../../types/generated/i18n.generated";
 
@@ -43,7 +42,7 @@ export class MovieController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get(':imdb_id')
-  async get_media(@Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<imdb.Movie> {
+  async get_media(@Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<Movie> {
     return await this.movieService.get(imdb_id, i18n)
   }
 
