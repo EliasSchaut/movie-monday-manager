@@ -18,13 +18,22 @@
       <table :id="id" class="table table-striped table-bordered table-active">
         <thead>
         <tr class="table-dark align-middle">
-          <th v-if="sortable" v-for="column in head"
-              @click="(e) => { sort_dir = sort_loop[sort_dir]; sort(e, id, sort_dir)}">
+          <th v-if="sortable" v-for="(column, index) in head"
+              @click="(e) => {
+                for(i = 0; i < head.length; i++) {
+                  if (i !== index) {
+                    sort_dir[i] = 'none';
+                  } else {
+                    sort_dir[i] = sort_loop[sort_dir[index]];
+                  }
+                }
+                sort(e, id, sort_dir[index])
+              }">
             <div class="d-flex justify-content-between flex-row">
               <div />
               <div v-html="column" />
-              <img v-if="sort_dir === 'asc'" src="../assets/svg/sort-alpha-down.svg" alt="sort_icon_down">
-              <img v-else-if="sort_dir === 'desc'" src="../assets/svg/sort-alpha-up.svg" alt="sort_icon_up">
+              <img v-if="sort_dir[index] === 'asc'" src="../assets/svg/sort-alpha-down.svg" alt="sort_icon_down">
+              <img v-else-if="sort_dir[index] === 'desc'" src="../assets/svg/sort-alpha-up.svg" alt="sort_icon_up">
               <img v-else src="../assets/svg/filter.svg" alt="sort_icon_none">
             </div>
           </th>
@@ -40,18 +49,23 @@
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 
-export default {
+export default defineComponent({
   name: "TableComponent",
   data() {
     return {
-      sort_dir: ref("none"),
       sort_loop: {
         none: "asc",
         asc: "desc",
         desc: "asc"
-      }
+      } as any,
+      i: 0
+    };
+  },
+  setup(props) {
+    return {
+      sort_dir: ref(Array(props.head.length).fill("none"))
     };
   },
   props: {
@@ -112,18 +126,18 @@ export default {
         }
       }
     },
-    filter(e: InputEvent, table_id: string, cell_index: number) {
-      const toggle = (e.target as HTMLInputElement).checked
-      const table = document.getElementById(table_id) as HTMLTableElement
-      const rows = table.rows
+    filter(e: Event, table_id: string, cell_index: number) {
+      const toggle = (e.target as HTMLInputElement).checked;
+      const table = document.getElementById(table_id) as HTMLTableElement;
+      const rows = table.rows;
 
       for (const row of rows) {
-        const td = row.cells[cell_index]
-        td.style.display = (toggle) ? "" : "none"
+        const td = row.cells[cell_index];
+        td.style.display = (toggle) ? "" : "none";
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>
