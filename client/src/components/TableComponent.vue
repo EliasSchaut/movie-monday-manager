@@ -104,12 +104,18 @@ export default defineComponent({
 
           const x_link = x.getElementsByTagName("a");
           const y_link = y.getElementsByTagName("a");
+          const x_div = x.getElementsByTagName("div");
+          const y_div = y.getElementsByTagName("div");
           if (x_link.length !== 0) {
             x = x_link[0];
+          } else if (x_div.length > 1) {
+            x = x_div[1];
           }
 
           if (y_link.length !== 0) {
             y = y_link[0];
+          } else if (y_div.length > 1) {
+            y = y_div[1];
           }
 
           if (sort_dir === "asc") {
