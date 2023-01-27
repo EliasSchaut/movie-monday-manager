@@ -8,7 +8,7 @@
       <div class="dropdown-menu">
         <label v-for="(column, index) in head" class="dropdown-item d-flex justify-content-between"
                :for="'movie_filter_' + column">
-          <input :id="'movie_filter_' + column" type="checkbox" checked @input="(e) => filter(e, id, index)">
+          <input :id="'movie_filter_' + column" type="checkbox" :checked="filter_values[index]" @input="(e: Event) => filter(id, index, (e.target as HTMLInputElement).checked)">
           <div v-html="'&nbsp;&nbsp;' + column" />
         </label>
       </div>
@@ -50,6 +50,7 @@
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { get_cookie, set_cookie } from "@/util/cookie";
 
 export default defineComponent({
   name: "TableComponent",
@@ -60,13 +61,24 @@ export default defineComponent({
         asc: "desc",
         desc: "asc"
       } as any,
-      i: 0
+      i: 0,
+      filter_values: this.get_filter_cookie(),
+      first_update: false
     };
   },
   setup(props) {
     return {
-      sort_dir: ref(Array(props.head.length).fill("none"))
+      sort_dir: ref(Array(props.head.length).fill("none")),
     };
+  },
+  updated() {
+    if (this.filterable && !this.first_update) {
+      console.log("filter", this.filter_values);
+      for (let i = 0; i < this.filter_values.length; i++) {
+        this.filter(this.id, i, this.filter_values[i]);
+      }
+      this.first_update = true;
+    }
   },
   props: {
     head: {
@@ -132,15 +144,23 @@ export default defineComponent({
         }
       }
     },
-    filter(e: Event, table_id: string, cell_index: number) {
-      const toggle = (e.target as HTMLInputElement).checked;
+    filter(table_id: string, cell_index: number, set_visible: boolean) {
       const table = document.getElementById(table_id) as HTMLTableElement;
       const rows = table.rows;
 
       for (const row of rows) {
         const td = row.cells[cell_index];
-        td.style.display = (toggle) ? "" : "none";
+        td.style.display = (set_visible) ? "" : "none";
       }
+      this.filter_values[cell_index] = set_visible;
+      this.set_filter_cookie(this.filter_values);
+    },
+    get_filter_cookie() : boolean[] {
+      const filter_cookie = get_cookie("table_filter_" + this.id)
+      return (filter_cookie) ? JSON.parse(filter_cookie) as boolean[] : Array(this.head.length).fill(true);
+    },
+    set_filter_cookie(filter_values: boolean[]) {
+      set_cookie("table_filter_" + this.id, JSON.stringify(filter_values), 365)
     }
   }
 });

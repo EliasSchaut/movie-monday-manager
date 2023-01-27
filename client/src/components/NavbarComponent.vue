@@ -49,10 +49,10 @@ import { store } from '@/util/store'
 </script>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 import { set_cookie } from "@/util/cookie";
 
-export default {
+export default defineComponent({
   name: "NavbarComponent",
   data() {
     return {
@@ -63,10 +63,10 @@ export default {
     change_lang: function (event: any) {
       const new_lang = event.target.value as "en" | "de"
       this.$i18next.changeLanguage(new_lang)
-      set_cookie("lang", new_lang)
+      set_cookie("lang", new_lang, 365)
     }
   }
-};
+});
 </script>
 
 <style scoped>
