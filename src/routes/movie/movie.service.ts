@@ -67,7 +67,11 @@ export class MovieService {
         year: movie.year,
         genre: movie.genre,
         proposer: user.name,
-        proposer_id: user.id,
+        proposer_id: movie.proposer_id,
+        director: movie.director,
+        imdb_rate: movie.imdb_rate,
+        language: movie.language,
+        metascore: movie.metascore,
         createdAt: movie.createdAt,
         votes
       } as MovieExtType;
@@ -128,7 +132,13 @@ export class MovieService {
       genre: movie.genres,
       link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
-      runtime: Number((movie.runtime.split(" "))[0])
+      runtime: Number((movie.runtime.split(" "))[0]),
+      director: movie.director,
+      imdb_rate: movie.rating,
+      poster: movie.poster,
+      plot: movie.plot,
+      language: movie.languages,
+      metascore: movie.metascore,
     }
 
     try {
