@@ -32,10 +32,16 @@ model Movie {
   title       String
   year        Int
   genre       String
+  director    String
+  imdb_rate   Float
+  metascore   String?
+  language    String
+  plot        String
+  runtime     Int
   link        String
+  poster      String?
   proposer_id Int
   proposer    User       @relation(fields: [proposer_id], references: [id])
-  runtime     Int
   Vote        Vote[]
   WatchList   WatchList?
 }
