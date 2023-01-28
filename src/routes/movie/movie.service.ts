@@ -40,6 +40,14 @@ export class MovieService {
 
   async get(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
     try {
+      return await this.movieDBService.get(imdb_id) as Movie
+    } catch (e) {
+      throw new NotFoundException(i18n.t('movie.exception.not_found'))
+    }
+  }
+
+  private async get_from_omdb(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
+    try {
       return await this.imdb.get({ id: imdb_id })
     } catch (e) {
       throw new NotFoundException(i18n.t('movie.exception.not_found'))
@@ -110,7 +118,7 @@ export class MovieService {
       } }))
     }
 
-    const movie = await this.get(imdb_id, i18n)
+    const movie = await this.get_from_omdb(imdb_id, i18n)
     const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
