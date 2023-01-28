@@ -2,54 +2,59 @@
   <WatchlistComponent />
 
   <div class="main">
-    <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie" :disabled="!store.logged_in"><b>{{ $t('movie.modal.title') }} +</b></button>
-    <TableComponent :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-                    id="table_movie" sortable filterable>
+    <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
+            :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
+    <TableComponent
+      :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
+      id="table_movie" sortable filterable>
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td><p>{{ movie.year }}</p></td>
         <td><p>{{ movie.genre }}</p></td>
         <td><p>{{ movie.proposer }}</p></td>
         <td><p>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</p></td>
-        <td><p>{{ movie.votes }}</p></td>
         <td>
           <div class="d-flex justify-content-between flex-row">
             <div :id="'table_movie_votes_' + movie.imdb_id">{{ movie.votes }}</div>
             <div>
-              <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id" class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
+              <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id"
+                      class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/trash-fill.svg" alt="trash">
               </button>
-              <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary" @click="unvote(movie.imdb_id, votes)" :disabled="!store.logged_in">
+              <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary"
+                      @click="unvote(movie.imdb_id, votes)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
               </button>
-              <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary" @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
+              <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary"
+                      @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
                 <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
               </button>
             </div>
           </div>
         </td>
       </tr>
-      </tbody>
-    </table>
+    </TableComponent>
   </div>
 
   <ModalComponent id="modal_add_movie" :title="$t('movie.modal.title')" spawn_over_body>
-    <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_register" class="form was-validated" novalidate>
+    <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_post_movie" class="form was-validated"
+          novalidate>
       <div class="modal-body">
-        <b>{{ $t('movie.modal.form.title') }}</b>
-        <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id" pattern="^tt[0-9]+$" required>
+        <b>{{ $t("movie.modal.form.title") }}</b>
+        <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id"
+               pattern="^tt[0-9]+$" @input="search_media" required>
         <div class="valid-feedback">
           Looks good!
         </div>
         <div class="invalid-feedback">
-          {{ $t('movie.modal.form.invalid_feedback') }}
-
-          <MovieSearchComponent :movies="search_movies" />
+          {{ $t("movie.modal.form.invalid_feedback") }}
         </div>
+
+        <MovieSearchComponent :movies="search_movies" />
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('common.modal.close') }}</button>
-        <button type="submit" class="btn btn-primary">{{ $t('common.form.submit') }}</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t("common.modal.close") }}</button>
+        <button type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
       </div>
     </form>
   </ModalComponent>
@@ -57,7 +62,7 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import { store } from '@/util/store'
+import { store } from "@/util/store";
 import { call } from "@/util/api";
 import router from "@/router/router";
 import WatchlistComponent from "@/components/WatchlistComponent.vue";
@@ -66,104 +71,113 @@ import FormComponent from "@/components/form/FormComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
 import MovieSearchElementComponent from "@/components/movie/MovieSearchElementComponent.vue";
 import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
-const search_movies = ref([] as any[])
-const sm = [{title: 'That Obscure Object of Desire', year: '1977'},
-{title: 'The Object of My Affection', year: '1998'},
-{title: 'Love Object', year: '2003'},
-{title: 'The Object of Beauty', year: '1991'},
-{title: 'Mysterious Object at Noon', year: '2000'}]
+
+const search_movies = ref([] as any[]);
 
 export default {
   name: "HomeView",
   data() {
-    return { store, search_movies, sm }
+    return { store, search_movies };
   },
-  components: { TableComponent, FormComponent, MovieSearchComponent, MovieSearchElementComponent, WatchlistComponent, ModalComponent },
+  components: {
+    TableComponent,
+    FormComponent,
+    MovieSearchComponent,
+    MovieSearchElementComponent,
+    WatchlistComponent,
+    ModalComponent
+  },
   setup() {
     let movies = ref([] as any[]);
     let votes = ref([] as any[]);
     let user_id = ref(-1);
 
     call("api/movie/all")
-      .then((data) => { movies.value = data; })
+      .then((data) => {
+        movies.value = data;
+      });
 
     if (store.logged_in) {
       call("api/vote")
-        .then((data) => { votes.value = data; })
+        .then((data) => {
+          votes.value = data;
+        });
       call("api/user")
-        .then((data) => { user_id.value = data.id; })
+        .then((data) => {
+          user_id.value = data.id;
+        });
     }
 
     return {
       movies,
       votes,
       user_id
-    }
+    };
   },
   methods: {
     search_media(e: InputEvent) {
-      const search_input = (e.target as HTMLInputElement).value
-      if (search_input.length < 3) return
-      if (/^tt[0-9]+$/.test(search_input)) return
+      const search_input = (e.target as HTMLInputElement).value;
+      if (search_input.length < 3) return;
+      if (/^tt[0-9]+$/.test(search_input)) return;
 
       call("api/movie/search", "POST", { search_input })
         .then((data) => {
-          search_movies.value = data
-        })
+          search_movies.value = data;
+        });
     },
     add_media(e: Event) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
-        return
+        return;
       }
 
       const form = new FormData(form_html);
-      const imdb_id = form.get("imdb_id") as string
+      const imdb_id = form.get("imdb_id") as string;
 
       call(form_html.action + imdb_id, "POST")
         .then((data) => {
           if (data.hasOwnProperty("statusCode")) {
             form_html.setAttribute("data-bs-dismiss", "modal");
-            form_html.click()
+            form_html.click();
             form_html.removeAttribute("data-bs-dismiss");
           } else {
-            router.go(0)
+            router.go(0);
           }
-        })
+        });
     },
     delete_media(imdb_id: string) {
       call("api/movie/" + imdb_id, "DELETE")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
-            const table = document.getElementById("table_movie") as HTMLTableElement
-            const tr = document.getElementById(imdb_id) as HTMLTableRowElement
-            table.deleteRow(tr.rowIndex)
+            const table = document.getElementById("table_movie") as HTMLTableElement;
+            const tr = document.getElementById(imdb_id) as HTMLTableRowElement;
+            table.deleteRow(tr.rowIndex);
           }
-        })
+        });
     },
     vote(imdb_id: string, votes: string[]) {
       call("api/vote/" + imdb_id, "POST")
         .then((data) => {
-            if (!data.hasOwnProperty("statusCode")) {
-              const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement
-              vote_div.innerHTML = String(Number(vote_div.innerHTML) + 1)
-              votes.push(imdb_id)
-            }
-        })
+          if (!data.hasOwnProperty("statusCode")) {
+            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
+            vote_div.innerHTML = String(Number(vote_div.innerHTML) + 1);
+            votes.push(imdb_id);
+          }
+        });
     },
     unvote(imdb_id: string, votes: any[]) {
       call("api/vote/" + imdb_id, "DELETE")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
-            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement
-            vote_div.innerHTML = String(Number(vote_div.innerHTML) - 1)
+            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
+            vote_div.innerHTML = String(Number(vote_div.innerHTML) - 1);
 
-            const slice_index = votes.indexOf(imdb_id)
-            delete votes[slice_index]
+            const slice_index = votes.indexOf(imdb_id);
+            delete votes[slice_index];
           }
-        })
+        });
     }
-  },
+  }
 };
 </script>
 
