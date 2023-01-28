@@ -55,6 +55,10 @@
   "movie": {
     "title": "Title",
     "year": "Year",
+    "director": "Director",
+    "imdb_rate": "IMDB",
+    "metascore": "Metascore",
+    "language": "Language",
     "genre": "Genre",
     "proposer": "Proposer",
     "proposed_on": "Proposed&nbsp;on",

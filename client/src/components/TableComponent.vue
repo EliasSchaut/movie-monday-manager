@@ -40,7 +40,7 @@
           <th v-else v-for="column in head" v-html="column" />
         </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align: center; vertical-align: middle">
         <slot />
         </tbody>
       </table>

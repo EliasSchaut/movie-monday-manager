@@ -5,17 +5,21 @@
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
-      :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
+      :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
       id="table_movie" sortable filterable>
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
-        <td><p>{{ movie.year }}</p></td>
-        <td><p>{{ movie.genre }}</p></td>
-        <td><p>{{ movie.proposer }}</p></td>
-        <td><p>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</p></td>
+        <td>{{ movie.year }}</td>
+        <td>{{ movie.genre }}</td>
+        <td>{{ movie.director }}</td>
+        <td>{{ movie.imdb_rate }}</td>
+        <td>{{ movie.metascore }}</td>
+        <td>{{ movie.language }}</td>
+        <td>{{ movie.proposer }}</td>
+        <td>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</td>
         <td>
           <div class="d-flex justify-content-between flex-row">
-            <div :id="'table_movie_votes_' + movie.imdb_id">{{ movie.votes }}</div>
+            <div :id="'table_movie_votes_' + movie.imdb_id" style="align-self: center">{{ movie.votes }}</div>
             <div>
               <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id"
                       class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">

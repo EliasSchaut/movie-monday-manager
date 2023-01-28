@@ -55,9 +55,13 @@
   "movie": {
     "title": "Titel",
     "year": "Jahr",
+    "director": "Regisseur",
+    "imdb_rate": "IMDB",
+    "metascore": "Metascore",
+    "language": "Sprache",
     "genre": "Genre",
-    "proposer": "Vorschlagende*r",
-    "proposed_on": "Vorgeschlagen&nbsp;am",
+    "proposer": "Hinzugefügt&nbsp;von",
+    "proposed_on": "Hinzugefügt&nbsp;am",
     "interested": "Interessiert",
     "start": "Start",
     "modal": {
