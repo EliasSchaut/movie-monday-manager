@@ -11,19 +11,19 @@
         <img width="16" src="../../assets/svg/metacritic.svg" class="me-1" alt="metacritic_logo">
         <b class="me-2">{{ movie.metascore }}</b>
       </div>
-      <b class="right">{{ movie.runtime }} {{ $t('movie.mins') }}</b>
+      <b class="right">{{ movie.runtime }} {{ $t("movie.mins") }}</b>
     </div>
-    <div class="d-flex flex-row">
-      <div class="d-flex flex-column me-2">
-        <img v-if="movie.poster !== 'N/A'" style="width: min(50vw, 300px)" :src="movie.poster" alt="movie poster">
-        <img v-else src="../../assets/img/Movie_Placeholder.png" alt="movie placeholder">
+    <div>
+      <div class="float-start">
+        <img class="me-2" v-if="movie.poster !== 'N/A'" style="width: min(50vw, 300px)" :src="movie.poster"
+             alt="movie poster">
+        <img class="me-2 float-start" v-else src="../../assets/img/Movie_Placeholder.png" alt="movie placeholder">
       </div>
-      <div class="d-flex flex-column mt-1">
-        <div class="mb-1">{{ movie.plot }}</div>
-        <div class="mb-1"><b v-text="$t('movie.genre')"></b>: {{ movie.genre }} </div>
-        <div class="mb-1"><b v-text="$t('movie.director')"></b>: {{ movie.director }}</div>
-        <div class="mb-1"><b v-text="$t('movie.language')"></b>: {{ movie.language }}</div>
-      </div>
+
+      <p class="mb-1 text-justify">{{ movie.plot }}</p>
+      <p class="mb-1 text-justify"><b v-text="$t('movie.genre')"></b>: {{ movie.genre }}</p>
+      <p class="mb-1 text-justify"><b v-text="$t('movie.director')"></b>: {{ movie.director }}</p>
+      <p class="mb-1 text-justify"><b v-text="$t('movie.language')"></b>: {{ movie.language }}</p>
     </div>
   </div>
 </template>
@@ -53,7 +53,7 @@ export default defineComponent({
         .then((data) => {
           this.movie = data;
           this.loading = false;
-          console.log(data)
+          console.log(data);
         });
     }
   }
