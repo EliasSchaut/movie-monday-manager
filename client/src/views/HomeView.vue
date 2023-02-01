@@ -5,9 +5,15 @@
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
-      :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable filterable :filter_default="[true, true, true, false, true, false, false, true, false, true]">
+      :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
+      id="table_movie" sortable filterable :filter_default="[true, true, true, true, false, true, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
+        <td :title="movie.title">
+          <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
+                  @click="big_picture_imdb_id = movie.imdb_id;big_picture_title = movie.title">
+            <img src="../assets/svg/box-arrow-up-right.svg" alt="big_picture">
+          </button>
+        </td>
         <td :title="movie.title"><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td :title="movie.year">{{ movie.year }}</td>
         <td :title="movie.genre">{{ movie.genre }}</td>
@@ -62,10 +68,14 @@
       </div>
     </form>
   </ModalComponent>
+
+  <ModalComponent id="modal_big_picture" class="modal-lg" :title="big_picture_title">
+    <MovieBigPictureComponent :imdb_id="big_picture_imdb_id" />
+  </ModalComponent>
 </template>
 
 <script lang="ts">
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 import { store } from "@/util/store";
 import { call } from "@/util/api";
 import router from "@/router/router";
@@ -75,15 +85,22 @@ import FormComponent from "@/components/form/FormComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
 import MovieSearchElementComponent from "@/components/movie/MovieSearchElementComponent.vue";
 import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
+import MovieBigPictureComponent from "@/components/movie/MovieBigPictureComponent.vue";
 
 const search_movies = ref([] as any[]);
 
-export default {
+export default defineComponent({
   name: "HomeView",
   data() {
-    return { store, search_movies };
+    return {
+      store,
+      search_movies,
+      big_picture_imdb_id: ref(""),
+      big_picture_title: ref("")
+    };
   },
   components: {
+    MovieBigPictureComponent,
     TableComponent,
     FormComponent,
     MovieSearchComponent,
@@ -119,7 +136,7 @@ export default {
     };
   },
   methods: {
-    search_media(e: InputEvent) {
+    search_media(e: Event) {
       const search_input = (e.target as HTMLInputElement).value;
       if (search_input.length < 3) return;
       if (/^tt[0-9]+$/.test(search_input)) return;
@@ -182,7 +199,7 @@ export default {
         });
     }
   }
-};
+});
 </script>
 
 <style scoped>

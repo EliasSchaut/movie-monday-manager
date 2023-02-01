@@ -31,7 +31,7 @@
               }">
             <div class="d-flex justify-content-between flex-row">
               <div />
-              <div v-html="column" />
+              <div v-html="column" class="me-1" />
               <img v-if="sort_dir[index] === 'asc'" src="../assets/svg/sort-alpha-down.svg" alt="sort_icon_down">
               <img v-else-if="sort_dir[index] === 'desc'" src="../assets/svg/sort-alpha-up.svg" alt="sort_icon_up">
               <img v-else src="../assets/svg/filter.svg" alt="sort_icon_none">
