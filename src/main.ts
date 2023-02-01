@@ -11,7 +11,7 @@ async function bootstrap() {
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {
-        imgSrc: ["'self'", "data:", "https://www.gravatar.com", "https://validator.swagger.io", "*"],
+        imgSrc: ["'self'", "data:", "https://www.gravatar.com", "https://validator.swagger.io", "https://m.media-amazon.com"],
         styleSrc: [`'self'`, `'unsafe-inline'`],
         scriptSrc: ["'self'", "https: 'unsafe-inline'"],
         objectSrc: ["'self'"],
