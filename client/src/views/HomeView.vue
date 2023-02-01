@@ -8,16 +8,16 @@
       :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
       id="table_movie" sortable filterable :filter_default="[true, true, true, false, true, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
-        <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
-        <td>{{ movie.year }}</td>
-        <td>{{ movie.genre }}</td>
-        <td>{{ movie.director }}</td>
-        <td>{{ movie.imdb_rate }}</td>
-        <td>{{ movie.metascore }}</td>
-        <td>{{ movie.language }}</td>
-        <td>{{ movie.proposer }}</td>
-        <td>{{ (new Date(movie.createdAt)).toLocaleDateString() }}</td>
-        <td>
+        <td :title="movie.title"><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
+        <td :title="movie.year">{{ movie.year }}</td>
+        <td :title="movie.genre">{{ movie.genre }}</td>
+        <td :title="movie.director">{{ movie.director }}</td>
+        <td :title="movie.imdb_rate">{{ movie.imdb_rate }}</td>
+        <td :title="movie.metascore">{{ movie.metascore }}</td>
+        <td :title="movie.language">{{ movie.language }}</td>
+        <td :title="movie.proposer">{{ movie.proposer }}</td>
+        <td :title="movie.createdAt">{{ (new Date(movie.createdAt)).toLocaleDateString() }}</td>
+        <td :title="movie.votes">
           <div class="d-flex justify-content-between flex-row">
             <div :id="'table_movie_votes_' + movie.imdb_id" style="align-self: center">{{ movie.votes }}</div>
             <div>

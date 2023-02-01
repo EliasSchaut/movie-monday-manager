@@ -117,29 +117,13 @@ export default defineComponent({
           let x = rows[i].getElementsByTagName("td")[clicked_col] as HTMLElement;
           let y = rows[i + 1].getElementsByTagName("td")[clicked_col] as HTMLElement;
 
-          const x_link = x.getElementsByTagName("a");
-          const y_link = y.getElementsByTagName("a");
-          const x_div = x.getElementsByTagName("div");
-          const y_div = y.getElementsByTagName("div");
-          if (x_link.length !== 0) {
-            x = x_link[0];
-          } else if (x_div.length > 1) {
-            x = x_div[1];
-          }
-
-          if (y_link.length !== 0) {
-            y = y_link[0];
-          } else if (y_div.length > 1) {
-            y = y_div[1];
-          }
-
           if (sort_dir === "asc") {
-            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            if (x.title.toLowerCase() > y.title.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i]);
               not_sorted = true;
             }
           } else if (sort_dir === "desc") {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            if (x.title.toLowerCase() < y.title.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i]);
               not_sorted = true;
             }
