@@ -73,7 +73,6 @@ export default defineComponent({
   },
   updated() {
     if (this.filterable && !this.first_update) {
-      console.log("filter", this.filter_values);
       for (let i = 0; i < this.filter_values.length; i++) {
         this.filter(this.id, i, this.filter_values[i]);
       }
@@ -96,6 +95,10 @@ export default defineComponent({
     filterable: {
       type: Boolean,
       default: false
+    },
+    filter_default: {
+      type: Array,
+      default: []
     }
   },
   methods: {
@@ -157,7 +160,18 @@ export default defineComponent({
     },
     get_filter_cookie() : boolean[] {
       const filter_cookie = get_cookie("table_filter_" + this.id)
-      return (filter_cookie) ? JSON.parse(filter_cookie) as boolean[] : Array(this.head.length).fill(true);
+      if (filter_cookie) {
+        const filter = JSON.parse(filter_cookie) as boolean[]
+        if (filter.length === this.head.length) {
+          return filter
+        }
+      }
+
+      if (this.filter_default.length) {
+        return this.filter_default as boolean[]
+      } else {
+        return Array(this.head.length).fill(true) as boolean[];
+      }
     },
     set_filter_cookie(filter_values: boolean[]) {
       set_cookie("table_filter_" + this.id, JSON.stringify(filter_values), 365)

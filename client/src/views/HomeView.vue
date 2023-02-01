@@ -6,7 +6,7 @@
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="[$t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable filterable>
+      id="table_movie" sortable filterable :filter_default="[true, true, true, false, true, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
         <td>{{ movie.year }}</td>
