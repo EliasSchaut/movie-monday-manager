@@ -11,7 +11,7 @@
         <img width="16" src="../../assets/svg/metacritic.svg" class="me-1" alt="metacritic_logo">
         <b class="me-2">{{ movie.metascore }}</b>
       </div>
-      <b class="right">{{ movie.runtime }} mins</b>
+      <b class="right">{{ movie.runtime }} {{ $t('movie.mins') }}</b>
     </div>
     <div class="d-flex flex-row">
       <div class="d-flex flex-column me-2">
@@ -20,9 +20,9 @@
       </div>
       <div class="d-flex flex-column mt-1">
         <div class="mb-1">{{ movie.plot }}</div>
-        <div class="mb-1"><b>Genre:</b> {{ movie.genre }} </div>
-        <div class="mb-1"><b>Director:</b> {{ movie.director }}</div>
-        <div class="mb-1"><b>Language:</b> {{ movie.language }}</div>
+        <div class="mb-1"><b v-text="$t('movie.genre')"></b>: {{ movie.genre }} </div>
+        <div class="mb-1"><b v-text="$t('movie.director')"></b>: {{ movie.director }}</div>
+        <div class="mb-1"><b v-text="$t('movie.language')"></b>: {{ movie.language }}</div>
       </div>
     </div>
   </div>
