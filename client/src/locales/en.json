@@ -55,17 +55,24 @@
   "movie": {
     "title": "Title",
     "year": "Year",
+    "director": "Director",
+    "actors": "Actors",
+    "imdb_rate": "IMDB",
+    "metascore": "Metascore",
+    "language": "Language",
     "genre": "Genre",
     "proposer": "Proposer",
     "proposed_on": "Proposed&nbsp;on",
     "interested": "Interested",
     "start": "Start",
+    "mins": "mins",
     "modal": {
       "title": "Add Movie",
       "form": {
-        "title": "IMDB ID:",
+        "title": "Title or IMDB ID:",
         "invalid_feedback": "Should be a valid IMDB ID, e.g. tt1234567"
-      }
+      },
+      "no_suggestion": "No movie suggestion"
     }
   },
 

@@ -31,7 +31,7 @@
               }">
             <div class="d-flex justify-content-between flex-row">
               <div />
-              <div v-html="column" />
+              <div v-html="column" class="me-1" />
               <img v-if="sort_dir[index] === 'asc'" src="../assets/svg/sort-alpha-down.svg" alt="sort_icon_down">
               <img v-else-if="sort_dir[index] === 'desc'" src="../assets/svg/sort-alpha-up.svg" alt="sort_icon_up">
               <img v-else src="../assets/svg/filter.svg" alt="sort_icon_none">
@@ -40,7 +40,7 @@
           <th v-else v-for="column in head" v-html="column" />
         </tr>
         </thead>
-        <tbody>
+        <tbody style="text-align: center; vertical-align: middle">
         <slot />
         </tbody>
       </table>
@@ -73,7 +73,6 @@ export default defineComponent({
   },
   updated() {
     if (this.filterable && !this.first_update) {
-      console.log("filter", this.filter_values);
       for (let i = 0; i < this.filter_values.length; i++) {
         this.filter(this.id, i, this.filter_values[i]);
       }
@@ -96,6 +95,10 @@ export default defineComponent({
     filterable: {
       type: Boolean,
       default: false
+    },
+    filter_default: {
+      type: Array,
+      default: []
     }
   },
   methods: {
@@ -114,29 +117,13 @@ export default defineComponent({
           let x = rows[i].getElementsByTagName("td")[clicked_col] as HTMLElement;
           let y = rows[i + 1].getElementsByTagName("td")[clicked_col] as HTMLElement;
 
-          const x_link = x.getElementsByTagName("a");
-          const y_link = y.getElementsByTagName("a");
-          const x_div = x.getElementsByTagName("div");
-          const y_div = y.getElementsByTagName("div");
-          if (x_link.length !== 0) {
-            x = x_link[0];
-          } else if (x_div.length > 1) {
-            x = x_div[1];
-          }
-
-          if (y_link.length !== 0) {
-            y = y_link[0];
-          } else if (y_div.length > 1) {
-            y = y_div[1];
-          }
-
           if (sort_dir === "asc") {
-            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            if (x.title.toLowerCase() > y.title.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i]);
               not_sorted = true;
             }
           } else if (sort_dir === "desc") {
-            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            if (x.title.toLowerCase() < y.title.toLowerCase()) {
               (rows[i].parentNode as ParentNode).insertBefore(rows[i + 1], rows[i]);
               not_sorted = true;
             }
@@ -157,7 +144,18 @@ export default defineComponent({
     },
     get_filter_cookie() : boolean[] {
       const filter_cookie = get_cookie("table_filter_" + this.id)
-      return (filter_cookie) ? JSON.parse(filter_cookie) as boolean[] : Array(this.head.length).fill(true);
+      if (filter_cookie) {
+        const filter = JSON.parse(filter_cookie) as boolean[]
+        if (filter.length === this.head.length) {
+          return filter
+        }
+      }
+
+      if (this.filter_default.length) {
+        return this.filter_default as boolean[]
+      } else {
+        return Array(this.head.length).fill(true) as boolean[];
+      }
     },
     set_filter_cookie(filter_values: boolean[]) {
       set_cookie("table_filter_" + this.id, JSON.stringify(filter_values), 365)
