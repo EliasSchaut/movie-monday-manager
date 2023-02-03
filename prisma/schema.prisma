@@ -33,6 +33,7 @@ model Movie {
   year        Int
   genre       String
   director    String
+  actors      String
   imdb_rate   Float
   metascore   String?
   language    String

@@ -23,6 +23,7 @@
       <p class="mb-1 text-justify">{{ movie.plot }}</p>
       <p class="mb-1 text-justify"><b v-text="$t('movie.genre')"></b>: {{ movie.genre }}</p>
       <p class="mb-1 text-justify"><b v-text="$t('movie.director')"></b>: {{ movie.director }}</p>
+      <p class="mb-1 text-justify"><b v-text="$t('movie.actors')"></b>: {{ movie.actors }}</p>
       <p class="mb-1 text-justify"><b v-text="$t('movie.language')"></b>: {{ movie.language }}</p>
     </div>
   </div>

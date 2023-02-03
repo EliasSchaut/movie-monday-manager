@@ -56,6 +56,7 @@
     "title": "Title",
     "year": "Year",
     "director": "Director",
+    "actors": "Actors",
     "imdb_rate": "IMDB",
     "metascore": "Metascore",
     "language": "Language",
