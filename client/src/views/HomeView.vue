@@ -5,8 +5,8 @@
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
-      :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable filterable :filter_default="[true, true, true, true, false, true, false, false, true, false, true]">
+      :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
+      id="table_movie" sortable filterable :filter_default="[true, true, true, true, false, false, true, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
@@ -18,6 +18,7 @@
         <td :title="movie.year">{{ movie.year }}</td>
         <td :title="movie.genre">{{ movie.genre }}</td>
         <td :title="movie.director">{{ movie.director }}</td>
+        <td :title="movie.actors">{{ movie.actors }}</td>
         <td :title="movie.imdb_rate">{{ movie.imdb_rate }}</td>
         <td :title="movie.metascore">{{ movie.metascore }}</td>
         <td :title="movie.language">{{ movie.language }}</td>
