@@ -1,4 +1,10 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException
+} from "@nestjs/common";
 import { Client } from "imdb-api";
 import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
 import { Prisma, User, Movie } from "@prisma/client";
@@ -13,6 +19,9 @@ import { ResDto } from "../../types/res.dto";
 import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 import { I18nContext } from "nestjs-i18n";
 import { I18nTranslations } from 'src/types/generated/i18n.generated';
+import { MovieSearchType } from "../../types/movie.types/movie_search.type";
+import * as process from "process";
+import { OmdbSearchDto } from "../../types/movie.dto/omdb_search.dto";
 
 @Injectable()
 export class MovieService {
@@ -30,6 +39,14 @@ export class MovieService {
   }
 
   async get(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
+    try {
+      return await this.movieDBService.get(imdb_id) as Movie
+    } catch (e) {
+      throw new NotFoundException(i18n.t('movie.exception.not_found'))
+    }
+  }
+
+  private async get_from_omdb(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
     try {
       return await this.imdb.get({ id: imdb_id })
     } catch (e) {
@@ -50,11 +67,41 @@ export class MovieService {
         year: movie.year,
         genre: movie.genre,
         proposer: user.name,
-        proposer_id: user.id,
+        proposer_id: movie.proposer_id,
+        director: movie.director,
+        actors: movie.actors,
+        imdb_rate: movie.imdb_rate,
+        language: movie.language,
+        metascore: movie.metascore,
         createdAt: movie.createdAt,
         votes
       } as MovieExtType;
     }));
+  }
+
+  async search(search_input: string, i18n: I18nContext<I18nTranslations>) : Promise<MovieSearchType[]> {
+    if (search_input.length < 3) {
+      throw new ForbiddenException(i18n.t('movie.exception.invalid_search_length'))
+    }
+
+    let movies = []
+    try {
+      const res = await (await fetch(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${search_input}&type=movie`)).json() as any
+      if (res.Response === 'False') return []
+      movies = res.Search as OmdbSearchDto[]
+
+    } catch (e) {
+      console.log(e)
+      throw new InternalServerErrorException()
+    }
+
+    return movies.map((movie) => {
+      return {
+        imdb_id: movie.imdbID,
+        title: movie.Title,
+        year: movie.Year
+      }
+    }) as MovieSearchType[]
   }
 
   async save(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
@@ -76,7 +123,7 @@ export class MovieService {
       } }))
     }
 
-    const movie = await this.get(imdb_id, i18n)
+    const movie = await this.get_from_omdb(imdb_id, i18n)
     const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
 
     const movieDB_data: Prisma.MovieCreateInput = {
@@ -86,7 +133,14 @@ export class MovieService {
       genre: movie.genres,
       link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
-      runtime: Number((movie.runtime.split(" "))[0])
+      runtime: Number((movie.runtime.split(" "))[0]),
+      director: movie.director,
+      actors: movie.actors,
+      imdb_rate: movie.rating,
+      poster: movie.poster,
+      plot: movie.plot,
+      language: movie.languages,
+      metascore: movie.metascore,
     }
 
     try {

@@ -21,8 +21,7 @@ export default {
   },
   components: { FormComponent, EmailComponent },
   methods: {
-    callback(e: SubmitEvent, post: any, data: any) {
-      console.log(post)
+    callback(e: SubmitEvent, post: any) {
       call("/api/auth/reset/" + post.username)
         .then(() => {
           router.push("../login");
