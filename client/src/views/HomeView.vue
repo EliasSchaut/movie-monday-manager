@@ -23,7 +23,7 @@
         <td :title="movie.language">{{ movie.language }}</td>
         <td :title="movie.proposer">{{ movie.proposer }}</td>
         <td :title="movie.createdAt">{{ (new Date(movie.createdAt)).toLocaleDateString() }}</td>
-        <td :title="movie.votes">
+        <td :title="movie.votes" :id="'table_movie_votes_td_' + movie.imdb_id">
           <div class="d-flex justify-content-between flex-row">
             <div :id="'table_movie_votes_' + movie.imdb_id" style="align-self: center">{{ movie.votes }}</div>
             <div>
@@ -180,8 +180,11 @@ export default defineComponent({
       call("api/vote/" + imdb_id, "POST")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
+            const vote_td = document.getElementById("table_movie_votes_td_" + imdb_id) as HTMLTableCellElement;
             const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
-            vote_div.innerHTML = String(Number(vote_div.innerHTML) + 1);
+            const new_vote_number = String(Number(vote_div.innerHTML) + 1);
+            vote_div.innerHTML = new_vote_number
+            vote_td.title = new_vote_number
             votes.push(imdb_id);
           }
         });
@@ -190,8 +193,11 @@ export default defineComponent({
       call("api/vote/" + imdb_id, "DELETE")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
+            const vote_td = document.getElementById("table_movie_votes_td_" + imdb_id) as HTMLTableCellElement;
             const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
-            vote_div.innerHTML = String(Number(vote_div.innerHTML) - 1);
+            const new_vote_number = String(Number(vote_div.innerHTML) - 1);
+            vote_div.innerHTML = new_vote_number
+            vote_td.title = new_vote_number
 
             const slice_index = votes.indexOf(imdb_id);
             delete votes[slice_index];
