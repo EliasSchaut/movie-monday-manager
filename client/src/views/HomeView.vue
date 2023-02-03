@@ -52,7 +52,7 @@
       <div class="modal-body">
         <b>{{ $t("movie.modal.form.title") }}</b>
         <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id"
-               pattern="^tt[0-9]+$" @input="search_media" required>
+               pattern="^tt[0-9]{1,12}$" @input="search_media" required>
         <div class="valid-feedback">
           Looks good!
         </div>
