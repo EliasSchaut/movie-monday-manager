@@ -1,6 +1,6 @@
 {
   "name": "movie-monday-client",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
