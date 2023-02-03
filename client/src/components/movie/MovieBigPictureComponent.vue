@@ -54,7 +54,6 @@ export default defineComponent({
         .then((data) => {
           this.movie = data;
           this.loading = false;
-          console.log(data);
         });
     }
   }
