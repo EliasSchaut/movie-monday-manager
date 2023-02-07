@@ -39,7 +39,7 @@ export class MovieController {
     return await this.movieService.get_history()
   }
 
-  @ApiOperation({ summary: '' })
+  @ApiOperation({ summary: 'POST returns up to 10 matching movies from input string' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('search')
@@ -48,8 +48,6 @@ export class MovieController {
   }
 
   @ApiOperation({ summary: 'GET information about a specific movie given by its imdb_id' })
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
   @Get(':imdb_id')
   async get_media(@Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>) : Promise<Movie> {
     return await this.movieService.get(imdb_id, i18n)

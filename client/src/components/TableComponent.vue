@@ -27,7 +27,7 @@
                     sort_dir[i] = sort_loop[sort_dir[index]];
                   }
                 }
-                sort(e, id, sort_dir[index])
+                sort((e.currentTarget as HTMLTableCellElement).cellIndex, sort_dir[index])
               }">
             <div class="d-flex justify-content-between flex-row">
               <div />
@@ -72,11 +72,18 @@ export default defineComponent({
     };
   },
   updated() {
-    if (this.filterable && !this.first_update) {
-      for (let i = 0; i < this.filter_values.length; i++) {
-        this.filter(this.id, i, this.filter_values[i]);
+    if (!this.first_update) {
+      if (this.filterable) {
+        for (let i = 0; i < this.filter_values.length; i++) {
+          this.filter(this.id, i, this.filter_values[i]);
+        }
+        this.first_update = true;
       }
-      this.first_update = true;
+
+      if (this.sortable && this.sort_default!.length) {
+        this.sort(this.sort_default[0] as any, this.sort_default[1] as any);
+
+      }
     }
   },
   props: {
@@ -92,6 +99,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    sort_default: {
+      type: Array,
+      default: []
+    },
     filterable: {
       type: Boolean,
       default: false
@@ -102,10 +113,8 @@ export default defineComponent({
     }
   },
   methods: {
-    sort(e: Event, table_id: string, sort_dir: string) {
-      const table = document.getElementById(table_id) as HTMLTableElement;
-      const th = e.currentTarget as HTMLTableCellElement;
-      const clicked_col = th.cellIndex;
+    sort(cell_index: number, sort_dir: string) {
+      const table = document.getElementById(this.id) as HTMLTableElement;
       const rows = table.rows;
       let not_sorted = true;
 
@@ -114,8 +123,8 @@ export default defineComponent({
         not_sorted = false;
 
         for (let i = 1; i < (rows.length - 1); i++) {
-          let x = rows[i].getElementsByTagName("td")[clicked_col] as HTMLElement;
-          let y = rows[i + 1].getElementsByTagName("td")[clicked_col] as HTMLElement;
+          let x = rows[i].getElementsByTagName("td")[cell_index] as HTMLElement;
+          let y = rows[i + 1].getElementsByTagName("td")[cell_index] as HTMLElement;
 
           if (sort_dir === "asc") {
             if (x.title.toLowerCase() > y.title.toLowerCase()) {
