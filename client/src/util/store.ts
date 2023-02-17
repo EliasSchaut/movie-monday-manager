@@ -1,9 +1,11 @@
 import { reactive } from  'vue';
-import { get_cookie } from "@/util/cookie";
+import { get_cookie, set_cookie } from "@/util/cookie";
 
 export const store = reactive({
   logged_in: false,
   loading: false,
+  theme: 'light',
+  theme_without_auto: 'light',
   alert: {
     show: false,
     msg: "",
@@ -46,5 +48,27 @@ export const store = reactive({
 
   hide_alert() {
     this.alert.show = false;
-  }
+  },
+
+  update_theme(theme: string) {
+    set_cookie("theme", theme)
+    this.theme = theme
+    if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.documentElement.setAttribute('data-bs-theme', 'dark')
+      this.theme_without_auto = 'dark'
+    } else {
+      this.theme_without_auto = (theme === 'auto') ? 'light' : theme
+      document.documentElement.setAttribute('data-bs-theme', theme)
+    }
+  },
 })
+
+function get_theme() {
+  const theme = get_cookie("theme")
+  if (theme) {
+    return theme
+  }
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+store.update_theme(get_theme())

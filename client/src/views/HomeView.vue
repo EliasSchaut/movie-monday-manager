@@ -6,7 +6,7 @@
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable filterable :filter_default="[true, true, true, true, false, false, true, false, false, true, false, true]">
+      id="table_movie" sortable :sort_default="[11, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
@@ -38,7 +38,8 @@
               </button>
               <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary"
                       @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
-                <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
+                <img v-if="store.theme_without_auto === 'dark'" class="fas fa-edit" src="../assets/svg/heartbreak-fill-white.svg" alt="heartbreak">
+                <img v-else class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
               </button>
             </div>
           </div>

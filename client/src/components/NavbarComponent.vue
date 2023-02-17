@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
     <div class="container-fluid">
       <router-link class="navbar-brand" to="/">Movie Monday Manager</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -30,7 +30,24 @@
           <div class="me-lg-1 spinner-border text-secondary" role="status" v-if="store.loading">
             <span class="visually-hidden">Loading...</span>
           </div>
-          <select class="form-select" aria-label="Default select example" @change="change_lang" v-model="lang">
+
+          <div class="dropdown align-self-center">
+            <button class="btn dropdown-toggle border-0 d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
+              <img v-if="store.theme === 'dark'" src="../assets/svg/moon-stars-fill-white.svg" alt="Theme Dark">
+              <img v-else-if="store.theme === 'auto' && store.theme_without_auto === 'dark'" src="../assets/svg/circle-half-white.svg" alt="Theme Auto">
+              <img v-else-if="store.theme === 'auto' && store.theme_without_auto !== 'dark'" src="../assets/svg/circle-half.svg" alt="Theme Auto">
+              <img v-else src="../assets/svg/brightness-high-fill.svg" alt="Theme Light">
+            </button>
+            <ul class="dropdown-menu">
+              <li v-if="store.theme_without_auto === 'dark'" ><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('light')"><img src="../assets/svg/brightness-high-fill-white.svg" alt="Theme Light">&nbsp;&nbsp;{{ $t("common.theme.light") }}</button></li>
+              <li v-if="store.theme_without_auto === 'dark'" ><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('dark')"><img src="../assets/svg/moon-stars-fill-white.svg" alt="Theme Dark">&nbsp;&nbsp;{{ $t("common.theme.dark") }}</button></li>
+              <li v-if="store.theme_without_auto === 'dark'" ><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('auto')"><img src="../assets/svg/circle-half-white.svg" alt="Theme Auto">&nbsp;&nbsp;{{ $t("common.theme.auto") }}</button></li>
+              <li v-if="store.theme_without_auto !== 'dark'"><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('light')"><img src="../assets/svg/brightness-high-fill.svg" alt="Theme Light">&nbsp;&nbsp;{{ $t("common.theme.light") }}</button></li>
+              <li v-if="store.theme_without_auto !== 'dark'"><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('dark')"><img src="../assets/svg/moon-stars-fill.svg" alt="Theme Dark">&nbsp;&nbsp;{{ $t("common.theme.dark") }}</button></li>
+              <li v-if="store.theme_without_auto !== 'dark'"><button class="dropdown-item d-flex align-items-center" @click="store.update_theme('auto')"><img src="../assets/svg/circle-half.svg" alt="Theme Auto">&nbsp;&nbsp;{{ $t("common.theme.auto") }}</button></li>
+            </ul>
+          </div>
+          <select class="form-select" aria-label="Select Lang" @change="change_lang" v-model="lang">
             <option value="en">{{ $t("nav.lang.en") }}</option>
             <option value="de">{{ $t("nav.lang.de") }}</option>
           </select>

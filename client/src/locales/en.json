@@ -34,6 +34,11 @@
       "success": "Success!",
       "warning": "Warning!",
       "danger": "Danger!"
+    },
+    "theme":{
+      "light": "Light",
+      "dark": "Dark",
+      "auto": "Auto"
     }
   },
 
