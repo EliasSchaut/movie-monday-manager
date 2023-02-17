@@ -1,6 +1,6 @@
 {
   "name": "movie-monday-manager",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "description": "A website for adding and voting movies for the next watch party",
   "author": "EliasSchaut",
   "private": true,
