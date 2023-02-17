@@ -38,7 +38,8 @@
               </button>
               <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary"
                       @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
-                <img class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
+                <img v-if="store.theme_without_auto === 'dark'" class="fas fa-edit" src="../assets/svg/heartbreak-fill-white.svg" alt="heartbreak">
+                <img v-else class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
               </button>
             </div>
           </div>

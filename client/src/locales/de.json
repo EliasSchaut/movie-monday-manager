@@ -34,6 +34,11 @@
       "success": "Erfolg!",
       "warning": "Warnung!",
       "danger": "Gefahr!"
+    },
+    "theme":{
+      "light": "Hell",
+      "dark": "Dunkel",
+      "auto": "Auto"
     }
   },
 
