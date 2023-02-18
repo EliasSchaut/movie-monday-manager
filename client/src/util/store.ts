@@ -63,6 +63,12 @@ export const store = reactive({
   },
 })
 
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (store.theme === 'auto') {
+    store.update_theme(get_theme())
+  }
+})
+
 function get_theme() {
   const theme = get_cookie("theme")
   if (theme) {
