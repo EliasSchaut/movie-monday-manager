@@ -8,11 +8,11 @@ export class HistoryDBService {
   constructor(private readonly prisma: PrismaService) {}
 
   async get_all() {
-    return await this.prisma.history.findMany();
+    return this.prisma.history.findMany();
   }
 
   async add(data: Prisma.HistoryCreateInput) {
-    return await this.prisma.history.create({ data });
+    return this.prisma.history.create({ data });
   }
 
   async has(imdb_id: string) {

@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from "../prisma.service";
 import { Prisma } from "@prisma/client";
+import { MovieInfoDBService } from "../movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class MovieDBService {
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService,
+              private readonly movieInfo: MovieInfoDBService) {}
 
   async get(imdb_id : string) {
     return this.prisma.movie.findUnique({
@@ -28,16 +30,19 @@ export class MovieDBService {
   }
 
   async add(data: Prisma.MovieCreateInput) {
-    return await this.prisma.movie.create({ data });
+    return this.prisma.movie.create({ data });
   }
 
   async delete(imdb_id: string) {
-    return await this.prisma.movie.delete({ where: { imdb_id } });
+    await this.movieInfo.delete(imdb_id);
+    return this.prisma.movie.delete({ where: { imdb_id } });
   }
 
   async delete_all_proposed(user_id : number) {
-    return await this.prisma.movie.deleteMany({
-      where: { proposer_id: user_id } as Prisma.MovieWhereUniqueInput
-    });
+    const movies = await this.get_all_proposed(user_id);
+    for (const movie of movies) {
+      await this.movieInfo.delete(movie.imdb_id);
+      await this.delete(movie.imdb_id)
+    }
   }
 }

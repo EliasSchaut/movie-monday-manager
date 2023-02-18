@@ -8,15 +8,15 @@ export class WatchListDBService {
   constructor(private readonly prisma: PrismaService) {}
 
   async get_all() {
-    return await this.prisma.watchList.findMany()
+    return this.prisma.watchList.findMany()
   }
 
   async add(data: Prisma.WatchListCreateInput) {
-    return await this.prisma.watchList.create({ data })
+    return this.prisma.watchList.create({ data })
   }
 
   async delete(imdb_id: string) {
-    return await this.prisma.watchList.delete({
+    return this.prisma.watchList.delete({
       where: {
         imdb_id
       }
