@@ -9,8 +9,8 @@ export class MovieExtType {
   proposer_id!: number
   director!: string
   actors!: string
-  language!: string
-  imdb_rate!: number
+  languages!: string
+  imdb_rate!: string
   rotten_score!: string
   meta_score!: string
   created_at!: Date

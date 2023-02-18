@@ -10,7 +10,7 @@ export class ImdbApiService {
 
   api_key = process.env.IMDB_API_KEY;
 
-  async get_movie_info(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput> {
+  async get(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput> {
     const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}`);
     const movie = await response.json() as any;
 
@@ -35,19 +35,19 @@ export class ImdbApiService {
     } as Prisma.MovieInfoCreateInput;
   }
 
-  async get_movie_info_all_langs(imdb_id: string): Promise<Prisma.MovieInfoCreateInput[]> {
+  async get_all_langs(imdb_id: string): Promise<Prisma.MovieInfoCreateInput[]> {
     const langs = ["en", "de"];
     const movie_infos: Prisma.MovieInfoCreateInput[] = [];
 
     for (const lang of langs) {
-      const movie_info = await this.get_movie_info(imdb_id, lang);
+      const movie_info = await this.get(imdb_id, lang);
       if (movie_info.imdb_id !== undefined) movie_infos.push(movie_info);
     }
 
     return movie_infos;
   }
 
-  async search_movie(search_input: string, lang: string = "en"): Promise<MovieSearchType[]> {
+  async search(search_input: string, lang: string = "en"): Promise<MovieSearchType[]> {
     const response = await fetch(`https://imdb-api.com/${lang}/API/SearchMovie/${this.api_key}/${search_input}`);
     const data = await response.json() as any;
     const movies = data.results as any[];

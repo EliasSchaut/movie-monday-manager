@@ -27,7 +27,7 @@ model User {
 }
 
 model MovieInfo {
-  imdb_id      String @id
+  imdb_id      String
   language     String
   title        String
   year         Int
@@ -56,7 +56,7 @@ model Movie {
 }
 
 model History {
-  imdb_id    String   @id
+  imdb_id    String
   language   String
   watched_at DateTime @default(now())
   title      String

@@ -5,9 +5,8 @@ import {
   InternalServerErrorException,
   NotFoundException
 } from "@nestjs/common";
-import { Client } from "imdb-api";
 import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
-import { Prisma, User, Movie } from "@prisma/client";
+import { Prisma, User, Movie, MovieInfo } from "@prisma/client";
 import { UserDBService } from "../../common/db_services/users/userDB.service";
 import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
 import { VoteService } from "../vote/vote.service";
@@ -18,181 +17,178 @@ import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
 import { ResDto } from "../../types/res.dto";
 import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 import { I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from 'src/types/generated/i18n.generated';
+import { I18nTranslations } from "src/types/generated/i18n.generated";
 import { MovieSearchType } from "../../types/movie.types/movie_search.type";
 import * as process from "process";
-import { OmdbSearchDto } from "../../types/movie.dto/omdb_search.dto";
+import { MovieInfoDBService } from "../../common/db_services/movie_infos/movieInfoDB.service";
+import { ImdbApiService } from "../../common/util_services/imdb_api.service";
 
 @Injectable()
 export class MovieService {
 
-  private readonly imdb: Client
-  private readonly max_proposeable_movies = Number(process.env.MAX_PROPOSEABLE_MOVIES)
+  private readonly max_proposeable_movies = Number(process.env.MAX_PROPOSEABLE_MOVIES);
 
   constructor(private readonly movieDBService: MovieDBService,
+              private readonly movieInfoDBService: MovieInfoDBService,
               private readonly userDBService: UserDBService,
               private readonly voteDBService: VoteDBService,
               private readonly histroyDBService: HistoryDBService,
               private readonly watchlistDBService: WatchListDBService,
-              private readonly voteService: VoteService) {
-    this.imdb = new Client({apiKey: process.env.OMDB_API_KEY})
+              private readonly voteService: VoteService,
+              private readonly imdbApiService: ImdbApiService) {
   }
 
-  async get(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
+  async get(imdb_id: string, i18n: I18nContext<I18nTranslations>): Promise<MovieInfo> {
     try {
-      return await this.movieDBService.get(imdb_id) as Movie
+      return await this.movieInfoDBService.get(imdb_id, i18n.lang) as MovieInfo;
     } catch (e) {
-      throw new NotFoundException(i18n.t('movie.exception.not_found'))
+      throw new NotFoundException(i18n.t("movie.exception.not_found"));
     }
   }
 
-  private async get_from_omdb(imdb_id: string, i18n: I18nContext<I18nTranslations>) {
-    try {
-      return await this.imdb.get({ id: imdb_id })
-    } catch (e) {
-      throw new NotFoundException(i18n.t('movie.exception.not_found'))
-    }
+  async get_ext(imdb_id: string, i18n: I18nContext<I18nTranslations>): Promise<MovieExtType> {
+    const movie = await this.movieDBService.get(imdb_id) as Movie;
+    const user = await this.userDBService.get({ id: movie.proposer_id }) as User;
+    const votes = await this.voteDBService.get_num_of_votes(movie.imdb_id);
+    const movie_info = await this.movieInfoDBService.get(movie.imdb_id, i18n.lang) as MovieInfo;
+
+    return {
+      imdb_id: movie.imdb_id,
+      title: movie_info.title,
+      link: movie_info.link,
+      year: movie_info.year,
+      genre: movie_info.genre,
+      proposer: user.name,
+      proposer_id: movie.proposer_id,
+      director: movie_info.director,
+      actors: movie_info.actors,
+      imdb_rate: movie_info.imdb_rate,
+      meta_score: movie_info.meta_score,
+      rotten_score: movie_info.rotten_score,
+      languages: movie_info.languages,
+      created_at: movie.created_at,
+      votes: votes
+    } as MovieExtType;
   }
 
-  async get_all() {
-    const movies = await this.movieDBService.get_all()
-    return await Promise.all(movies.map(async (movie) => {
-      const user = await this.userDBService.get({ id: movie.proposer_id }) as User
-      const votes = await this.voteDBService.get_num_of_votes(movie.imdb_id)
+  async get_all(i18n: I18nContext<I18nTranslations>): Promise<MovieExtType[]> {
+    const imdb_ids = await this.movieDBService.get_all_imdb();
 
-      return {
-        imdb_id: movie.imdb_id,
-        title: movie.title,
-        link: movie.link,
-        year: movie.year,
-        genre: movie.genre,
-        proposer: user.name,
-        proposer_id: movie.proposer_id,
-        director: movie.director,
-        actors: movie.actors,
-        imdb_rate: movie.imdb_rate,
-        language: movie.language,
-        metascore: movie.metascore,
-        createdAt: movie.createdAt,
-        votes
-      } as MovieExtType;
+    return await Promise.all(imdb_ids.map(async (imdb_id) => {
+      return await this.get_ext(imdb_id, i18n);
     }));
   }
 
-  async search(search_input: string, i18n: I18nContext<I18nTranslations>) : Promise<MovieSearchType[]> {
+  async search(search_input: string, i18n: I18nContext<I18nTranslations>): Promise<MovieSearchType[]> {
     if (search_input.length < 3) {
-      throw new ForbiddenException(i18n.t('movie.exception.invalid_search_length'))
+      throw new ForbiddenException(i18n.t("movie.exception.invalid_search_length"));
     }
 
-    let movies = []
-    try {
-      const res = await (await fetch(`https://www.omdbapi.com/?apikey=${process.env.OMDB_API_KEY}&s=${search_input}&type=movie`)).json() as any
-      if (res.Response === 'False') return []
-      movies = res.Search as OmdbSearchDto[]
-
-    } catch (e) {
-      console.log(e)
-      throw new InternalServerErrorException()
-    }
-
-    return movies.map((movie) => {
-      return {
-        imdb_id: movie.imdbID,
-        title: movie.Title,
-        year: movie.Year
-      }
-    }) as MovieSearchType[]
+    return await this.imdbApiService.search(search_input, i18n.lang);
   }
 
   async save(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
     if (!imdb_id_pattern.test(imdb_id)) {
-      throw new ForbiddenException(i18n.t('movie.exception.invalid_imdb_id'))
+      throw new ForbiddenException(i18n.t("movie.exception.invalid_imdb_id"));
     }
 
     if (await this.histroyDBService.has(imdb_id)) {
-      throw new ConflictException(i18n.t('movie.exception.conflict_history'))
+      throw new ConflictException(i18n.t("movie.exception.conflict_history"));
     }
 
     if (await this.movieDBService.has(imdb_id)) {
-      throw new ConflictException(i18n.t('movie.exception.conflict_movie'))
+      throw new ConflictException(i18n.t("movie.exception.conflict_movie"));
     }
 
     if ((await this.movieDBService.get_all_proposed(proposer_id)).length >= this.max_proposeable_movies) {
-      throw new ConflictException(i18n.t('movie.exception.conflict_max_proposed', { args: {
-        max_proposeable_movies: this.max_proposeable_movies
-      } }))
+      throw new ConflictException(i18n.t("movie.exception.conflict_max_proposed", {
+        args: {
+          max_proposeable_movies: this.max_proposeable_movies
+        }
+      }));
     }
 
-    const movie = await this.get_from_omdb(imdb_id, i18n)
-    const { username } : Prisma.UserCreateInput = await this.userDBService.get({id: proposer_id}) as User
+    const movie_imdb_api = await this.imdbApiService.get_all_langs(imdb_id);
+    const { username }: Prisma.UserCreateInput = await this.userDBService.get({ id: proposer_id }) as User;
 
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
-      title: movie.title,
-      year: movie.year,
-      genre: movie.genres,
-      link: movie.imdburl,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
-      runtime: Number((movie.runtime.split(" "))[0]),
-      director: movie.director,
-      actors: movie.actors,
-      imdb_rate: movie.rating,
-      poster: movie.poster,
-      plot: movie.plot,
-      language: movie.languages,
-      metascore: movie.metascore,
     }
 
-    try {
-      return this.movieDBService.add(movieDB_data).then((movie) => {
-        return this.voteService.vote(movie.imdb_id, proposer_id, i18n)
-          .then((vote) => {
-            return { movie, vote, message: i18n.t('movie.success.save'), show_alert: true }
-          })
-          .catch((e) => {
-            this.movieDBService.delete(movie.imdb_id)
-            throw e
-          })
-      })
-    } catch (e) {
-      throw new ConflictException(i18n.t('movie.exception.conflict_movie'))
-    }
+    movie_imdb_api.map((movie) => {
+      return {
+        imdb_id: imdb_id,
+        language: movie.language,
+        title: movie.title,
+        year: movie.year,
+        genre: movie.genre,
+        link: movie.link,
+        runtime: Number(movie.runtime),
+        director: movie.director,
+        actors: movie.actors,
+        imdb_rate: movie.imdb_rate,
+        meta_score: movie.meta_score,
+        rotten_score: movie.rotten_score,
+        poster: movie.poster,
+        plot: movie.plot,
+        languages: movie.languages,
+      } as Prisma.MovieInfoCreateInput;
+    })
+
+    await this.movieDBService.add(movieDB_data).catch(() => {
+      throw new ConflictException(i18n.t("movie.exception.conflict_movie"))
+    })
+
+    await this.voteService.vote(imdb_id, proposer_id, i18n).catch((e) => {
+      this.movieDBService.delete(imdb_id);
+      throw new InternalServerErrorException(e);
+    })
+
+    await this.movieInfoDBService.add(movie_imdb_api).catch((e) => {
+      this.movieDBService.delete(imdb_id);
+      this.voteService.unvote(imdb_id, proposer_id, i18n);
+      throw new InternalServerErrorException(e)
+    })
+
+    return { movie: await this.get_ext(imdb_id, i18n), message: i18n.t("movie.success.save"), show_alert: true };
   }
 
   async delete(imdb_id: string, proposer_id: string, i18n: I18nContext<I18nTranslations>) {
-    const movie = await this.movieDBService.get(imdb_id) as Movie
-    const watchlist = await this.watchlistDBService.get_all()
-    const watchlist_imdbs = watchlist.map((movie) => movie.imdb_id)
+    const movie = await this.movieDBService.get(imdb_id) as Movie;
+    const movie_info = await this.movieInfoDBService.get(imdb_id, i18n.lang) as MovieInfo;
+    const watchlist = await this.watchlistDBService.get_all();
+    const watchlist_imdbs = watchlist.map((movie) => movie.imdb_id);
 
     if (watchlist_imdbs.includes(imdb_id)) {
-      throw new ConflictException(i18n.t('movie.exception.conflict_watchlist'))
-    }
-    else if (movie.proposer_id === Number(proposer_id)) {
-      await this.voteDBService.delete_all(imdb_id)
-      await this.movieDBService.delete(imdb_id)
-      return { message: i18n.t('movie.success.delete', {args: { title: movie.title }}), show_alert: true } as ResDto
+      throw new ConflictException(i18n.t("movie.exception.conflict_watchlist"));
+    } else if (movie.proposer_id === Number(proposer_id)) {
+      await this.voteDBService.delete_all(imdb_id);
+      await this.movieDBService.delete(imdb_id);
+      return { message: i18n.t("movie.success.delete", { args: { title: movie_info.title } }), show_alert: true } as ResDto;
     } else {
-      throw new NotFoundException(i18n.t('movie.exception.not_found_or_not_proposer'))
+      throw new NotFoundException(i18n.t("movie.exception.not_found_or_not_proposer"));
     }
   }
 
-  async get_watchlist() {
-    const watchlist = await this.watchlistDBService.get_all()
+  async get_watchlist(i18n: I18nContext<I18nTranslations>) {
+    const watchlist = await this.watchlistDBService.get_all();
 
     return await Promise.all(watchlist.map(async (watch_movie) => {
-      const movie = await this.movieDBService.get(watch_movie.imdb_id) as Movie
-      const votes = await this.voteDBService.get_votes_movie(movie.imdb_id)
+      const movie = await this.movieDBService.get(watch_movie.imdb_id) as Movie;
+      const movie_info = await this.movieInfoDBService.get(watch_movie.imdb_id, i18n.lang) as MovieInfo;
+      const votes = await this.voteDBService.get_votes_movie(movie.imdb_id);
       return {
         imdb_id: movie.imdb_id,
-        title: movie.title,
-        link: movie.link,
+        title: movie_info.title,
+        link: movie_info.link,
         start_time: watch_movie.start_time,
         interested: votes.map((vote) => vote.user.id)
-      } as WatchlistExtType
-    }))
+      } as WatchlistExtType;
+    }));
   }
 
   async get_history() {
-    return await this.histroyDBService.get_all()
+    return this.histroyDBService.get_all();
   }
 }

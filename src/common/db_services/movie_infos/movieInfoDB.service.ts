@@ -8,7 +8,7 @@ export class MovieInfoDBService {
   constructor(private readonly prisma: PrismaService) {
   }
 
-  async get(imdb_id: string, language: string) {
+  async get(imdb_id: string, language: string = "en") {
     return this.prisma.movieInfo.findUnique({
       where: { imdb_id_language: { imdb_id, language } }
     }).catch((e: Prisma.PrismaClientKnownRequestError) => {
@@ -16,7 +16,7 @@ export class MovieInfoDBService {
     });
   }
 
-  async get_all(language: string) {
+  async get_all(language: string = "en") {
     return this.prisma.movieInfo.findMany({
       where: { language: language }
     }).catch((e: Prisma.PrismaClientKnownRequestError) => {
