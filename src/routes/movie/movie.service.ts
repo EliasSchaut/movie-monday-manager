@@ -188,7 +188,7 @@ export class MovieService {
     }));
   }
 
-  async get_history() {
-    return this.histroyDBService.get_all();
+  async get_history(i18n: I18nContext<I18nTranslations>) {
+    return this.histroyDBService.get_all_without_lang(i18n.lang);
   }
 }

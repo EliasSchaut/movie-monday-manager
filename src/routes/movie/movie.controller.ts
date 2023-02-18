@@ -6,11 +6,12 @@ import { User } from "../../common/decorators/user.decorator";
 import { JwtUser } from "../../types/jwtuser.type";
 import { MovieExtType } from "../../types/movie.types/movie_ext.type";
 import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
-import { History, MovieInfo } from "@prisma/client";
+import { MovieInfo } from "@prisma/client";
 import { ResDto } from "../../types/res.dto";
 import { I18n, I18nContext } from "nestjs-i18n";
 import { I18nTranslations } from "../../types/generated/i18n.generated";
 import { MovieSearchType } from "../../types/movie.types/movie_search.type";
+import { HistoryWithoutLangType } from "../../types/movie.types/history_without_lang.type";
 
 /**
  * Controller for movie related routes
@@ -35,8 +36,8 @@ export class MovieController {
 
   @ApiOperation({ summary: 'GET all movies from history with its related data' })
   @Get('history')
-  async get_history() : Promise<History[]> {
-    return this.movieService.get_history();
+  async get_history(@I18n() i18n: I18nContext<I18nTranslations>) : Promise<HistoryWithoutLangType[]> {
+    return this.movieService.get_history(i18n);
   }
 
   @ApiOperation({ summary: 'POST returns up to 10 matching movies from input string' })
