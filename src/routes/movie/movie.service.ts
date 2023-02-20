@@ -116,42 +116,23 @@ export class MovieService {
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
     }
 
-    movies_info_imdb_api.map((movie) => {
-      return {
-        imdb_id: imdb_id,
-        language: movie.language,
-        title: movie.title,
-        year: movie.year,
-        genre: movie.genre,
-        link: movie.link,
-        runtime: Number(movie.runtime),
-        director: movie.director,
-        actors: movie.actors,
-        imdb_rate: movie.imdb_rate,
-        meta_score: movie.meta_score,
-        rotten_score: movie.rotten_score,
-        poster: movie.poster,
-        plot: movie.plot,
-        languages: movie.languages,
-      } as Prisma.MovieInfoCreateInput;
-    })
-
+    console.log("movieDB_data")
     console.log(movies_info_imdb_api)
 
     await this.movieDBService.add(movieDB_data).catch(() => {
       throw new ConflictException(i18n.t("movie.exception.conflict_movie"))
     })
 
-    await this.voteService.vote(imdb_id, proposer_id, i18n).catch((e) => {
+    await this.voteService.vote(imdb_id, proposer_id, i18n).catch(async (e) => {
       console.error(e)
-      this.movieDBService.delete(imdb_id);
+      await this.movieDBService.delete(imdb_id);
       throw new InternalServerErrorException(e);
     })
 
-    await this.movieInfoDBService.add(movies_info_imdb_api).catch((e) => {
+    await this.movieInfoDBService.add(movies_info_imdb_api).catch(async (e) => {
       console.error(e)
-      this.movieDBService.delete(imdb_id);
-      this.voteService.unvote(imdb_id, proposer_id, i18n);
+      await this.voteDBService.delete_all(imdb_id);
+      await this.movieDBService.delete(imdb_id);
       throw new InternalServerErrorException(e)
     })
 

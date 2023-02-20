@@ -10,18 +10,17 @@ export class ImdbApiService {
 
   api_key = process.env.IMDB_API_KEY;
 
-  async get(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput> {
-    console.log(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}`)
-    const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}`);
+  async get(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput | null> {
+    const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}/Ratings`);
     const movie = await response.json() as any;
 
-    if (movie.type !== "movie") return {} as Prisma.MovieInfoCreateInput;
+    if (movie.type !== "Movie") return null;
 
     return {
       imdb_id: movie.id,
       language: lang,
       title: movie.title,
-      year: Number(movie.type),
+      year: Number(movie.year),
       genre: movie.genres,
       director: movie.directors,
       actors: movie.stars,
@@ -42,9 +41,8 @@ export class ImdbApiService {
 
     for (const lang of langs) {
       const movie_info = await this.get(imdb_id, lang);
-      if (movie_info.imdb_id !== undefined) movie_infos.push(movie_info);
+      if (movie_info !== null) movie_infos.push(movie_info);
     }
-
     return movie_infos;
   }
 

@@ -61,7 +61,7 @@ export class UserService {
 
     } else {
       data_to_update["use_gravatar"] = false;
-      data_to_update["gravatar_url"] = null;
+      data_to_update["gravatar_url"] = "";
     }
 
     await this.userDBService.update({ where: { id: user_id }, data: data_to_update });
