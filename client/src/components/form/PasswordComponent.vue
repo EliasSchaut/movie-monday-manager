@@ -48,8 +48,9 @@
 
 <script lang="ts">
 import InputComponent from "@/components/form/InputComponent.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "PasswordComponent",
   components: { InputComponent },
   inheritAttrs: false,
@@ -70,7 +71,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

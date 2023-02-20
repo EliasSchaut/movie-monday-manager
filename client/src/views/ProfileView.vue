@@ -87,12 +87,12 @@ import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import EmailComponent from "@/components/form/EmailComponent.vue";
 import NameComponent from "@/components/form/NameComponent.vue";
 import InputComponent from "@/components/form/InputComponent.vue";
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 import router from "@/router/router";
 import CardComponent from "@/components/CardComponent.vue";
 const user = ref({})
 
-export default {
+export default defineComponent({
   name: "ProfileComponent",
   components: {
     CardComponent,
@@ -154,7 +154,7 @@ export default {
       call("/api/user/email_opt_in", "post", { email_opt_in: checkbox.checked })
     }
   }
-};
+});
 
 function fetch_user(): Promise<void> {
   return call("/api/user").then((data) => {

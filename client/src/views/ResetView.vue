@@ -9,10 +9,10 @@ import PasswordComponent from "@/components/form/PasswordComponent.vue";
 import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import FormComponent from "@/components/form/FormComponent.vue";
 import router from "@/router/router";
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 const challenge = ref("" as string)
 
-export default {
+export default defineComponent({
   name: "ResetView",
   data() {
     return {
@@ -32,7 +32,7 @@ export default {
   setup() {
     challenge.value = router.currentRoute.value.params.challenge as string
   }
-};
+});
 </script>
 
 <style scoped>

@@ -32,10 +32,10 @@ import CardComponent from "@/components/CardComponent.vue";
 import TableComponent from "@/components/TableComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
 import { call } from "@/util/api";
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 const interested_local = ref([] as any);
 
-export default {
+export default defineComponent({
   name: "WatchlistComponent",
   components: { TableComponent, CardComponent, ModalComponent },
   data() {
@@ -65,7 +65,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

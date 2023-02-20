@@ -11,10 +11,11 @@
 
 <script lang="ts">
 import InputComponent from "@/components/form/InputComponent.vue";
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   name: "NameComponent",
   components: { InputComponent }
-};
+});
 </script>
 
 <style scoped>

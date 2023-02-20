@@ -12,8 +12,9 @@ import NameComponent from "@/components/form/NameComponent.vue";
 import EmailComponent from "@/components/form/EmailComponent.vue";
 import PasswordComponent from "@/components/form/PasswordComponent.vue";
 import router from "@/router/router";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       route: "/api/auth/register",
@@ -29,7 +30,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

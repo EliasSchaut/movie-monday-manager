@@ -9,8 +9,9 @@
 
 <script lang="ts">
 import MovieSearchElementComponent from "@/components/movie/MovieSearchElementComponent.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "MovieSearchComponent",
   components: { MovieSearchElementComponent },
   props: {
@@ -25,7 +26,7 @@ export default {
       input.value = imdb_id
     }
   }
-};
+});
 </script>
 
 <style scoped>

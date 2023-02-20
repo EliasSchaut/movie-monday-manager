@@ -9,10 +9,10 @@
 
 <script lang="ts">
 import TableComponent from "@/components/TableComponent.vue";
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 import { call } from "@/util/api";
 
-export default {
+export default defineComponent({
   name: "HistroyComponent",
   components: { TableComponent },
   setup() {
@@ -26,7 +26,7 @@ export default {
       history
     }
   }
-};
+});
 </script>
 
 <style scoped>

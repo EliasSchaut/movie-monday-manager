@@ -10,8 +10,9 @@
 <script lang="ts">
 import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import { call } from "@/util/api";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "FormComponent",
   inheritAttrs: false,
   components: { SubmitComponent },
@@ -60,7 +61,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>
