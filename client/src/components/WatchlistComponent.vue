@@ -33,6 +33,7 @@ import TableComponent from "@/components/TableComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
 import { call } from "@/util/api";
 import { defineComponent, ref } from "vue";
+import type { WatchlistExtType } from "@/types/movie.types/watchlist_ext.type";
 const interested_local = ref([] as any);
 
 export default defineComponent({
@@ -44,9 +45,9 @@ export default defineComponent({
     };
   },
   setup() {
-    const watchlist = ref([]);
+    const watchlist = ref([] as WatchlistExtType[]);
     call("/api/movie/watchlist")
-      .then((data) => {
+      .then((data: WatchlistExtType[]) => {
         watchlist.value = data;
       });
 

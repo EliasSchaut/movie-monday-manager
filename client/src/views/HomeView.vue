@@ -6,7 +6,7 @@
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable :sort_default="[11, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, true, false, true]">
+      id="table_movie" sortable :sort_default="[11, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
@@ -15,16 +15,17 @@
           </button>
         </td>
         <td :title="movie.title"><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
-        <td :title="movie.year">{{ movie.year }}</td>
+        <td :title="String(movie.year)">{{ movie.year }}</td>
         <td :title="movie.genre">{{ movie.genre }}</td>
         <td :title="movie.director">{{ movie.director }}</td>
         <td :title="movie.actors">{{ movie.actors }}</td>
         <td :title="movie.imdb_rate">{{ movie.imdb_rate }}</td>
-        <td :title="movie.metascore">{{ movie.metascore }}</td>
-        <td :title="movie.language">{{ movie.language }}</td>
+        <td :title="movie.meta_score">{{ movie.meta_score }}</td>
+        <td :title="movie.rotten_score">{{ movie.rotten_score }}</td>
+        <td :title="movie.languages">{{ movie.languages }}</td>
         <td :title="movie.proposer">{{ movie.proposer }}</td>
-        <td :title="movie.createdAt">{{ (new Date(movie.createdAt)).toLocaleDateString() }}</td>
-        <td :title="movie.votes" :id="'table_movie_votes_td_' + movie.imdb_id">
+        <td :title="movie.created_at.toString()">{{ (new Date(movie.created_at)).toLocaleDateString() }}</td>
+        <td :title="String(movie.votes)" :id="'table_movie_votes_td_' + movie.imdb_id">
           <div class="d-flex justify-content-between flex-row">
             <div :id="'table_movie_votes_' + movie.imdb_id" style="align-self: center">{{ movie.votes }}</div>
             <div>
@@ -88,6 +89,8 @@ import TableComponent from "@/components/TableComponent.vue";
 import MovieSearchElementComponent from "@/components/movie/MovieSearchElementComponent.vue";
 import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
 import MovieBigPictureComponent from "@/components/movie/MovieBigPictureComponent.vue";
+import type { MovieExtType } from "@/types/movie.types/movie_ext.type"
+import type { JwtUser } from "@/types/user.types/user_jwt.type";
 
 const search_movies = ref([] as any[]);
 
@@ -111,25 +114,26 @@ export default defineComponent({
     ModalComponent
   },
   setup() {
-    let movies = ref([] as any[]);
-    let votes = ref([] as any[]);
-    let user_id = ref(-1);
+    const movies = ref([] as MovieExtType[]);
+    const votes = ref([] as string[]);
+    const user_id = ref(-1);
 
     call("api/movie/all")
-      .then((data) => {
+      .then((data: MovieExtType[]) => {
         movies.value = data;
       });
 
     if (store.logged_in) {
       call("api/vote")
-        .then((data) => {
+        .then((data: string[]) => {
           votes.value = data;
         });
-      call("api/user")
-        .then((data) => {
+      call("api/user/id")
+        .then((data: JwtUser) => {
           user_id.value = data.id;
         });
     }
+
 
     return {
       movies,
@@ -191,7 +195,7 @@ export default defineComponent({
           }
         });
     },
-    unvote(imdb_id: string, votes: any[]) {
+    unvote(imdb_id: string, votes: string[]) {
       call("api/vote/" + imdb_id, "DELETE")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {

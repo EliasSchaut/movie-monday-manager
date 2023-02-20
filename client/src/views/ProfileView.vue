@@ -90,7 +90,8 @@ import InputComponent from "@/components/form/InputComponent.vue";
 import { defineComponent, ref } from "vue";
 import router from "@/router/router";
 import CardComponent from "@/components/CardComponent.vue";
-const user = ref({})
+import type { UserSlimType } from "@/types/user.types/user_slim.type";
+const user = ref({} as UserSlimType)
 
 export default defineComponent({
   name: "ProfileComponent",
@@ -113,7 +114,7 @@ export default defineComponent({
     fetch_user()
   },
   methods: {
-    on_submit(e: SubmitEvent) {
+    on_submit(e: Event) {
       const form = e.target as HTMLFormElement;
       const form_data = new FormData(form);
       const post = {} as any;
@@ -138,7 +139,7 @@ export default defineComponent({
         document.body.removeChild(a);
       })
     },
-    delete_account(e: SubmitEvent) {
+    delete_account(e: Event) {
       const form = e.target as HTMLFormElement;
       const form_data = new FormData(form);
       const post = {} as any;

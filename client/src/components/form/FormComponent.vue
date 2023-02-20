@@ -31,7 +31,7 @@ export default defineComponent({
     },
     callback: {
       type: Function,
-      default: () => {}
+      default: () => {return null}
     },
     skip_call: {
       type: Boolean,
@@ -39,7 +39,7 @@ export default defineComponent({
     }
   },
   methods: {
-    submit(e: SubmitEvent, callback: (e: SubmitEvent, post: any, data: any) => void, skip_call: boolean) {
+    submit(e: Event, callback: Function, skip_call: boolean) {
       const form_html = e.target as HTMLFormElement;
       if (!form_html.checkValidity()) {
         return

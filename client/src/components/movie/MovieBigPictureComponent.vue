@@ -9,7 +9,7 @@
         <b>{{ movie.imdb_rate }}</b>
         <b class="ms-1 me-1">•</b>
         <img width="16" src="../../assets/svg/metacritic.svg" class="me-1" alt="metacritic_logo">
-        <b class="me-2">{{ movie.metascore }}</b>
+        <b class="me-2">{{ movie.meta_score }}</b>
       </div>
       <b class="right">{{ movie.runtime }} {{ $t("movie.mins") }}</b>
     </div>
@@ -24,7 +24,7 @@
       <p class="mb-1 text-justify"><b v-text="$t('movie.genre')"></b>: {{ movie.genre }}</p>
       <p class="mb-1 text-justify"><b v-text="$t('movie.director')"></b>: {{ movie.director }}</p>
       <p class="mb-1 text-justify"><b v-text="$t('movie.actors')"></b>: {{ movie.actors }}</p>
-      <p class="mb-1 text-justify"><b v-text="$t('movie.language')"></b>: {{ movie.language }}</p>
+      <p class="mb-1 text-justify"><b v-text="$t('movie.language')"></b>: {{ movie.languages }}</p>
     </div>
   </div>
 </template>
@@ -32,13 +32,14 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { call } from "@/util/api";
+import type { MovieInfo } from "@prisma/client";
 
 export default defineComponent({
   name: "MovieBigPictureComponent",
   data() {
     return {
       loading: ref(false),
-      movie: ref({} as any)
+      movie: ref({} as MovieInfo)
     };
   },
   props: {
