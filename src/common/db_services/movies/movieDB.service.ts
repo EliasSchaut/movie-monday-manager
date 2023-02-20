@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma.service";
 import { Prisma } from "@prisma/client";
-import { MovieInfoDBService } from "../movie_infos/movieInfoDB.service";
+import { PrismaService } from "@/common/db_services/prisma.service";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class MovieDBService {

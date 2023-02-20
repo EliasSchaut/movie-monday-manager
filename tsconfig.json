@@ -18,6 +18,12 @@
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/prisma/*": ["./prisma/*"],
+      "@/package.json": ["./package.json"]
+    }
   }
 }

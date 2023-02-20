@@ -5,23 +5,23 @@ import {
   InternalServerErrorException,
   NotFoundException
 } from "@nestjs/common";
-import { MovieDBService } from "../../common/db_services/movies/movieDB.service";
-import { Prisma, User, Movie, MovieInfo } from "@prisma/client";
-import { UserDBService } from "../../common/db_services/users/userDB.service";
-import { VoteDBService } from "../../common/db_services/votes/voteDB.service";
-import { VoteService } from "../vote/vote.service";
-import { HistoryDBService } from "../../common/db_services/histroy/historyDB.service";
-import { WatchListDBService } from "../../common/db_services/watchlist/watchListDB.service";
-import { MovieExtType } from "../../types/movie.types/movie_ext.type";
-import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
-import { ResDto } from "../../types/res.dto";
-import { imdb_id_pattern } from "../../common/validation/patterns/imdb_id.pattern";
 import { I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "src/types/generated/i18n.generated";
-import { MovieSearchType } from "../../types/movie.types/movie_search.type";
-import * as process from "process";
-import { MovieInfoDBService } from "../../common/db_services/movie_infos/movieInfoDB.service";
-import { ImdbApiService } from "../../common/util_services/imdb_api.service";
+import { Prisma, User, Movie, MovieInfo } from "@prisma/client";
+
+import { MovieDBService } from "@/common/db_services/movies/movieDB.service";
+import { UserDBService } from "@/common/db_services/users/userDB.service";
+import { VoteDBService } from "@/common/db_services/votes/voteDB.service";
+import { VoteService } from "@/routes/vote/vote.service";
+import { HistoryDBService } from "@/common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "@/common/db_services/watchlist/watchListDB.service";
+import { MovieExtType } from "@/types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "@/types/movie.types/watchlist_ext.type";
+import { ResDto } from "@/types/res.dto";
+import { imdb_id_pattern } from "@/common/validation/patterns/imdb_id.pattern";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
+import { MovieSearchType } from "@/types/movie.types/movie_search.type";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
+import { ImdbApiService } from "@/common/util_services/imdb_api.service";
 
 @Injectable()
 export class MovieService {

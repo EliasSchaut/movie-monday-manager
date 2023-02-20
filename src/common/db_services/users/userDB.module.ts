@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UserDBService } from './userDB.service';
-import { PrismaService } from '../prisma.service';
-import { PasswordService } from "../../util_services/password.service";
+import { UserDBService } from "@/common/db_services/users/userDB.service";
+import { PrismaService } from "@/common/db_services/prisma.service";
+import { PasswordService } from "@/common/util_services/password.service";
 
 @Module({
   providers: [UserDBService, PrismaService, PasswordService],

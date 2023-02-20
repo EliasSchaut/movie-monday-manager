@@ -1,17 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { MovieService } from "./movie.service";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { User } from "../../common/decorators/user.decorator";
-import { JwtUser } from "../../types/jwtuser.type";
-import { MovieExtType } from "../../types/movie.types/movie_ext.type";
-import { WatchlistExtType } from "../../types/movie.types/watchlist_ext.type";
-import { MovieInfo } from "@prisma/client";
-import { ResDto } from "../../types/res.dto";
 import { I18n, I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "../../types/generated/i18n.generated";
-import { MovieSearchType } from "../../types/movie.types/movie_search.type";
-import { HistoryWithoutLangType } from "../../types/movie.types/history_without_lang.type";
+import { MovieService } from "@/routes/movie/movie.service";
+import { JwtAuthGuard } from "@/routes/auth/jwt-auth.guard";
+import { User } from "@/common/decorators/user.decorator";
+import { JwtUser } from "@/types/jwtuser.type";
+import { MovieExtType } from "@/types/movie.types/movie_ext.type";
+import { WatchlistExtType } from "@/types/movie.types/watchlist_ext.type";
+import { MovieInfo } from "@prisma/client";
+import { ResDto } from "@/types/res.dto";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
+import { MovieSearchType } from "@/types/movie.types/movie_search.type";
+import { HistoryWithoutLangType } from "@/types/movie.types/history_without_lang.type";
 
 /**
  * Controller for movie related routes

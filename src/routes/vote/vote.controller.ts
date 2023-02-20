@@ -1,12 +1,13 @@
 import { Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { VoteService } from "./vote.service";
-import { User } from "../../common/decorators/user.decorator";
-import { JwtUser } from "../../types/jwtuser.type";
 import { Vote } from "@prisma/client";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { I18n, I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "../../types/generated/i18n.generated";
+
+import { JwtAuthGuard } from "@/routes/auth/jwt-auth.guard";
+import { VoteService } from "@/routes/vote/vote.service";
+import { User } from "@/common/decorators/user.decorator";
+import { JwtUser } from "@/types/jwtuser.type";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
 
 /**
  * Controller for the vote routes

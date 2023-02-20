@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import * as process from "process";
 import { Prisma } from "@prisma/client";
-import { MovieSearchType } from "../../types/movie.types/movie_search.type";
+
+import { MovieSearchType } from "@/types/movie.types/movie_search.type";
 
 @Injectable()
 export class ImdbApiService {

@@ -1,17 +1,18 @@
 import { Controller, Get, UseGuards, Post, Delete, Param, Body } from "@nestjs/common";
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { UserService } from "./user.service";
-import { User } from "../../common/decorators/user.decorator";
-import { JwtUser } from "../../types/jwtuser.type";
-import { ProfileDto } from "../../types/user.dto/profile.dto";
-import { EmailOptInDto } from "../../types/user.dto/email_opt_in.dto";
-import { PasswordDto } from "../../types/user.dto/password.dto";
-import { LoginDto } from "../../types/user.dto/login.dto";
-import { PasswordNewDto } from "../../types/user.dto/password_new.dto";
-import { ResDto } from "../../types/res.dto";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { I18n, I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "../../types/generated/i18n.generated";
+
+import { JwtAuthGuard } from '@/routes/auth/jwt-auth.guard';
+import { UserService } from "@/routes/user/user.service";
+import { User } from "@/common/decorators/user.decorator";
+import { JwtUser } from "@/types/jwtuser.type";
+import { ProfileDto } from "@/types/user.dto/profile.dto";
+import { EmailOptInDto } from "@/types/user.dto/email_opt_in.dto";
+import { PasswordDto } from "@/types/user.dto/password.dto";
+import { LoginDto } from "@/types/user.dto/login.dto";
+import { PasswordNewDto } from "@/types/user.dto/password_new.dto";
+import { ResDto } from "@/types/res.dto";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
 
 /**
  * Controller for user related routes

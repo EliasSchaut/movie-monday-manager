@@ -5,6 +5,10 @@
   "author": "EliasSchaut",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EliasSchaut/Movie-Monday-Manager"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",

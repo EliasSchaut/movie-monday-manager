@@ -5,18 +5,19 @@ import {
   InternalServerErrorException,
   NotFoundException
 } from "@nestjs/common";
-import { UserDBService } from '../../common/db_services/users/userDB.service';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { EmailService } from "../../common/util_services/email.service";
-import { PasswordService } from "../../common/util_services/password.service";
-import cuid from "cuid";
-import { RegisterDto } from "../../types/user.dto/register.dto";
-import { name_pattern } from "../../common/validation/patterns/name.pattern";
-import { username_pattern } from "../../common/validation/patterns/username.pattern";
-import { password_pattern } from "../../common/validation/patterns/password.pattern";
 import { I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "../../types/generated/i18n.generated";
+import { JwtService } from '@nestjs/jwt';
+import cuid from "cuid";
+
+import { UserDBService } from "@/common/db_services/users/userDB.service";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { EmailService } from "@/common/util_services/email.service";
+import { PasswordService } from "@/common/util_services/password.service";
+import { RegisterDto } from "@/types/user.dto/register.dto";
+import { name_pattern } from "@/common/validation/patterns/name.pattern";
+import { username_pattern } from "@/common/validation/patterns/username.pattern";
+import { password_pattern } from "@/common/validation/patterns/password.pattern";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
 
 @Injectable()
 export class AuthService {

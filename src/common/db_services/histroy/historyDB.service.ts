@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
 import { Prisma } from "@prisma/client";
-import { HistoryWithoutLangType } from "../../../types/movie.types/history_without_lang.type";
+import { HistoryWithoutLangType } from "@/types/movie.types/history_without_lang.type";
 
 @Injectable()
 export class HistoryDBService {

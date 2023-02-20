@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { MovieDBService } from "../../db_services/movies/movieDB.service";
-import { HistoryDBService } from "../../db_services/histroy/historyDB.service";
-import { WatchListDBService } from "../../db_services/watchlist/watchListDB.service";
-import { MovieInfo, Prisma } from "@prisma/client";
-import { VoteDBService } from "../../db_services/votes/voteDB.service";
 import { Cron } from "@nestjs/schedule";
-import { MovieInfoDBService } from "../../db_services/movie_infos/movieInfoDB.service";
+import { MovieInfo, Prisma } from "@prisma/client";
+
+import { MovieDBService } from "@/common/db_services/movies/movieDB.service";
+import { HistoryDBService } from "@/common/db_services/histroy/historyDB.service";
+import { WatchListDBService } from "@/common/db_services/watchlist/watchListDB.service";
+import { VoteDBService } from "@/common/db_services/votes/voteDB.service";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class HistoryJob {

@@ -1,11 +1,12 @@
 import { Injectable } from "@nestjs/common";
-import { WatchListDBService } from "../../db_services/watchlist/watchListDB.service";
-import { VoteDBService } from "../../db_services/votes/voteDB.service";
+import { Cron } from "@nestjs/schedule";
 import { parseExpression } from "cron-parser"
 import { MovieInfo, Prisma } from "@prisma/client";
-import { Cron } from "@nestjs/schedule";
-import { AnnounceJob } from "./announce.job";
-import { MovieInfoDBService } from "../../db_services/movie_infos/movieInfoDB.service";
+
+import { WatchListDBService } from "@/common/db_services/watchlist/watchListDB.service";
+import { VoteDBService } from "@/common/db_services/votes/voteDB.service";
+import { AnnounceJob } from "@/common/event_service/jobs/announce.job";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class WatchListJob {

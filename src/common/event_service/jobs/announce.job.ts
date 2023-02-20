@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { DiscordService } from "../../util_services/discord.service";
-import { WatchListDBService } from "../../db_services/watchlist/watchListDB.service";
-import { EmailService } from "../../util_services/email.service";
-import { MovieInfoDBService } from "../../db_services/movie_infos/movieInfoDB.service";
+import { DiscordService } from "@/common/util_services/discord.service";
+import { WatchListDBService } from "@/common/db_services/watchlist/watchListDB.service";
+import { EmailService } from "@/common/util_services/email.service";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class AnnounceJob {

@@ -1,6 +1,6 @@
 import * as Joi from 'joi'
-import { cron_pattern } from "./patterns/cron.pattern";
-import { discord_webhook_pattern } from "./patterns/discord_webhook.pattern";
+import { cron_pattern } from "@/common/validation/patterns/cron.pattern";
+import { discord_webhook_pattern } from "@/common/validation/patterns/discord_webhook.pattern";
 
 export const config_validation_schema = Joi.object({
   PROJECT_NAME: Joi.string().required()

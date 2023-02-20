@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import helmet from 'helmet';
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import * as process from "process";
-const { version } = require('./../package.json')
+
+import { AppModule } from '@/app.module';
+const { version } = require('@/package.json')
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
