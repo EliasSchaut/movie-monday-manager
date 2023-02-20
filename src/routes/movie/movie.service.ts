@@ -108,7 +108,7 @@ export class MovieService {
       }));
     }
 
-    const movie_imdb_api = await this.imdbApiService.get_all_langs(imdb_id);
+    const movies_info_imdb_api = await this.imdbApiService.get_all_langs(imdb_id);
     const { username }: Prisma.UserCreateInput = await this.userDBService.get({ id: proposer_id }) as User;
 
     const movieDB_data: Prisma.MovieCreateInput = {
@@ -116,7 +116,7 @@ export class MovieService {
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
     }
 
-    movie_imdb_api.map((movie) => {
+    movies_info_imdb_api.map((movie) => {
       return {
         imdb_id: imdb_id,
         language: movie.language,
@@ -136,16 +136,20 @@ export class MovieService {
       } as Prisma.MovieInfoCreateInput;
     })
 
+    console.log(movies_info_imdb_api)
+
     await this.movieDBService.add(movieDB_data).catch(() => {
       throw new ConflictException(i18n.t("movie.exception.conflict_movie"))
     })
 
     await this.voteService.vote(imdb_id, proposer_id, i18n).catch((e) => {
+      console.error(e)
       this.movieDBService.delete(imdb_id);
       throw new InternalServerErrorException(e);
     })
 
-    await this.movieInfoDBService.add(movie_imdb_api).catch((e) => {
+    await this.movieInfoDBService.add(movies_info_imdb_api).catch((e) => {
+      console.error(e)
       this.movieDBService.delete(imdb_id);
       this.voteService.unvote(imdb_id, proposer_id, i18n);
       throw new InternalServerErrorException(e)
@@ -154,7 +158,7 @@ export class MovieService {
     return { movie: await this.get_ext(imdb_id, i18n), message: i18n.t("movie.success.save"), show_alert: true };
   }
 
-  async delete(imdb_id: string, proposer_id: string, i18n: I18nContext<I18nTranslations>) {
+  async delete(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
     const movie = await this.movieDBService.get(imdb_id) as Movie;
     const movie_info = await this.movieInfoDBService.get(imdb_id, i18n.lang) as MovieInfo;
     const watchlist = await this.watchlistDBService.get_all();
@@ -162,7 +166,7 @@ export class MovieService {
 
     if (watchlist_imdbs.includes(imdb_id)) {
       throw new ConflictException(i18n.t("movie.exception.conflict_watchlist"));
-    } else if (movie.proposer_id === Number(proposer_id)) {
+    } else if (movie.proposer_id === proposer_id) {
       await this.voteDBService.delete_all(imdb_id);
       await this.movieDBService.delete(imdb_id);
       return { message: i18n.t("movie.success.delete", { args: { title: movie_info.title } }), show_alert: true } as ResDto;

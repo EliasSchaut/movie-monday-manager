@@ -11,6 +11,7 @@ export class ImdbApiService {
   api_key = process.env.IMDB_API_KEY;
 
   async get(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput> {
+    console.log(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}`)
     const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}`);
     const movie = await response.json() as any;
 

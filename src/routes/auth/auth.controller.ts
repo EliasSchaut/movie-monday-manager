@@ -4,7 +4,7 @@ import { I18n, I18nContext } from "nestjs-i18n";
 
 import { LocalAuthGuard } from '@/routes/auth/auth.guard';
 import { AuthService } from '@/routes/auth/auth.service';
-import { JwtUser } from "@/types/jwtuser.type";
+import { JwtUser } from "@/types/user.types/user_jwt.type";
 import { User } from "@/common/decorators/user.decorator";
 import { PasswordDto } from "@/types/user.dto/password.dto";
 import { RegisterDto } from "@/types/user.dto/register.dto";

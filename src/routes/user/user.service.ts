@@ -15,6 +15,7 @@ import { name_pattern } from "@/common/validation/patterns/name.pattern";
 import { username_pattern } from "@/common/validation/patterns/username.pattern";
 import { password_pattern } from "@/common/validation/patterns/password.pattern";
 import { I18nTranslations } from "@/types/generated/i18n.generated";
+import { UserSlimType } from "@/types/user.types/user_slim.type";
 
 @Injectable()
 export class UserService {
@@ -27,7 +28,7 @@ export class UserService {
               private readonly emailService: EmailService,
               private readonly gravatarService: GravatarService) {}
 
-  async get(user_id: number) {
+  async get(user_id: number): Promise<UserSlimType> {
     const { password, verified, challenge, pw_reset, ...result } = await this.userDBService.get({ id: user_id }) as User;
     return result
   }

@@ -22,8 +22,7 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@/prisma/*": ["./prisma/*"],
-      "@/package.json": ["./package.json"]
+      "@/prisma/*": ["./prisma/*"]
     }
   }
 }

@@ -20,7 +20,7 @@ model User {
   pw_reset     Boolean  @default(false)
   challenge    String   @unique @default(cuid())
   use_gravatar Boolean  @default(false)
-  gravatar_url String?
+  gravatar_url String   @default("https://www.gravatar.com/avatar/00")
   email_opt_in Boolean  @default(false)
   Movie        Movie[]
   Vote         Vote[]

@@ -4,7 +4,7 @@ import { I18n, I18nContext } from "nestjs-i18n";
 import { MovieService } from "@/routes/movie/movie.service";
 import { JwtAuthGuard } from "@/routes/auth/jwt-auth.guard";
 import { User } from "@/common/decorators/user.decorator";
-import { JwtUser } from "@/types/jwtuser.type";
+import { JwtUser } from "@/types/user.types/user_jwt.type";
 import { MovieExtType } from "@/types/movie.types/movie_ext.type";
 import { WatchlistExtType } from "@/types/movie.types/watchlist_ext.type";
 import { MovieInfo } from "@prisma/client";
@@ -59,7 +59,7 @@ export class MovieController {
   @UseGuards(JwtAuthGuard)
   @Post(':imdb_id')
   async post_media(@User() user: JwtUser, @Param('imdb_id') imdb_id: string, @I18n() i18n: I18nContext<I18nTranslations>): Promise<{movie: MovieExtType}> {
-    return await this.movieService.save(imdb_id, Number(user.id), i18n)
+    return await this.movieService.save(imdb_id, user.id, i18n)
   }
 
   @ApiOperation({ summary: "DEL remove a movie from the movie database by a given imdb_id, when the given user is the proposer" })
