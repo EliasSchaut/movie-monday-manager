@@ -5,7 +5,7 @@
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
-      :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.metascore'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
+      :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.meta_score'), $t('movie.rotten_score'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
       id="table_movie" sortable :sort_default="[11, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
