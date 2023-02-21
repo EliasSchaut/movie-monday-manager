@@ -49,7 +49,10 @@ export class ImdbApiService {
   async search(search_input: string, lang: string = "en"): Promise<MovieSearchType[]> {
     const response = await fetch(`https://imdb-api.com/${lang}/API/SearchMovie/${this.api_key}/${search_input}`);
     const data = await response.json() as any;
-    const movies = data.results as any[];
+    let movies = data.results as any[];
+    if (movies.length > 5) {
+      movies = movies.slice(0, 5);
+    }
 
     return movies.map((movie) => {
       return {
