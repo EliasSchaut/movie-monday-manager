@@ -27,7 +27,7 @@
         <td :title="movie.created_at.toString()">{{ (new Date(movie.created_at)).toLocaleDateString() }}</td>
         <td :title="String(movie.votes)" :id="'table_movie_votes_td_' + movie.imdb_id">
           <VoteComponent :imdb_id="movie.imdb_id" :votes="movie.votes" :delete_media="delete_media"
-                         :proposed="movie.proposer_id === user_id" show_votes />
+                         :proposed="movie.proposer_id === user_id" show_votes :on_vote="(new_votes: number) => movie.votes = new_votes" />
         </td>
       </tr>
     </TableComponent>

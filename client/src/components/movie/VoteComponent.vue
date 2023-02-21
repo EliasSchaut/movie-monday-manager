@@ -63,7 +63,11 @@ export default defineComponent({
     delete_media: {
       type: Function,
       default: () => {}
-    }
+    },
+    on_vote: {
+      type: Function,
+      default: () => {}
+    },
   },
   methods: {
     vote(imdb_id: string) {
@@ -74,6 +78,7 @@ export default defineComponent({
             movie_votes.value[imdb_id]++;
             vote_td.title = String(movie_votes.value[imdb_id])
             voted_movies.value.push(imdb_id);
+            this.on_vote(movie_votes.value[imdb_id])
           }
         });
     },
@@ -87,6 +92,7 @@ export default defineComponent({
 
             const slice_index = voted_movies.value.indexOf(imdb_id);
             delete voted_movies.value[slice_index];
+            this.on_vote(movie_votes.value[imdb_id])
           }
         });
     },
