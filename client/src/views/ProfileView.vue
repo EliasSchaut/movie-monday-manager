@@ -37,45 +37,45 @@
 
   <!-- Modal: Change Profile -->
   <ModalComponent id="modal_profile" :title="$t('profile.button.profile')">
-    <form @submit.prevent="on_submit" action="/api/user" method="post"
-          class="d-flex flex-column was-validated">
+    <FormVal :submit="on_submit" action="/api/user" method="post"
+          class="d-flex flex-column">
       <NameComponent :value="user.name" />
       <InputComponent id="check" _class="form-check-input" type="checkbox" role="switch"
                       :label="$t('profile.form.profile.gravatar')" help="https://en.gravatar.com/"
                       name="use_gravatar" :checked="user.use_gravatar" />
       <SubmitComponent inner_text="Update" />
-    </form>
+    </FormVal>
   </ModalComponent>
 
 
   <!-- Modal: Change Email -->
   <ModalComponent id="modal_change_email" :title="$t('profile.button.username')">
-    <form @submit.prevent="on_submit" action="/api/user/username" method="post"
-          class="d-flex flex-column justify-content-around was-validated">
+    <FormVal :submit="on_submit" action="/api/user/username" method="post"
+          class="d-flex flex-column justify-content-around">
       <EmailComponent :label="$t('profile.form.username.new')" :value="user.username"/>
       <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Update" />
-    </form>
+    </FormVal>
   </ModalComponent>
 
   <!-- Modal: Change Password -->
   <ModalComponent id="modal_change_password" :title="$t('profile.button.password')">
-    <form @submit.prevent="on_submit" action="/api/user/password" method="post"
-          class="d-flex flex-column justify-content-around was-validated">
+    <FormVal :submit="on_submit" action="/api/user/password" method="post"
+          class="d-flex flex-column justify-content-around">
       <PasswordComponent type="tripple" />
       <SubmitComponent inner_text="Update" />
-    </form>
+    </FormVal>
   </ModalComponent>
 
   <!-- Modal: Delete Account -->
   <ModalComponent id="modal_delete_account" :title="$t('profile.option.delete_account')">
     <p style="color: red">{{ $t('profile.form.delete_account.desc') }}</p>
     <br>
-    <form @submit.prevent="delete_account" action="/api/user" method="post"
-          class="d-flex flex-column justify-content-around was-validated">
+    <FormVal :submit="delete_account" action="/api/user" method="post"
+          class="d-flex flex-column justify-content-around">
       <PasswordComponent :label="$t('common.form.password.label.submit')" />
       <SubmitComponent inner_text="Delete" class="btn btn-danger form-submit" />
-    </form>
+    </FormVal>
   </ModalComponent>
 </template>
 
@@ -91,11 +91,13 @@ import { defineComponent, ref } from "vue";
 import router from "@/router/router";
 import CardComponent from "@/components/CardComponent.vue";
 import type { UserSlimType } from "@/types/user.types/user_slim.type";
+import FormVal from "@/components/form/FormVal.Component.vue";
 const user = ref({} as UserSlimType)
 
 export default defineComponent({
   name: "ProfileComponent",
   components: {
+    FormVal,
     CardComponent,
     InputComponent,
     NameComponent,

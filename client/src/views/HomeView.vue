@@ -3,7 +3,7 @@
 
   <div class="main">
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
-            :disabled="store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
+            :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.meta_score'), $t('movie.rotten_score'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
       id="table_movie" sortable :sort_default="[12, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
@@ -50,8 +50,7 @@
   </div>
 
   <ModalComponent id="modal_add_movie" :title="$t('movie.modal.title')" spawn_over_body>
-    <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_post_movie" class="form was-validated"
-          novalidate>
+    <FormVal action="api/movie/" method="post" :submit="search_media" id="form_post_movie" class="form">
       <div class="modal-body">
         <label class="form-label" for="modal_post_movie_enter_title"><b>Enter Title</b></label>
         <div class="input-group">
@@ -60,7 +59,7 @@
                    @click="movie_add_with_imdb_id = false" checked>
           </div>
           <input type="text" class="form-control" id="modal_post_movie_enter_title" placeholder="My Movie Title" name="movie_title"
-                 pattern="^.{3,}$" :disabled="movie_add_with_imdb_id" required>
+                 pattern="^.{3,100}$" :disabled="movie_add_with_imdb_id" required>
           <div class="valid-feedback">
             {{ $t("common.form.valid_feedback") }}
           </div>
@@ -68,7 +67,7 @@
             Should be at least 3 characters long
           </div>
         </div>
-        <p class="mt-2">----- OR -----</p>
+        <p class="mt-3">----- OR -----</p>
         <label class="form-label" for="modal_post_movie_enter_id"><b>Enter IMDB-ID</b></label>
         <div class="input-group">
           <div class="input-group-text">
@@ -89,7 +88,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t("common.modal.close") }}</button>
         <button type="submit" class="btn btn-primary">Search</button>
       </div>
-    </form>
+    </FormVal>
   </ModalComponent>
 
   <ModalComponent id="modal_big_picture" class="modal-lg" :title="big_picture_title">
@@ -111,6 +110,7 @@ import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
 import MovieBigPictureComponent from "@/components/movie/MovieBigPictureComponent.vue";
 import type { MovieExtType } from "@/types/movie.types/movie_ext.type"
 import type { JwtUser } from "@/types/user.types/user_jwt.type";
+import FormVal from "@/components/form/FormVal.Component.vue";
 
 const search_movies = ref([] as any[]);
 
@@ -126,6 +126,7 @@ export default defineComponent({
     };
   },
   components: {
+    FormVal,
     MovieBigPictureComponent,
     TableComponent,
     FormComponent,
@@ -155,7 +156,6 @@ export default defineComponent({
         });
     }
 
-
     return {
       movies,
       votes,
@@ -163,22 +163,20 @@ export default defineComponent({
     };
   },
   methods: {
-    search_media(e: Event) {
-      const search_input = (e.target as HTMLInputElement).value;
-      if (search_input.length < 3) return;
-      if (/^tt[0-9]+$/.test(search_input)) return;
+    search_media(e: Event, form_html: HTMLFormElement) {
+      if (this.movie_add_with_imdb_id) {
+        this.add_media(e, form_html);
 
-      call("api/movie/search", "POST", { search_input })
-        .then((data) => {
-          search_movies.value = data;
-        });
-    },
-    add_media(e: Event) {
-      const form_html = e.target as HTMLFormElement;
-      if (!form_html.checkValidity()) {
-        return;
+      } else {
+        const form = new FormData(form_html);
+        const search_input = form.get("movie_title") as string;
+        call("api/movie/search", "POST", { search_input })
+          .then((data) => {
+            search_movies.value = data;
+          });
       }
-
+    },
+    add_media(e: Event, form_html: HTMLFormElement) {
       const form = new FormData(form_html);
       const imdb_id = form.get("imdb_id") as string;
 
