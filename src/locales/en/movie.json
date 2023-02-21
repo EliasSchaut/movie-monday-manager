@@ -4,7 +4,7 @@
     "invalid_search_length": "Your search has too few characters! Your search text must be at least 3 characters long!",
     "conflict_movie": "Movie is already in database!",
     "conflict_history": "Movie is already in history!",
-    "conflict_watchlist": "Movie is already in watchlist!",
+    "conflict_watchlist": "A movie in the watchlist cannot be deleted!",
     "conflict_max_proposed": "You have reached the maximum number of proposed movies! You can only propose {max_proposeable_movies} movies!",
     "not_found": "Movie not found!",
     "not_found_or_not_proposer": "Movie not found or you are not the proposer!"

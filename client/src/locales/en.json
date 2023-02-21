@@ -24,7 +24,8 @@
         }
       },
       "valid_feedback": "Looks good!",
-      "submit": "Submit"
+      "submit": "Submit",
+      "search": "Search"
     },
     "modal": {
       "close": "Close"
@@ -63,7 +64,8 @@
     "director": "Director",
     "actors": "Actors",
     "imdb_rate": "IMDB",
-    "metascore": "Metascore",
+    "meta_score": "Meta",
+    "rotten_score": "Rotten",
     "language": "Language",
     "genre": "Genre",
     "proposer": "Proposer",
@@ -74,10 +76,16 @@
     "modal": {
       "title": "Add Movie",
       "form": {
-        "title": "Title or IMDB ID:",
-        "invalid_feedback": "Should be a valid IMDB ID, e.g. tt1234567"
-      },
-      "no_suggestion": "No movie suggestion"
+        "enter_title": "Enter Title",
+        "enter_id": "Enter IMDB-ID",
+        "or": "----- OR -----",
+        "placeholder_title": "My Movie Title",
+        "invalid_feedback": {
+          "title": "Should be at least 3 characters long",
+          "id": "Should be a valid IMDB ID, e.g. tt1234567"
+        },
+        "no_suggestion": "No film proposal"
+      }
     }
   },
 

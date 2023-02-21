@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { DiscordService } from "../../util_services/discord.service";
-import { WatchListDBService } from "../../db_services/watchlist/watchListDB.service";
-import { MovieDBService } from "../../db_services/movies/movieDB.service";
-import { Movie } from "@prisma/client";
-import { EmailService } from "../../util_services/email.service";
+import { DiscordService } from "@/common/util_services/discord.service";
+import { WatchListDBService } from "@/common/db_services/watchlist/watchListDB.service";
+import { EmailService } from "@/common/util_services/email.service";
+import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 
 @Injectable()
 export class AnnounceJob {
@@ -13,8 +12,10 @@ export class AnnounceJob {
 
   constructor(private readonly discordService: DiscordService,
               private readonly watchListDBService: WatchListDBService,
-              private readonly movieDBService: MovieDBService,
+              private readonly movieInfoDBService: MovieInfoDBService,
               private readonly emailService: EmailService) {
+
+
     this.announce_discord = (watchlist: string[]) => `<@&1041714399964041286>\n` +
       `Die Wahl ist durch, diese Filme werden geschaut:\n${watchlist.join("\n")}\n` +
       `Mehr Infos siehe auch ${process.env.FRONTEND_URL}\n\n` +
@@ -31,9 +32,9 @@ export class AnnounceJob {
     const output = [] as string[];
 
     for (const movie of watchlist) {
-      const movie_data = await this.movieDBService.get(movie.imdb_id) as Movie;
+      const movie_info_data = await this.movieInfoDBService.get(movie.imdb_id);
       const start_time = movie.start_time.toLocaleString();
-      output.push(`${start_time} - ${movie_data.title}`);
+      output.push(`${start_time} - ${movie_info_data!.title}`);
     }
 
     await this.send_announce(output);

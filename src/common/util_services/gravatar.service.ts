@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PasswordService } from "./password.service";
+import { PasswordService } from "@/common/util_services/password.service";
 
 @Injectable()
 export class GravatarService {

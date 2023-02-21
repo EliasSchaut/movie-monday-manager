@@ -1,6 +1,7 @@
 
 export class MovieSearchType {
   title!: string
-  year!: string
+  description!: string
   imdb_id!: string
+  poster!: string
 }

@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
-  createdAt    DateTime @default(now())
+  created_at   DateTime @default(now())
   username     String   @unique
   password     String
   name         String
@@ -20,40 +20,58 @@ model User {
   pw_reset     Boolean  @default(false)
   challenge    String   @unique @default(cuid())
   use_gravatar Boolean  @default(false)
-  gravatar_url String?
+  gravatar_url String   @default("https://www.gravatar.com/avatar/00")
   email_opt_in Boolean  @default(false)
   Movie        Movie[]
   Vote         Vote[]
 }
 
+model MovieInfo {
+  imdb_id      String
+  language     String
+  title        String
+  year         Int
+  genre        String
+  director     String
+  actors       String
+  imdb_rate    String
+  meta_score   String
+  rotten_score String
+  languages    String
+  plot         String
+  runtime      Int
+  link         String
+  poster       String
+
+  @@unique([imdb_id, language])
+}
+
 model Movie {
   imdb_id     String     @id
-  createdAt   DateTime   @default(now())
-  title       String
-  year        Int
-  genre       String
-  director    String
-  actors      String
-  imdb_rate   Float
-  metascore   String?
-  language    String
-  plot        String
-  runtime     Int
-  link        String
-  poster      String?
+  created_at  DateTime   @default(now())
   proposer_id Int
   proposer    User       @relation(fields: [proposer_id], references: [id])
   Vote        Vote[]
   WatchList   WatchList?
 }
 
+model History {
+  imdb_id    String
+  language   String
+  watched_at DateTime @default(now())
+  title      String
+  link       String
+
+  @@unique([imdb_id, language])
+}
+
 model Vote {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  imdb_id   String
-  movie     Movie    @relation(fields: [imdb_id], references: [imdb_id])
-  user_id   Int
-  user      User     @relation(fields: [user_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  imdb_id    String
+  movie      Movie    @relation(fields: [imdb_id], references: [imdb_id])
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
 
   @@unique([imdb_id, user_id])
 }
@@ -62,11 +80,4 @@ model WatchList {
   imdb_id    String   @id
   start_time DateTime
   movie      Movie    @relation(fields: [imdb_id], references: [imdb_id])
-}
-
-model History {
-  imdb_id    String   @id
-  watched_at DateTime @default(now())
-  title      String
-  link       String
 }

@@ -13,11 +13,12 @@
 
 <script lang="ts">
 import CardComponent from "@/components/CardComponent.vue";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "DocsView",
   components: { CardComponent }
-};
+});
 </script>
 
 <style scoped>

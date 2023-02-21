@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-
 const bcrypt = require('bcrypt');
 import md5 from "crypto-js/md5";
 

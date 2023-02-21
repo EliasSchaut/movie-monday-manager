@@ -14,8 +14,6 @@ import { store } from "@/util/store";
 import warn_svg from "@/assets/svg/exclamation-triangle-fill.svg";
 </script>
 
-
-
 <style scoped>
 .alert {
   width: min(90vw, 600px);

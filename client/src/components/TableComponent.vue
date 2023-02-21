@@ -63,7 +63,8 @@ export default defineComponent({
       } as any,
       i: 0,
       filter_values: this.get_filter_cookie(),
-      first_update: false
+      first_update: false,
+      loop_update: true
     };
   },
   setup(props) {
@@ -72,18 +73,14 @@ export default defineComponent({
     };
   },
   updated() {
-    if (!this.first_update) {
+    if (this.loop_update) {
       if (this.filterable) {
-        for (let i = 0; i < this.filter_values.length; i++) {
-          this.filter(this.id, i, this.filter_values[i]);
-        }
-        this.first_update = true;
+        this.filter_all()
       }
-
       if (this.sortable && this.sort_default!.length) {
         this.sort(this.sort_default[0] as any, this.sort_default[1] as any);
-
       }
+      if (this.first_update) this.loop_update = false;
     }
   },
   props: {
@@ -150,6 +147,11 @@ export default defineComponent({
       }
       this.filter_values[cell_index] = set_visible;
       this.set_filter_cookie(this.filter_values);
+    },
+    filter_all() {
+      for (let i = 0; i < this.filter_values.length; i++) {
+        this.filter(this.id, i, this.filter_values[i]);
+      }
     },
     get_filter_cookie() : boolean[] {
       const filter_cookie = get_cookie("table_filter_" + this.id)
