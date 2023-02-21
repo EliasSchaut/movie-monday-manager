@@ -6,7 +6,7 @@
             :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.meta_score'), $t('movie.rotten_score'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable :sort_default="[12, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
+      id="table_movie" ref="filter" sortable :sort_default="[12, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
@@ -14,7 +14,7 @@
             <img src="../assets/svg/info-circle-fill.svg" alt="big_picture">
           </button>
         </td>
-        <td :title="movie.title"><div class="d-flex align-items-center"><a :href="movie.link" target="_blank">{{ movie.title }}</a>&nbsp;<img class="d-inline" src="../assets/svg/box-arrow-up-right.svg" alt="external link icon"></div></td>
+        <td :title="movie.title"><div class="d-flex justify-content-center"><a :href="movie.link" target="_blank">{{ movie.title }}</a>&nbsp;<img class="d-inline" src="../assets/svg/box-arrow-up-right.svg" alt="external link icon"></div></td>
         <td :title="String(movie.year)">{{ movie.year }}</td>
         <td :title="movie.genre">{{ movie.genre }}</td>
         <td :title="movie.director">{{ movie.director }}</td>
@@ -70,7 +70,8 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t("common.modal.close") }}</button>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button v-if="movie_add_with_imdb_id" type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
+        <button v-else type="submit" class="btn btn-primary">Search</button>
       </div>
     </FormVal>
   </ModalComponent>
@@ -84,7 +85,6 @@
 import { ref, defineComponent } from "vue";
 import { store } from "@/util/store";
 import { call } from "@/util/api";
-import router from "@/router/router";
 import WatchlistComponent from "@/components/WatchlistComponent.vue";
 import ModalComponent from "@/components/ModalComponent.vue";
 import FormComponent from "@/components/form/FormComponent.vue";
@@ -165,13 +165,12 @@ export default defineComponent({
 
       call(form_html.action + imdb_id, "POST")
         .then((data) => {
-          if (data.hasOwnProperty("statusCode")) {
-            form_html.setAttribute("data-bs-dismiss", "modal");
-            form_html.click();
-            form_html.removeAttribute("data-bs-dismiss");
-          } else {
-            router.go(0);
+          if (!data.hasOwnProperty("statusCode")) {
+            this.get_movies_all()
           }
+          form_html.setAttribute("data-bs-dismiss", "modal");
+          form_html.click();
+          form_html.removeAttribute("data-bs-dismiss");
         });
     },
     delete_media(imdb_id: string) {
@@ -187,7 +186,12 @@ export default defineComponent({
     get_movies_all() {
       call("api/movie/all")
         .then((data: MovieExtType[]) => {
-          movies.value = data;
+          const child = this.$refs.filter as any
+          child.loop_update = true
+          movies.value = data
+          setTimeout(() => {
+            child.loop_update = false
+          }, 5000);
         });
     }
   }
