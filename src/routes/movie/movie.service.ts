@@ -136,7 +136,8 @@ export class MovieService {
       throw new InternalServerErrorException(e)
     })
 
-    return { movie: await this.get_ext(imdb_id, i18n), message: i18n.t("movie.success.save"), show_alert: true };
+    const movie_info = await this.get_ext(imdb_id, i18n)
+    return { movie: movie_info, message: i18n.t("movie.success.save", { args: { title: movie_info.title } }), show_alert: true };
   }
 
   async delete(imdb_id: string, proposer_id: number, i18n: I18nContext<I18nTranslations>) {
