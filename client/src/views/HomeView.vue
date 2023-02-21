@@ -3,10 +3,10 @@
 
   <div class="main">
     <button class="position-absolute btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#modal_add_movie"
-            :disabled="!store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
+            :disabled="store.logged_in"><b>{{ $t("movie.modal.title") }} +</b></button>
     <TableComponent
       :head="['' , $t('movie.title'), $t('movie.year'), $t('movie.genre'), $t('movie.director'), $t('movie.actors'), $t('movie.imdb_rate'), $t('movie.meta_score'), $t('movie.rotten_score'), $t('movie.language'), $t('movie.proposer'), $t('movie.proposed_on'), $t('movie.interested')]"
-      id="table_movie" sortable :sort_default="[11, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
+      id="table_movie" sortable :sort_default="[12, 'desc']" filterable :filter_default="[true, true, true, true, false, false, true, false, false, false, true, false, true]">
       <tr v-for="movie in movies" :key="movie.imdb_id" :id="movie.imdb_id">
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
@@ -53,21 +53,41 @@
     <form action="api/movie/" method="post" @submit.prevent="add_media" id="form_post_movie" class="form was-validated"
           novalidate>
       <div class="modal-body">
-        <b>{{ $t("movie.modal.form.title") }}</b>
-        <input type="text" class="form-control" id="from_imdb_id" placeholder="tt1234567" name="imdb_id"
-               pattern="^tt[0-9]{1,12}$" @input="search_media" required>
-        <div class="valid-feedback">
-          Looks good!
+        <label class="form-label" for="modal_post_movie_enter_title"><b>Enter Title</b></label>
+        <div class="input-group">
+          <div class="input-group-text">
+            <input class="form-check-input mt-0" type="radio" value="true" name="modal_post_movie_radio"
+                   @click="movie_add_with_imdb_id = false" checked>
+          </div>
+          <input type="text" class="form-control" id="modal_post_movie_enter_title" placeholder="My Movie Title" name="movie_title"
+                 pattern="^.{3,}$" :disabled="movie_add_with_imdb_id" required>
+          <div class="valid-feedback">
+            {{ $t("common.form.valid_feedback") }}
+          </div>
+          <div class="invalid-feedback">
+            Should be at least 3 characters long
+          </div>
         </div>
-        <div class="invalid-feedback">
-          {{ $t("movie.modal.form.invalid_feedback") }}
+        <p class="mt-2">----- OR -----</p>
+        <label class="form-label" for="modal_post_movie_enter_id"><b>Enter IMDB-ID</b></label>
+        <div class="input-group">
+          <div class="input-group-text">
+            <input class="form-check-input mt-0" type="radio" name="modal_post_movie_radio"
+                   @click="movie_add_with_imdb_id = true">
+          </div>
+          <input type="text" class="form-control" id="modal_post_movie_enter_id" placeholder="tt1234567" name="imdb_id"
+                 pattern="^tt[0-9]{1,12}$" :disabled="!movie_add_with_imdb_id" required>
+          <div class="valid-feedback">
+            {{ $t("common.form.valid_feedback") }}
+          </div>
+          <div class="invalid-feedback">
+            {{ $t("movie.modal.form.invalid_feedback") }}
+          </div>
         </div>
-
-        <MovieSearchComponent :movies="search_movies" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t("common.modal.close") }}</button>
-        <button type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
+        <button type="submit" class="btn btn-primary">Search</button>
       </div>
     </form>
   </ModalComponent>
@@ -101,7 +121,8 @@ export default defineComponent({
       store,
       search_movies,
       big_picture_imdb_id: ref(""),
-      big_picture_title: ref("")
+      big_picture_title: ref(""),
+      movie_add_with_imdb_id: ref(false)
     };
   },
   components: {
