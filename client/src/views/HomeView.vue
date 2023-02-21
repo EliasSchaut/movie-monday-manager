@@ -72,7 +72,11 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t("common.modal.close") }}</button>
-        <button v-if="movie_add_with_imdb_id" type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
+        <button v-if="movie_search_loading" class="btn btn-primary" type="button" disabled>
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span class="visually-hidden">{{ $t('common.loading') }}</span>
+        </button>
+        <button v-else-if="movie_add_with_imdb_id" type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
         <button v-else type="submit" class="btn btn-primary">Search</button>
       </div>
     </FormVal>
@@ -115,7 +119,8 @@ export default defineComponent({
       big_picture_title: ref(""),
       movie_add_with_imdb_id: ref(false),
       movies,
-      user_id
+      user_id,
+      movie_search_loading: ref(false)
     };
   },
   components: {
@@ -156,9 +161,11 @@ export default defineComponent({
       } else {
         const form = new FormData(form_html);
         const search_input = form.get("movie_title") as string;
+        this.movie_search_loading = true
         call("api/movie/search", "POST", { search_input })
           .then((data) => {
             search_movies.value = data;
+            this.movie_search_loading = false
           });
       }
     },
@@ -170,12 +177,14 @@ export default defineComponent({
     add_media(e: Event, form_html: HTMLFormElement) {
       const form = new FormData(form_html);
       const imdb_id = form.get("imdb_id") as string;
+      this.movie_search_loading = true
 
       call(form_html.action + imdb_id, "POST")
         .then((data) => {
           if (!data.hasOwnProperty("statusCode")) {
             this.get_movies_all()
           }
+          this.movie_search_loading = false
           form_html.setAttribute("data-bs-dismiss", "modal");
           form_html.click();
           form_html.removeAttribute("data-bs-dismiss");
