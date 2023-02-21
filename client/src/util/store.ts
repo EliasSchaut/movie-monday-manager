@@ -4,8 +4,8 @@ import { get_cookie, set_cookie } from "@/util/cookie";
 export const store = reactive({
   logged_in: false,
   loading: false,
-  theme: 'light',
-  theme_without_auto: 'light',
+  theme: 'auto',
+  theme_without_auto: 'dark',
   alert: {
     show: false,
     msg: "",
@@ -74,7 +74,7 @@ function get_theme() {
   if (theme) {
     return theme
   }
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return 'auto'
 }
 
 store.update_theme(get_theme())
