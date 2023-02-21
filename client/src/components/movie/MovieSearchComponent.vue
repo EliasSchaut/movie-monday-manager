@@ -1,8 +1,9 @@
 <template>
-  <div v-if="movies.length !== 0" class="list-group">
-    <MovieSearchElementComponent v-for="movie in movies" :title="movie.description" @click="save_movie(movie.imdb_id)" />
+  <div v-if="movies.length !== 0" class="mt-2">
+    <MovieSearchElementComponent v-for="movie in movies" :movie="movie"
+                                 @movie_select="(imdb_id: string) => $emit('movie_select', imdb_id)" />
   </div>
-  <div v-else class="list-group">
+  <div v-else class="list-group mt-2">
     <button type="button" class="list-group-item list-group-item-action" disabled>{{ $t("movie.modal.no_suggestion") }}</button>
   </div>
 </template>
@@ -19,12 +20,6 @@ export default defineComponent({
     movies: {
       type: Array as () => MovieSearchType[],
       default: []
-    }
-  },
-  methods: {
-    save_movie(imdb_id: string) {
-      const input = document.getElementById("from_imdb_id") as HTMLInputElement
-      input.value = imdb_id
     }
   }
 });

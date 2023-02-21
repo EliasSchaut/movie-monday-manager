@@ -51,6 +51,8 @@
             Should be at least 3 characters long
           </div>
         </div>
+        <MovieSearchComponent :movies="search_movies" @movie_select="movie_search_select" />
+
         <p class="mt-3">----- OR -----</p>
         <label class="form-label" for="modal_post_movie_enter_id"><b>Enter IMDB-ID</b></label>
         <div class="input-group">
@@ -97,10 +99,11 @@ import type { JwtUser } from "@/types/user.types/user_jwt.type";
 import FormVal from "@/components/form/FormValComponent.vue";
 import VoteButtonComponent from "@/components/movie/VoteButtonComponent.vue";
 import VoteComponent from "@/components/movie/VoteComponent.vue";
+import type { MovieSearchType } from "@/types/movie.types/movie_search.type";
 
 const movies = ref([] as MovieExtType[]);
 const user_id = ref(-1);
-const search_movies = ref([] as any[]);
+const search_movies = ref([] as MovieSearchType[]);
 
 export default defineComponent({
   name: "HomeView",
@@ -158,6 +161,11 @@ export default defineComponent({
             search_movies.value = data;
           });
       }
+    },
+    movie_search_select(imdb_id: string) {
+      this.movie_add_with_imdb_id = true;
+      const imdb_id_input = document.getElementById("modal_post_movie_enter_id") as HTMLInputElement
+      imdb_id_input.value = imdb_id;
     },
     add_media(e: Event, form_html: HTMLFormElement) {
       const form = new FormData(form_html);
