@@ -26,24 +26,8 @@
         <td :title="movie.proposer">{{ movie.proposer }}</td>
         <td :title="movie.created_at.toString()">{{ (new Date(movie.created_at)).toLocaleDateString() }}</td>
         <td :title="String(movie.votes)" :id="'table_movie_votes_td_' + movie.imdb_id">
-          <div class="d-flex justify-content-between flex-row">
-            <div :id="'table_movie_votes_' + movie.imdb_id" style="align-self: center">{{ movie.votes }}</div>
-            <div>
-              <button v-if="store.logged_in && movie.proposer_id === user_id" :id="'v_' + movie.imdb_id"
-                      class="btn btn-danger" @click="delete_media(movie.imdb_id)" :disabled="!store.logged_in">
-                <img class="fas fa-edit" src="../assets/svg/trash-fill.svg" alt="trash">
-              </button>
-              <button v-else-if="votes.includes(movie.imdb_id)" :id="'v_' + movie.imdb_id" class="btn btn-primary"
-                      @click="unvote(movie.imdb_id, votes)" :disabled="!store.logged_in">
-                <img class="fas fa-edit" src="../assets/svg/heart-fill.svg" alt="heart">
-              </button>
-              <button v-else :id="'v_' + movie.imdb_id" class="btn btn-outline-primary"
-                      @click="vote(movie.imdb_id, votes)" :disabled="!store.logged_in">
-                <img v-if="store.theme_without_auto === 'dark'" class="fas fa-edit" src="../assets/svg/heartbreak-fill-white.svg" alt="heartbreak">
-                <img v-else class="fas fa-edit" src="../assets/svg/heartbreak-fill.svg" alt="heartbreak">
-              </button>
-            </div>
-          </div>
+          <VoteComponent :imdb_id="movie.imdb_id" :votes="movie.votes" :delete_media="delete_media"
+                         :proposed="movie.proposer_id === user_id" show_votes />
         </td>
       </tr>
     </TableComponent>
@@ -110,10 +94,11 @@ import MovieSearchComponent from "@/components/movie/MovieSearchComponent.vue";
 import MovieBigPictureComponent from "@/components/movie/MovieBigPictureComponent.vue";
 import type { MovieExtType } from "@/types/movie.types/movie_ext.type"
 import type { JwtUser } from "@/types/user.types/user_jwt.type";
-import FormVal from "@/components/form/FormVal.Component.vue";
+import FormVal from "@/components/form/FormValComponent.vue";
+import VoteButtonComponent from "@/components/movie/VoteButtonComponent.vue";
+import VoteComponent from "@/components/movie/VoteComponent.vue";
 
 const movies = ref([] as MovieExtType[]);
-const votes = ref([] as string[]);
 const user_id = ref(-1);
 const search_movies = ref([] as any[]);
 
@@ -127,11 +112,12 @@ export default defineComponent({
       big_picture_title: ref(""),
       movie_add_with_imdb_id: ref(false),
       movies,
-      votes,
       user_id
     };
   },
   components: {
+    VoteComponent,
+    VoteButtonComponent,
     FormVal,
     MovieBigPictureComponent,
     TableComponent,
@@ -148,10 +134,6 @@ export default defineComponent({
       });
 
     if (store.logged_in) {
-      call("api/vote")
-        .then((data: string[]) => {
-          votes.value = data;
-        });
       call("api/user/id")
         .then((data: JwtUser) => {
           user_id.value = data.id;
@@ -199,34 +181,6 @@ export default defineComponent({
             const table = document.getElementById("table_movie") as HTMLTableElement;
             const tr = document.getElementById(imdb_id) as HTMLTableRowElement;
             table.deleteRow(tr.rowIndex);
-          }
-        });
-    },
-    vote(imdb_id: string, votes: string[]) {
-      call("api/vote/" + imdb_id, "POST")
-        .then((data) => {
-          if (!data.hasOwnProperty("statusCode")) {
-            const vote_td = document.getElementById("table_movie_votes_td_" + imdb_id) as HTMLTableCellElement;
-            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
-            const new_vote_number = String(Number(vote_div.innerHTML) + 1);
-            vote_div.innerHTML = new_vote_number
-            vote_td.title = new_vote_number
-            votes.push(imdb_id);
-          }
-        });
-    },
-    unvote(imdb_id: string, votes: string[]) {
-      call("api/vote/" + imdb_id, "DELETE")
-        .then((data) => {
-          if (!data.hasOwnProperty("statusCode")) {
-            const vote_td = document.getElementById("table_movie_votes_td_" + imdb_id) as HTMLTableCellElement;
-            const vote_div = document.getElementById("table_movie_votes_" + imdb_id) as HTMLDivElement;
-            const new_vote_number = String(Number(vote_div.innerHTML) - 1);
-            vote_div.innerHTML = new_vote_number
-            vote_td.title = new_vote_number
-
-            const slice_index = votes.indexOf(imdb_id);
-            delete votes[slice_index];
           }
         });
     },

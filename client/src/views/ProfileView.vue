@@ -91,7 +91,7 @@ import { defineComponent, ref } from "vue";
 import router from "@/router/router";
 import CardComponent from "@/components/CardComponent.vue";
 import type { UserSlimType } from "@/types/user.types/user_slim.type";
-import FormVal from "@/components/form/FormVal.Component.vue";
+import FormVal from "@/components/form/FormValComponent.vue";
 const user = ref({} as UserSlimType)
 
 export default defineComponent({

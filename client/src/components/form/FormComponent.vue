@@ -11,7 +11,7 @@
 import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import { call } from "@/util/api";
 import { defineComponent } from "vue";
-import FormVal from "@/components/form/FormVal.Component.vue";
+import FormVal from "@/components/form/FormValComponent.vue";
 
 export default defineComponent({
   name: "FormComponent",

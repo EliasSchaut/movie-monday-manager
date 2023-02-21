@@ -56,6 +56,7 @@ export default defineComponent({
   },
   methods: {
     load_movie(imdb_id: string) {
+      console.log(imdb_id)
       this.loading = true;
       call("/api/movie/" + imdb_id)
         .then((data) => {
