@@ -4,7 +4,7 @@
                                  @movie_select="(imdb_id: string) => $emit('movie_select', imdb_id)" />
   </div>
   <div v-else class="list-group mt-2">
-    <button type="button" class="list-group-item list-group-item-action" disabled>{{ $t("movie.modal.no_suggestion") }}</button>
+    <button type="button" class="list-group-item list-group-item-action" disabled>{{ $t("movie.modal.form.no_suggestion") }}</button>
   </div>
 </template>
 

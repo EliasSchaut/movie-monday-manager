@@ -36,25 +36,25 @@
   <ModalComponent id="modal_add_movie" :title="$t('movie.modal.title')" spawn_over_body>
     <FormVal action="api/movie/" method="post" :submit="search_media" id="form_post_movie" class="form">
       <div class="modal-body">
-        <label class="form-label" for="modal_post_movie_enter_title"><b>Enter Title</b></label>
+        <label class="form-label" for="modal_post_movie_enter_title"><b>{{ $t("movie.modal.form.enter_title") }}</b></label>
         <div class="input-group">
           <div class="input-group-text">
             <input class="form-check-input mt-0" type="radio" value="true" name="modal_post_movie_radio"
                    @click="movie_add_with_imdb_id = false" checked>
           </div>
-          <input type="text" class="form-control" id="modal_post_movie_enter_title" placeholder="My Movie Title" name="movie_title"
+          <input type="text" class="form-control" id="modal_post_movie_enter_title" :placeholder="$t('movie.modal.form.placeholder_title')" name="movie_title"
                  pattern="^.{3,100}$" :disabled="movie_add_with_imdb_id" required>
           <div class="valid-feedback">
             {{ $t("common.form.valid_feedback") }}
           </div>
           <div class="invalid-feedback">
-            Should be at least 3 characters long
+            {{ $t("movie.modal.form.invalid_feedback.title") }}
           </div>
         </div>
         <MovieSearchComponent :movies="search_movies" @movie_select="movie_search_select" />
 
-        <p class="mt-3">----- OR -----</p>
-        <label class="form-label" for="modal_post_movie_enter_id"><b>Enter IMDB-ID</b></label>
+        <p class="mt-3">{{ $t("movie.modal.form.or") }}</p>
+        <label class="form-label" for="modal_post_movie_enter_id"><b>{{ $t("movie.modal.form.enter_id") }}</b></label>
         <div class="input-group">
           <div class="input-group-text">
             <input class="form-check-input mt-0" type="radio" name="modal_post_movie_radio"
@@ -66,7 +66,7 @@
             {{ $t("common.form.valid_feedback") }}
           </div>
           <div class="invalid-feedback">
-            {{ $t("movie.modal.form.invalid_feedback") }}
+            {{ $t("movie.modal.form.invalid_feedback.id") }}
           </div>
         </div>
       </div>
@@ -77,7 +77,7 @@
           <span class="visually-hidden">{{ $t('common.loading') }}</span>
         </button>
         <button v-else-if="movie_add_with_imdb_id" type="submit" class="btn btn-primary">{{ $t("common.form.submit") }}</button>
-        <button v-else type="submit" class="btn btn-primary">Search</button>
+        <button v-else type="submit" class="btn btn-primary">{{ $t("common.form.search") }}</button>
       </div>
     </FormVal>
   </ModalComponent>
