@@ -11,10 +11,10 @@
         <td :title="movie.title">
           <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal_big_picture"
                   @click="big_picture_imdb_id = movie.imdb_id;big_picture_title = movie.title">
-            <img src="../assets/svg/box-arrow-up-right.svg" alt="big_picture">
+            <img src="../assets/svg/info-circle-fill.svg" alt="big_picture">
           </button>
         </td>
-        <td :title="movie.title"><a :href="movie.link" target="_blank">{{ movie.title }}</a></td>
+        <td :title="movie.title"><div class="d-flex align-items-center"><a :href="movie.link" target="_blank">{{ movie.title }}</a>&nbsp;<img class="d-inline" src="../assets/svg/box-arrow-up-right.svg" alt="external link icon"></div></td>
         <td :title="String(movie.year)">{{ movie.year }}</td>
         <td :title="movie.genre">{{ movie.genre }}</td>
         <td :title="movie.director">{{ movie.director }}</td>
