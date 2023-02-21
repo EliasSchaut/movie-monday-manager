@@ -54,15 +54,25 @@ export default defineComponent({
       required: true
     }
   },
-  watch: {
-    imdb_id: function(new_value) {
+  methods: {
+    load_movie(imdb_id: string) {
       this.loading = true;
-      call("/api/movie/" + new_value)
+      call("/api/movie/" + imdb_id)
         .then((data) => {
           this.movie = data;
           this.loading = false;
         });
     }
+  },
+  mounted() {
+    this.$i18next.on("languageChanged", () => {
+      this.load_movie(this.imdb_id)
+    })
+  },
+  watch: {
+    imdb_id: function(new_value) {
+      this.load_movie(new_value)
+    },
   }
 });
 </script>

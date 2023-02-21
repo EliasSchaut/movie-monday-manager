@@ -13,19 +13,34 @@ import { ref, defineComponent } from "vue";
 import { call } from "@/util/api";
 import type { History } from "@prisma/client";
 
+const history = ref([] as History[])
+
 export default defineComponent({
   name: "HistoryComponent",
   components: { TableComponent },
+  data() {
+    return {
+      history
+    }
+  },
+  methods: {
+    get_history() {
+      call("/api/movie/history")
+        .then((data: History[]) => {
+          history.value = data;
+        });
+    }
+  },
+  mounted() {
+    this.$i18next.on("languageChanged", () => {
+      this.get_history()
+    })
+  },
   setup() {
-    const history = ref([] as History[])
     call("/api/movie/history")
       .then((data: History[]) => {
         history.value = data;
       });
-
-    return {
-      history
-    }
   }
 });
 </script>

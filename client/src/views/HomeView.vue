@@ -112,6 +112,9 @@ import type { MovieExtType } from "@/types/movie.types/movie_ext.type"
 import type { JwtUser } from "@/types/user.types/user_jwt.type";
 import FormVal from "@/components/form/FormVal.Component.vue";
 
+const movies = ref([] as MovieExtType[]);
+const votes = ref([] as string[]);
+const user_id = ref(-1);
 const search_movies = ref([] as any[]);
 
 export default defineComponent({
@@ -122,7 +125,10 @@ export default defineComponent({
       search_movies,
       big_picture_imdb_id: ref(""),
       big_picture_title: ref(""),
-      movie_add_with_imdb_id: ref(false)
+      movie_add_with_imdb_id: ref(false),
+      movies,
+      votes,
+      user_id
     };
   },
   components: {
@@ -136,10 +142,6 @@ export default defineComponent({
     ModalComponent
   },
   setup() {
-    const movies = ref([] as MovieExtType[]);
-    const votes = ref([] as string[]);
-    const user_id = ref(-1);
-
     call("api/movie/all")
       .then((data: MovieExtType[]) => {
         movies.value = data;
@@ -155,12 +157,11 @@ export default defineComponent({
           user_id.value = data.id;
         });
     }
-
-    return {
-      movies,
-      votes,
-      user_id
-    };
+  },
+  mounted() {
+    this.$i18next.on("languageChanged", () => {
+      this.get_movies_all()
+    })
   },
   methods: {
     search_media(e: Event, form_html: HTMLFormElement) {
@@ -227,6 +228,12 @@ export default defineComponent({
             const slice_index = votes.indexOf(imdb_id);
             delete votes[slice_index];
           }
+        });
+    },
+    get_movies_all() {
+      call("api/movie/all")
+        .then((data: MovieExtType[]) => {
+          movies.value = data;
         });
     }
   }
