@@ -77,10 +77,13 @@ export default defineComponent({
       if (this.filterable) {
         this.filter_all()
       }
-      if (this.sortable && this.sort_default!.length) {
-        this.sort(this.sort_default[0] as any, this.sort_default[1] as any);
-      }
-      if (this.first_update) this.loop_update = false;
+    }
+    if (this.sortable && this.sort_default!.length) {
+      this.sort(this.sort_default[0] as any, this.sort_default[1] as any);
+    }
+    if (this.first_update) {
+      this.loop_update = false;
+      this.first_update = false
     }
   },
   props: {
