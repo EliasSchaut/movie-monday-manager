@@ -27,7 +27,8 @@
                     sort_dir[i] = sort_loop[sort_dir[index]];
                   }
                 }
-                sort((e.currentTarget as HTMLTableCellElement).cellIndex, sort_dir[index])
+                current_sort_cell = (e.currentTarget as HTMLTableCellElement).cellIndex;
+                current_sort_dir = sort_dir[index];
               }">
             <div class="d-flex justify-content-between flex-row">
               <div />
@@ -63,12 +64,22 @@ export default defineComponent({
       } as any,
       i: 0,
       filter_values: this.get_filter_cookie(),
-      first_update: false,
-      loop_update: true
+      first_update: true,
+      loop_update: true,
     };
   },
   setup(props) {
+    let current_sort_cell = 1
+    let current_sort_dir = "asc"
+
+    if (props.sort_default.length === 2) {
+      current_sort_cell = props.sort_default[0] as number
+      current_sort_dir = props.sort_default[1] as string
+    }
+
     return {
+      current_sort_cell: current_sort_cell,
+      current_sort_dir: current_sort_dir,
       sort_dir: ref(Array(props.head.length).fill("none")),
     };
   },
@@ -78,8 +89,8 @@ export default defineComponent({
         this.filter_all()
       }
     }
-    if (this.sortable && this.sort_default!.length) {
-      this.sort(this.sort_default[0] as any, this.sort_default[1] as any);
+    if (this.sortable) {
+      this.sort(this.current_sort_cell, this.current_sort_dir);
     }
     if (this.first_update) {
       this.loop_update = false;
