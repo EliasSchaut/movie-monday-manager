@@ -35,13 +35,14 @@ export class ImdbApiService {
     } as Prisma.MovieInfoCreateInput;
   }
 
-  async get_all_langs(imdb_id: string): Promise<Prisma.MovieInfoCreateInput[]> {
+  async get_all_langs(imdb_id: string): Promise<Prisma.MovieInfoCreateInput[] | null> {
     const langs = ["en", "de"];
     const movie_infos: Prisma.MovieInfoCreateInput[] = [];
 
     for (const lang of langs) {
       const movie_info = await this.get(imdb_id, lang);
       if (movie_info !== null) movie_infos.push(movie_info);
+      else return null
     }
     return movie_infos;
   }

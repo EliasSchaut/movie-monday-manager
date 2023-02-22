@@ -109,15 +109,16 @@ export class MovieService {
     }
 
     const movies_info_imdb_api = await this.imdbApiService.get_all_langs(imdb_id);
+    if (movies_info_imdb_api === null) {
+      throw new ConflictException(i18n.t("movie.exception.conflict_no_movie"));
+    }
+
     const { username }: Prisma.UserCreateInput = await this.userDBService.get({ id: proposer_id }) as User;
 
     const movieDB_data: Prisma.MovieCreateInput = {
       imdb_id: imdb_id,
       proposer: { connect: { username } } as Prisma.UserCreateNestedOneWithoutMovieInput,
     }
-
-    console.log("movieDB_data")
-    console.log(movies_info_imdb_api)
 
     await this.movieDBService.add(movieDB_data).catch(() => {
       throw new ConflictException(i18n.t("movie.exception.conflict_movie"))

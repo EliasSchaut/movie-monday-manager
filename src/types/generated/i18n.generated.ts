@@ -28,6 +28,7 @@ export type I18nTranslations = {
             "conflict_history": string;
             "conflict_watchlist": string;
             "conflict_max_proposed": string;
+            "conflict_no_movie": string;
             "not_found": string;
             "not_found_or_not_proposer": string;
         };
