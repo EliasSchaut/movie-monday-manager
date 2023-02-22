@@ -1,7 +1,7 @@
 <template>
-  <div class="input-group">
+  <div class="input-group" @click="($refs.radio as HTMLInputElement).click()">
     <div class="input-group-text">
-      <input class="form-check-input mt-0" type="radio" name="modal_post_movie_radio" @click="$emit('movie_select', movie.imdb_id)">
+      <input ref="radio" class="form-check-input mt-0" type="radio" name="modal_post_movie_radio" @click="$emit('movie_select', movie.imdb_id)">
     </div>
     <div class="form-control d-flex flex-row justify-content-start align-items-center">
       <img v-if="movie.poster !== ''" :src="movie.poster" alt="poster" height="60" class="me-2">
@@ -21,6 +21,8 @@ import type { MovieSearchType } from "@/types/movie.types/movie_search.type";
 
 export default defineComponent({
   name: "MovieSearchElementComponent",
+  data() {
+  },
   props: {
     movie: {
       type: Object as () => MovieSearchType,
