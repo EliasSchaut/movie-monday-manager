@@ -14,6 +14,12 @@ export class MovieInfoDBService {
     })
   }
 
+  async get_all_lang(imdb_id: string) {
+    return this.prisma.movieInfo.findMany({
+      where: { imdb_id }
+    })
+  }
+
   async get_all(language: string = "en") {
     return this.prisma.movieInfo.findMany({
       where: { language: language }

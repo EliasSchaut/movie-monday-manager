@@ -22,12 +22,15 @@ export class HistoryJob {
     console.log('History job started');
     const watch_list = await this.watchListDBService.get_all()
     for (const movie of watch_list) {
-      const movie_info_data = await this.movieInfoDBService.get(movie.imdb_id) as MovieInfo
-      const data = {
-        imdb_id: movie_info_data.imdb_id,
-        title: movie_info_data.title,
-        link: movie_info_data.link
-      } as Prisma.HistoryCreateInput
+      const movie_info_data = await this.movieInfoDBService.get_all_lang(movie.imdb_id) as MovieInfo[]
+      const data = movie_info_data.map((item) => {
+        return {
+          imdb_id: item.imdb_id,
+          title: item.title,
+          link: item.link,
+          language: item.language,
+        } as Prisma.HistoryCreateInput
+      })
       await this.historyDBService.add(data)
       await this.voteDBService.delete_all(movie.imdb_id)
       await this.watchListDBService.delete(movie.imdb_id)

@@ -26,8 +26,10 @@ export class HistoryDBService {
     });
   }
 
-  async add(data: Prisma.HistoryCreateInput) {
-    return this.prisma.history.create({ data });
+  async add(data: Prisma.HistoryCreateInput[]) {
+    data.forEach((item) => {
+      this.prisma.history.create({ data: item });
+    })
   }
 
   async has(imdb_id: string) {
