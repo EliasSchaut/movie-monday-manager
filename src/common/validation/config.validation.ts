@@ -16,8 +16,8 @@ export const config_validation_schema = Joi.object({
     .description('The secret used to sign the JWT tokens. The JWT tokens are used to authenticate the users'),
   JWT_EXPIRATION: Joi.string().required().default("2h")
     .description('The expiration time of the JWT tokens'),
-  OMDB_API_KEY: Joi.string().required().token()
-    .description('The API key for the OMDB API. Request a free key at https://www.omdbapi.com/apikey.aspx'),
+  IMDB_API_KEY: Joi.string().required().token()
+    .description('The API key for the IMDB API. Request a free key at https://imdb-api.com/'),
   MAX_VOTES: Joi.number().required().default("20")
     .description('The maximum number of votes a user can cast in total for all movies'),
   MAX_PROPOSEABLE_MOVIES: Joi.number().required().default("5")
