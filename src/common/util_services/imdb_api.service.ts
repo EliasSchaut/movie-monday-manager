@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, ServiceUnavailableException } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 
 import { MovieSearchType } from "@/types/movie.types/movie_search.type";
@@ -11,7 +11,9 @@ export class ImdbApiService {
   api_key = process.env.IMDB_API_KEY;
 
   async get(imdb_id: string, lang: string = "en"): Promise<Prisma.MovieInfoCreateInput | null> {
-    const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}/Ratings`);
+    const response = await fetch(`https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}/Ratings`).catch(() => {
+      throw new ServiceUnavailableException();
+    });
     const movie = await response.json() as any;
 
     if (movie.type !== "Movie") return null;
@@ -48,7 +50,10 @@ export class ImdbApiService {
   }
 
   async search(search_input: string, lang: string = "en"): Promise<MovieSearchType[]> {
-    const response = await fetch(`https://imdb-api.com/${lang}/API/SearchMovie/${this.api_key}/${search_input}`);
+    const response = await fetch(`https://imdb-api.com/${lang}/API/SearchMovie/${this.api_key}/${search_input}`)
+      .catch(() => {
+        throw new ServiceUnavailableException();
+      });
     const data = await response.json() as any;
     let movies = data.results as any[];
     if (movies.length > 5) {

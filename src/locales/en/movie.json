@@ -8,7 +8,8 @@
     "conflict_max_proposed": "You have reached the maximum number of proposed movies! You can only propose {max_proposeable_movies} movies!",
     "conflict_no_movie": "The proposal is not a movie!",
     "not_found": "Movie not found!",
-    "not_found_or_not_proposer": "Movie not found or you are not the proposer!"
+    "not_found_or_not_proposer": "Movie not found or you are not the proposer!",
+    "service_unavailable_imdb_api": "IMDB API is currently unavailable! Please try again later!"
   },
   "success": {
     "save": "Movie {title} added successfully to the list!",

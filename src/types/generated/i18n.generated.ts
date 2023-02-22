@@ -31,6 +31,7 @@ export type I18nTranslations = {
             "conflict_no_movie": string;
             "not_found": string;
             "not_found_or_not_proposer": string;
+            "service_unavailable_imdb_api": string;
         };
         "success": {
             "save": string;
