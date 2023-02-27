@@ -1,5 +1,5 @@
 {
-  "name": "movie-monday-manager",
+  "name": "watchvote",
   "version": "1.0.0-alpha.8",
   "description": "A website for adding and voting movies for the next watch party",
   "author": "EliasSchaut",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/EliasSchaut/Movie-Monday-Manager"
+    "url": "https://github.com/EliasSchaut/WatchVote"
   },
   "scripts": {
     "prebuild": "rimraf dist",

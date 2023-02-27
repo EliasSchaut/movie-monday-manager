@@ -1,5 +1,5 @@
 {
-  "name": "movie-monday-client",
+  "name": "watch-vote-client",
   "version": "1.0.0-alpha.8",
   "scripts": {
     "dev": "vite",
@@ -14,7 +14,8 @@
     "js-cookie": "^3.0.1",
     "movie-monday-manager": "file:..",
     "vue": "^3.2.37",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "watchvote": "file:.."
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.6",
