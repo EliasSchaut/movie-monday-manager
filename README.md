@@ -1,7 +1,7 @@
-![](https://img.shields.io/github/v/release/EliasSchaut/Movie-Monday-Manager?color=purple&include_prereleases&label=Release)
-![](https://img.shields.io/github/license/EliasSchaut/Movie-Monday-Manager)
+![](https://img.shields.io/github/v/release/EliasSchaut/WatchVote?color=purple&include_prereleases&label=Release)
+![](https://img.shields.io/github/license/EliasSchaut/WatchVote)
 
-# Movie Monday Manager 
+# WatchVote 
 A full stack management application for voting movies for cyclic movie events.
 
 ## Features
@@ -16,7 +16,7 @@ A full stack management application for voting movies for cyclic movie events.
 
 ## Installation
 1. You need [node.js](https://nodejs.org/en/) installed (version 18.12.1 or newer).
-2. Download the [newest version](https://github.com/EliasSchaut/Movie-Monday-Manager/releases) of the code
+2. Download the [newest version](https://github.com/EliasSchaut/WatchVote/releases) of the code
 3. Rename the .env file from ```.env.tmp``` to ```.env```
 4. Open the configuration file (now ```.env```) and set values (see [config-section](#configuration) below).
 5. Build the project with ```npm run build:all```
@@ -37,16 +37,16 @@ The api is documented with [Swagger](https://swagger.io/) at ```/docs/api``` rou
 This small guide assumes, that you have already some knowledge about node.js and the used frameworks. 
 The whole project is written in [Typescript](https://www.typescriptlang.org/).
 
-### MoMoMat (Backend)
+### WatchVote (Backend)
 The backend uses the [NestJS](https://nestjs.com/) framework to handle the REST-API with all its corresponding services. It is also documented with [compodoc](https://compodoc.app/) at ```/docs/backend``` route of the website (e.g. `http://[::1]:3000/docs/backend`).
 This project (`/src` folder) is dived into 3 main parts: 
 The routes (controllers) to handle incoming requests; 
 a common section with lots of usefully functions and classes to support the other parts; 
 and type definitions for internal data structures and data transmission objects (dto's).
 
-To run the backend in development mode, you need to `npm install` the dependencies and run ```npm run start:dev``` in the root folder of the project. Note, that the client has to be built via `npm run build:client` because the client is only statically served from the  `/client/dist` folder. So every change in the client has to be built to show up in the backend project. Also note, that the database should also be built (see `MoMoMat-DB` below). The backend can generate docs as static website by run `npm run build:docs` and shown by `npm run start:docs`. The backend itself can be build with `npm run build`. The build files are located in the `/dist` folder. The `npm run build:all` command can be used to build everything in with just one step.
+To run the backend in development mode, you need to `npm install` the dependencies and run ```npm run start:dev``` in the root folder of the project. Note, that the client has to be built via `npm run build:client` because the client is only statically served from the  `/client/dist` folder. So every change in the client has to be built to show up in the backend project. Also note, that the database should also be built (see `WatchVote-DB` below). The backend can generate docs as static website by run `npm run build:docs` and shown by `npm run start:docs`. The backend itself can be build with `npm run build`. The build files are located in the `/dist` folder. The `npm run build:all` command can be used to build everything in with just one step.
 
-### MoMoMat-Client (Frontend)
+### WatchVote-Client (Frontend)
 The frontend uses the [Vue.js](https://vuejs.org/) framework to handle the user interface. 
 It can be found in the `/client` folder.
 
@@ -57,7 +57,7 @@ To run the client in development mode, you need to `npm install` the dependencie
 But in this mode, the backend is disabled and the website cannot interact with any backend route. 
 To build the client for production, you need to run `npm run build` in the `/client` folder. The build files are located in the `/client/dist` folder.
 
-### MoMoMat-DB (Database)
+### WatchVote-DB (Database)
 The database use [Prisma](https://www.prisma.io/) as ORM to handle the database connection and management. 
 Its database schema is defined in the ```/prisma``` folder. 
 Which database is used under the hood can be defined in the ```.env``` file.
