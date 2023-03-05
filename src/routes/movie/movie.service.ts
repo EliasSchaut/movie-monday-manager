@@ -22,6 +22,7 @@ import { I18nTranslations } from "@/types/generated/i18n.generated";
 import { MovieSearchType } from "@/types/movie.types/movie_search.type";
 import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 import { ImdbApiService } from "@/common/util_services/imdb_api.service";
+import { search_pattern } from "@/common/validation/patterns/search.pattern";
 
 @Injectable()
 export class MovieService {
@@ -82,6 +83,9 @@ export class MovieService {
   async search(search_input: string, i18n: I18nContext<I18nTranslations>): Promise<MovieSearchType[]> {
     if (search_input.length < 3) {
       throw new ForbiddenException(i18n.t("movie.exception.invalid_search_length"));
+    }
+    if (!search_pattern.test(search_input)) {
+      throw new ForbiddenException(i18n.t("movie.exception.invalid_search"));
     }
 
     return await this.imdbApiService.search(search_input, i18n.lang);
