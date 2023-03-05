@@ -1,20 +1,22 @@
 <template>
   <h1 class="form-intro">{{ title }}</h1>
 
-  <form v-bind="$attrs" :action="route" :method="method" @submit.prevent="(e: Event) => submit(e, callback, skip_call)" class="form was-validated">
+  <FormVal v-bind="$attrs" :action="route" :method="method" :submit="(e: Event, form_html: HTMLFormElement) => submit(e, form_html, callback, skip_call)" class="form">
     <slot />
     <SubmitComponent />
-  </form>
+  </FormVal>
 </template>
 
 <script lang="ts">
 import SubmitComponent from "@/components/form/SubmitComponent.vue";
 import { call } from "@/util/api";
+import { defineComponent } from "vue";
+import FormVal from "@/components/form/FormValComponent.vue";
 
-export default {
+export default defineComponent({
   name: "FormComponent",
   inheritAttrs: false,
-  components: { SubmitComponent },
+  components: { FormVal, SubmitComponent },
   props: {
     title: {
       type: String,
@@ -30,7 +32,7 @@ export default {
     },
     callback: {
       type: Function,
-      default: () => {}
+      default: () => {return null}
     },
     skip_call: {
       type: Boolean,
@@ -38,12 +40,7 @@ export default {
     }
   },
   methods: {
-    submit(e: SubmitEvent, callback: (e: SubmitEvent, post: any, data: any) => void, skip_call: boolean) {
-      const form_html = e.target as HTMLFormElement;
-      if (!form_html.checkValidity()) {
-        return
-      }
-
+    submit(e: Event, form_html: HTMLFormElement, callback: Function, skip_call: boolean) {
       const form = new FormData(form_html);
       const post = {} as any;
       form.forEach((value, key) => {
@@ -60,7 +57,7 @@ export default {
       }
     }
   }
-};
+});
 </script>
 
 <style scoped>

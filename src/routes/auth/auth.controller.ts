@@ -1,15 +1,16 @@
 import { Controller, Post, UseGuards, Get, Param, Body } from "@nestjs/common";
-import { LocalAuthGuard } from './auth.guard';
-import { AuthService } from './auth.service';
-import { JwtUser } from "../../types/jwtuser.type";
-import { User } from "../../common/decorators/user.decorator";
-import { PasswordDto } from "../../types/user.dto/password.dto";
-import { RegisterDto } from "../../types/user.dto/register.dto";
-import { ResDto } from "../../types/res.dto";
-import { LoginDto } from "../../types/user.dto/login.dto";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { I18n, I18nContext } from "nestjs-i18n";
-import { I18nTranslations } from "../../types/generated/i18n.generated";
+
+import { LocalAuthGuard } from '@/routes/auth/auth.guard';
+import { AuthService } from '@/routes/auth/auth.service';
+import { JwtUser } from "@/types/user.types/user_jwt.type";
+import { User } from "@/common/decorators/user.decorator";
+import { PasswordDto } from "@/types/user.dto/password.dto";
+import { RegisterDto } from "@/types/user.dto/register.dto";
+import { ResDto } from "@/types/res.dto";
+import { LoginDto } from "@/types/user.dto/login.dto";
+import { I18nTranslations } from "@/types/generated/i18n.generated";
 
 /**
  * Controller for authentication related routes

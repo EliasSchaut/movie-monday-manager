@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-
 const nodemailer = require("nodemailer");
 import { TransportOptions } from "nodemailer";
-import { UserDBService } from "../db_services/users/userDB.service";
+
+import { UserDBService } from "@/common/db_services/users/userDB.service";
 
 @Injectable()
 export class EmailService {

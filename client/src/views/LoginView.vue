@@ -13,8 +13,9 @@ import PasswordComponent from "@/components/form/PasswordComponent.vue";
 import router from "@/router/router";
 import { set_cookie } from "@/util/cookie"
 import { call } from "@/util/api";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   data() {
     return {
       route: "/api/auth/login",
@@ -39,7 +40,7 @@ export default {
       call("/api/auth/confirm/" + challenge)
     }
   }
-}
+})
 </script>
 
 <style scoped>

@@ -24,12 +24,15 @@ export type I18nTranslations = {
         "exception": {
             "invalid_imdb_id": string;
             "invalid_search_length": string;
+            "invalid_search": string;
             "conflict_movie": string;
             "conflict_history": string;
             "conflict_watchlist": string;
             "conflict_max_proposed": string;
+            "conflict_no_movie": string;
             "not_found": string;
             "not_found_or_not_proposer": string;
+            "service_unavailable_imdb_api": string;
         };
         "success": {
             "save": string;

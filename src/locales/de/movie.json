@@ -2,12 +2,15 @@
   "exception": {
     "invalid_imdb_id": "Ungültige IMDB-ID! Die ID muss mit tt beginnen und darf nur Zahlen enthalten!",
     "invalid_search_length": "Deine Suche hat zu wenig Zeichen! Dein Suchtext muss mindestens 3 Zeichen lang sein!",
+    "invalid_search": "Deine Suche enthält ungültige Zeichen! Bitte verwende nur Buchstaben, Zahlen, Leerzeichen und gängige Sonderzeichen!",
     "conflict_movie": "Der Film ist bereits in der Datenbank!",
     "conflict_history": "Der Film ist bereits im Verlauf bereits geschauter Filme!",
-    "conflict_watchlist": "Der Film ist bereits in der WatchList!",
+    "conflict_watchlist": "Ein Film in der Watchlist kann nicht gelöscht werden!",
     "conflict_max_proposed": "Die maximale Anzahl an vorschlagbaren Filmen ist bereits erreicht! Es können maximal {max_proposeable_movies} Filme gleichzeitig vorgeschlagen werden!",
+    "conflict_no_movie": "Der Vorschlag ist kein Film!",
     "not_found": "Der Film wurde nicht gefunden!",
-    "not_found_or_not_proposer": "Der Film wurde nicht gefunden oder du bist nicht der zugehörige Vorschläger*in!"
+    "not_found_or_not_proposer": "Der Film wurde nicht gefunden oder du bist nicht der zugehörige Vorschläger*in!",
+    "service_unavailable_imdb_api": "Die IMDB API ist aktuell nicht erreichbar! Bitte versuche es später erneut!"
   },
   "success": {
     "save": "Der Film {title} wurde erfolgreich zur Liste hinzugefügt!",

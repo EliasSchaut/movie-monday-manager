@@ -9,8 +9,9 @@ import EmailComponent from "@/components/form/EmailComponent.vue";
 import FormComponent from "@/components/form/FormComponent.vue";
 import router from "@/router/router";
 import { call } from "@/util/api";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "ResetRequestView",
   data() {
     return {
@@ -28,7 +29,7 @@ export default {
         })
     }
   }
-};
+});
 </script>
 
 <style scoped>

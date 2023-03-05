@@ -11,8 +11,9 @@
 
 <script lang="ts">
 import { store } from "@/util/store";
+import { defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   name: "SubmitComponent",
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
       type: String,
     },
   },
-};
+});
 </script>
 
 <style scoped>

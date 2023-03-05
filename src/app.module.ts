@@ -1,15 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './routes/auth/auth.module';
-import { UserModule } from './routes/user/user.module';
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { MovieModule } from './routes/movie/movie.module';
-import { VoteModule } from './routes/vote/vote.module';
-import { EventModule } from "./common/event_service/event.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { ConfigModule } from "@nestjs/config";
 import { AcceptLanguageResolver, I18nModule } from "nestjs-i18n";
-import { config_validation_schema } from "./common/validation/config.validation";
 import { join } from "path";
+
+import { AuthModule } from '@/routes/auth/auth.module';
+import { UserModule } from '@/routes/user/user.module';
+import { MovieModule } from '@/routes/movie/movie.module';
+import { VoteModule } from '@/routes/vote/vote.module';
+import { EventModule } from "@/common/event_service/event.module";
+import { config_validation_schema } from "@/common/validation/config.validation";
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { join } from "path";
       rootPath: join(__dirname, '..', 'docs'),
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client/dist'),
+      rootPath: join(__dirname, '..', 'client', 'dist'),
     }),
     ScheduleModule.forRoot()
   ],

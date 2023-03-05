@@ -24,7 +24,8 @@
         }
       },
       "valid_feedback": "Sieht gut aus!",
-      "submit": "Bestätigen"
+      "submit": "Bestätigen",
+      "search": "Suchen"
     },
     "modal": {
       "close": "Schließen"
@@ -63,7 +64,8 @@
     "director": "Regisseur",
     "actors": "Schauspieler",
     "imdb_rate": "IMDB",
-    "metascore": "Metascore",
+    "meta_score": "Meta",
+    "rotten_score": "Rotten",
     "language": "Sprache",
     "genre": "Genre",
     "proposer": "Hinzugefügt&nbsp;von",
@@ -74,10 +76,16 @@
     "modal": {
       "title": "Film hinzufügen",
       "form": {
-        "title": "Titel oder IMDB ID:",
-        "invalid_feedback": "Sollte eine gültige IMDB ID sein, z.B. tt1234567"
-      },
-      "no_suggestion": "Kein Filmvorschlag"
+        "enter_title": "Titel eingeben",
+        "enter_id": "IMDB-ID eingeben",
+        "or": "----- ODER -----",
+        "placeholder_title": "Mein Filmtitel",
+        "invalid_feedback": {
+          "title": "Sollte mindestens 3 Zeichen lang sein",
+          "id": "Sollte eine gültige IMDB ID sein, z.B. tt1234567"
+        },
+        "no_suggestion": "Kein Filmvorschlag"
+      }
     }
   },
 
