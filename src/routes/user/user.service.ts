@@ -136,8 +136,6 @@ export class UserService {
 
     const user = await this.userDBService.get({ id: user_id }) as User;
     if (await this.passwordService.compare(password, user.password)) {
-      await this.voteDBService.delete_all_user(user_id);
-      await this.movieDBService.delete_all_proposed(user_id);
       await this.userDBService.delete({ id: user_id });
       return { message: i18n.t("user.success.delete"), show_alert: true };
 

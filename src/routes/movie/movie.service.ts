@@ -154,7 +154,6 @@ export class MovieService {
     if (watchlist_imdbs.includes(imdb_id)) {
       throw new ConflictException(i18n.t("movie.exception.conflict_watchlist"));
     } else if (movie.proposer_id === proposer_id) {
-      await this.voteDBService.delete_all(imdb_id);
       await this.movieDBService.delete(imdb_id);
       return { message: i18n.t("movie.success.delete", { args: { title: movie_info.title } }), show_alert: true } as ResDto;
     } else {
