@@ -1,12 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -69,8 +66,8 @@ model Vote {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
   imdb_id    String
-  movie      Movie    @relation(fields: [imdb_id], references: [imdb_id])
   user_id    Int
+  movie      Movie    @relation(fields: [imdb_id], references: [imdb_id])
   user       User     @relation(fields: [user_id], references: [id])
 
   @@unique([imdb_id, user_id])
