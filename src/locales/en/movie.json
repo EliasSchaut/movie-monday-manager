@@ -2,6 +2,7 @@
   "exception": {
     "invalid_imdb_id": "Invalid imdb id! The id must start with tt and contain only numbers!",
     "invalid_search_length": "Your search has too few characters! Your search text must be at least 3 characters long!",
+    "invalid_search": "Your search contains invalid characters! Please use only letters, numbers, spaces and common special characters!",
     "conflict_movie": "Movie is already in database!",
     "conflict_history": "Movie is already in history!",
     "conflict_watchlist": "A movie in the watchlist cannot be deleted!",

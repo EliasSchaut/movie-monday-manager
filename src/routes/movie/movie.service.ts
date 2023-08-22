@@ -22,6 +22,7 @@ import { I18nTranslations } from "@/types/generated/i18n.generated";
 import { MovieSearchType } from "@/types/movie.types/movie_search.type";
 import { MovieInfoDBService } from "@/common/db_services/movie_infos/movieInfoDB.service";
 import { ImdbApiService } from "@/common/util_services/imdb_api.service";
+import { search_pattern } from "@/common/validation/patterns/search.pattern";
 
 @Injectable()
 export class MovieService {
@@ -82,6 +83,9 @@ export class MovieService {
   async search(search_input: string, i18n: I18nContext<I18nTranslations>): Promise<MovieSearchType[]> {
     if (search_input.length < 3) {
       throw new ForbiddenException(i18n.t("movie.exception.invalid_search_length"));
+    }
+    if (!search_pattern.test(search_input)) {
+      throw new ForbiddenException(i18n.t("movie.exception.invalid_search"));
     }
 
     return await this.imdbApiService.search(search_input, i18n.lang);
@@ -150,7 +154,6 @@ export class MovieService {
     if (watchlist_imdbs.includes(imdb_id)) {
       throw new ConflictException(i18n.t("movie.exception.conflict_watchlist"));
     } else if (movie.proposer_id === proposer_id) {
-      await this.voteDBService.delete_all(imdb_id);
       await this.movieDBService.delete(imdb_id);
       return { message: i18n.t("movie.success.delete", { args: { title: movie_info.title } }), show_alert: true } as ResDto;
     } else {

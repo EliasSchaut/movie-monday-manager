@@ -2,6 +2,7 @@
   "exception": {
     "invalid_imdb_id": "Ungültige IMDB-ID! Die ID muss mit tt beginnen und darf nur Zahlen enthalten!",
     "invalid_search_length": "Deine Suche hat zu wenig Zeichen! Dein Suchtext muss mindestens 3 Zeichen lang sein!",
+    "invalid_search": "Deine Suche enthält ungültige Zeichen! Bitte verwende nur Buchstaben, Zahlen, Leerzeichen und gängige Sonderzeichen!",
     "conflict_movie": "Der Film ist bereits in der Datenbank!",
     "conflict_history": "Der Film ist bereits im Verlauf bereits geschauter Filme!",
     "conflict_watchlist": "Ein Film in der Watchlist kann nicht gelöscht werden!",

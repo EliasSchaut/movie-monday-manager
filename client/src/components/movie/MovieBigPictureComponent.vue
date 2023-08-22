@@ -38,14 +38,13 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { call } from "@/util/api";
-import type { MovieInfo } from "@prisma/client";
 
 export default defineComponent({
   name: "MovieBigPictureComponent",
   data() {
     return {
       loading: ref(false),
-      movie: ref({} as MovieInfo)
+      movie: ref({} as any)
     };
   },
   props: {
