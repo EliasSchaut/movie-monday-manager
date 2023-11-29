@@ -11,13 +11,32 @@ datasource db {
 }
 
 model Server {
-  id    Int           @id @default(autoincrement())
-  name  String        @unique
-  title String
-  desc  String?
-  host  String        @unique
-  oauth ServerOAuth[]
-  users User[]
+  id        Int              @id @default(autoincrement())
+  name      String           @unique
+  title     String
+  desc      String?
+  host      String           @unique
+  settings  ServerSettings?
+  oauth     ServerOAuth[]
+  users     User[]
+  movies    Movie[]
+  history   MovieHistory[]
+  watchlist MovieWatchlist[]
+}
+
+model ServerSettings {
+  id                 Int     @id @default(autoincrement())
+  server_id          Int     @unique
+  server             Server  @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  imdb_api_key       String
+  max_votes          Int     @default(50)
+  max_proposals      Int     @default(5)
+  max_movies         Int     @default(30)
+  schedule_watchlist String  @default("0 20 * * 1")
+  schedule_start     String  @default("0 20 * * 1")
+  movie_gap_mins     Int     @default(15)
+  round_to_5mins     Boolean @default(true)
+  discord_webhook    String?
 }
 
 model ServerOAuth {
@@ -34,6 +53,7 @@ model ServerOAuth {
 
 model User {
   id             String      @id @default(uuid())
+  created_at     DateTime    @default(now())
   server_id      Int
   server         Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
   email          String      @unique
@@ -50,6 +70,8 @@ model User {
   pw_reset       Boolean     @default(false)
   challenge      String      @unique @default(cuid())
   oauth          UserOAuth[]
+  proposals      Movie[]
+  votes          MovieVote[]
 }
 
 model UserOAuth {
@@ -61,4 +83,74 @@ model UserOAuth {
   token          String
 
   @@unique([user_id, server_oath_id])
+}
+
+model Movie {
+  imdb_id     String      @id
+  server_id   Int
+  server      Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  created_at  DateTime    @default(now())
+  proposer_id String
+  proposer    User        @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
+  infos       MovieInfo[]
+  votes       MovieVote[]
+}
+
+model MovieInfo {
+  imdb_id      String
+  lang         String
+  title        String
+  year         Int
+  genre        String
+  director     String
+  actors       String
+  imdb_rate    String
+  meta_score   String
+  rotten_score String
+  languages    String
+  plot         String
+  runtime      Int
+  link         String
+  poster       String
+  movie        Movie  @relation(fields: [imdb_id], references: [imdb_id], onDelete: Cascade)
+
+  @@unique([imdb_id, lang])
+}
+
+model MovieVote {
+  id         Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  imdb_id    String
+  movie      Movie    @relation(fields: [imdb_id], references: [imdb_id], onDelete: Cascade)
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  vote       Boolean
+
+  @@unique([imdb_id, user_id])
+}
+
+model MovieWatchlist {
+  imdb_id    String   @id
+  server_id  Int
+  server     Server   @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  start_time DateTime
+  end_time   DateTime
+}
+
+model MovieHistory {
+  imdb_id    String             @id
+  server_id  Int
+  server     Server             @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  watched_at DateTime           @default(now())
+  link       String
+  infos      MovieHistoryInfo[]
+}
+
+model MovieHistoryInfo {
+  imdb_id       String
+  lang          String
+  title         String
+  movie_history MovieHistory @relation(fields: [imdb_id], references: [imdb_id], onDelete: Cascade)
+
+  @@unique([imdb_id, lang])
 }
