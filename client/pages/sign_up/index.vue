@@ -154,9 +154,7 @@ export default defineComponent({
     const query_mutate_user = gql`
       mutation register($user_input_data: UserInputModel!) {
         auth_register(user_input_data: $user_input_data) {
-          success
-          response
-          code
+          id
         }
       }
     `;

@@ -36,10 +36,10 @@ export class UserInputModel {
   bio?: string | null;
 
   @IsOptional()
-  @Field(() => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true, defaultValue: false })
   profile_public?: boolean;
 
   @IsOptional()
-  @Field(() => Boolean, { nullable: true })
+  @Field(() => Boolean, { nullable: true, defaultValue: false })
   email_opt_in?: boolean;
 }

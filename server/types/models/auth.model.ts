@@ -1,8 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ResModel } from '@/types/models/res.model';
 
 @ObjectType()
-export class AuthModel extends ResModel {
+export class AuthModel {
   @Field(() => String, { description: 'The barrier token.', nullable: true })
   barrier_token?: string;
 

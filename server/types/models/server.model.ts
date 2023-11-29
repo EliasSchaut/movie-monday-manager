@@ -1,11 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ResModel } from '@/types/models/res.model';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';
 
 @ObjectType({
   description: 'Server Information',
 })
-export class ServerModel extends ResModel {
+export class ServerModel {
   @Field(() => Int, {
     description: 'Unique id number of server used for comparison',
     nullable: true,

@@ -61,8 +61,8 @@ model User {
   password       String
   first_name     String
   last_name      String
-  bio            String?
   avatar         String?
+  bio            String?
   profile_public Boolean     @default(false)
   email_opt_in   Boolean     @default(false)
   is_admin       Boolean     @default(false)

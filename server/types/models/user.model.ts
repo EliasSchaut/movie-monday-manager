@@ -1,8 +1,7 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { ResModel } from '@/types/models/res.model';
 
 @ObjectType()
-export class UserModel extends ResModel {
+export class UserModel {
   @Field(() => ID, {
     description: 'Unique id number of user used for comparison',
     nullable: true,
@@ -70,7 +69,7 @@ export class UserModel extends ResModel {
     description: 'Indicates whether the user is an admin',
     nullable: true,
   })
-  is_admin!: boolean;
+  is_admin?: boolean;
 
   @Field(() => String, {
     description:

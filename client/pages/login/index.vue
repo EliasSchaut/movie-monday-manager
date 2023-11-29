@@ -93,7 +93,7 @@ export default defineComponent({
 
       const query = gql`
         query login($email: String!, $password: String!) {
-          auth_sign_in(username: $email, password: $password) {
+          auth_sign_in(email: $email, password: $password) {
             barrier_token
             is_admin
           }
@@ -113,7 +113,7 @@ export default defineComponent({
           result.value.auth_sign_in.is_admin,
         );
       } else {
-        this.alert.show('Invalid credentials', 'warning');
+        this.alert.show('Invalid credentials', 'warn');
       }
     },
   },
