@@ -1,0 +1,51 @@
+{
+  "common": {
+    "err": {
+      "404": {
+        "title": "Seite nicht gefunden",
+        "desc": "Die von Ihnen gesuchte Seite ist nicht vorhanden."
+      },
+      "501": {
+        "title": "Nicht implementiert",
+        "desc": "Entschuldigung, diese Funktion ist noch nicht implementiert."
+      }
+    },
+    "sr": {
+      "dismiss": "Schließen",
+      "open_user_menu": "Benutzermenü öffnen",
+      "open_main_menu": "Hauptmenü öffnen"
+    },
+    "form": {
+      "mail": "E-Mail Adresse",
+      "password": "Passwort",
+      "forgot_password": "Passwort vergessen?"
+    },
+    "lang": {
+      "en": "Englisch",
+      "de": "Deutsch"
+    },
+    "theme": {
+      "light": "Hell",
+      "dark": "Dunkel",
+      "system": "System"
+    }
+  },
+  "nav": {
+    "go_home": "Zurück zur Startseite",
+    "profile": "Ihr Profil",
+    "settings": "Einstellungen",
+    "sign_out": "Abmelden",
+    "login": "Anmelden",
+    "sign_up": "Registrieren"
+  },
+  "login": {
+    "title": "Melden Sie sich bei Ihrem Konto an",
+    "submit": "Anmelden",
+    "oauth": "Oder weiter mit",
+    "no_account": "Kein Konto?",
+    "sign_up": "Registriere dich jetzt"
+  },
+  "footer": {
+    "title": "Footer"
+  }
+}

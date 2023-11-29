@@ -1,0 +1,85 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthModel {
+  """The barrier token."""
+  barrier_token: String!
+}
+
+type UserModel {
+  """Unique id number of user used for comparison"""
+  id: ID!
+
+  """Unique email of user used for login"""
+  username: String!
+
+  """Public name of user used to display to others"""
+  name: String!
+
+  """Challenge string used for password reset and account verification"""
+  challenge: String
+
+  """Hashed password of user used for login"""
+  password: String
+
+  """Unique id number of server on which the user is registered"""
+  server_id: Float
+
+  """Indicates whether the user account is verified"""
+  verified: Boolean
+
+  """Indicates whether a password reset was requested"""
+  pw_reset: Boolean
+}
+
+"""Server Information"""
+type ServerModel {
+  id: Int!
+
+  """Visible title of the server"""
+  title: String!
+
+  """Unique name of the server"""
+  name: String!
+  desc: String
+}
+
+type Query {
+  auth_sign_in(username: String!, password: String!): AuthModel!
+
+  """Get server Information"""
+  server: ServerModel!
+  user: UserModel!
+}
+
+type Mutation {
+  auth_register(user_input_data: UserInputModel!): UserModel!
+  auth_verify(challenge: String!): UserModel!
+  auth_user_pw_reset(user_pw_reset_input_data: UserPwResetInputModel!): UserModel!
+
+  """
+  Request a password reset for a user. A new challenge will sent to the user's email. Returns true if the request was successful.
+  """
+  auth_user_pw_reset_request(username: String!): Boolean!
+  user_update(user_update_input_data: UserUpdateInputModel!): UserModel!
+  user_delete: UserModel!
+}
+
+input UserInputModel {
+  username: String!
+  password: String!
+  name: String!
+}
+
+input UserPwResetInputModel {
+  """Challenge string used for password reset and account verification"""
+  challenge: String!
+
+  """New password of user used for login"""
+  password: String!
+}
+
+input UserUpdateInputModel {
+  name: String
+}

@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Server {
+  id    Int           @id @default(autoincrement())
+  name  String        @unique
+  title String
+  desc  String?
+  host  String        @unique
+  oauth ServerOAuth[]
+  users User[]
+}
+
+model ServerOAuth {
+  id        Int         @id @default(autoincrement())
+  server_id Int
+  server    Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  name      String
+  client_id String      @unique
+  secret    String
+  user_oath UserOAuth[]
+
+  @@unique([server_id, name])
+}
+
+model User {
+  id             String      @id @default(uuid())
+  server_id      Int
+  server         Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  email          String      @unique
+  username       String      @unique
+  password       String
+  first_name     String
+  last_name      String
+  bio            String?
+  avatar         String?
+  profile_public Boolean     @default(false)
+  email_opt_in   Boolean     @default(false)
+  is_admin       Boolean     @default(false)
+  verified       Boolean     @default(false)
+  pw_reset       Boolean     @default(false)
+  challenge      String      @default(cuid())
+  oauth          UserOAuth[]
+}
+
+model UserOAuth {
+  id             Int         @id @default(autoincrement())
+  user_id        String
+  user           User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  server_oath_id Int
+  server_oath    ServerOAuth @relation(fields: [server_oath_id], references: [id], onDelete: Cascade)
+  token          String
+
+  @@unique([user_id, server_oath_id])
+}

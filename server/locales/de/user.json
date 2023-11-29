@@ -1,0 +1,17 @@
+{
+  "exception": {
+    "conflict_username": "Konflikt! E-Mail ist bereits im Einsatz!",
+    "create": "User konnte nicht erstellt werden. Probiere es später erneut!",
+    "forbidden_password": "Verboten! Falsches altes Passwort!",
+    "invalid_name": "Ungültiger Name! Der Name muss zwischen 3 und 20 Zeichen lang sein und mit einem Großbuchstaben beginnen!",
+    "invalid_password": "Ungültiges Passwort! Das Passwort muss mindestens acht Zeichen lang sein und mindestens einen Buchstaben und eine Zahl enthalten!",
+    "invalid_username": "Ungültige E-Mail! Der Benutzername muss eine gültige E-Mail Adresse sein!"
+  },
+  "success": {
+    "delete": "Das Konto wurde erfolgreich mit allen zugehörigen Stimmen und vorgeschlagenen Filmen gelöscht!",
+    "email_opt_in": "E-Mail-Option erfolgreich aktualisiert!",
+    "password": "Passwort erfolgreich aktualisiert! Bei der nächsten Anmeldung müssen die E-Mail-Adresse und das neue Passwort verwendet werden!",
+    "profile": "Profil erfolgreich aktualisiert!",
+    "username": "E-Mail erfolgreich aktualisiert! Bitte bestätige die neue E-Mail-Adresse mit dem Link, der an den neuen Posteingang gesendet wurde. Bei der nächsten Anmeldung müssen die neue verifizierte E-Mail-Adresse und das Passwort verwendet werden!"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "common": {
+    "err": {
+      "404": {
+        "title": "Page not found",
+        "desc": "Sorry, we couldn’t find the page you’re looking for."
+      },
+      "501": {
+        "title": "Not Implemented",
+        "desc": "Sorry, this feature is currently not implemented."
+      }
+    },
+    "sr": {
+      "dismiss": "Dismiss",
+      "open_user_menu": "Open user menu",
+      "open_main_menu": "Open main menu"
+    },
+    "form": {
+      "mail": "E-Mail address",
+      "password": "Password",
+      "forgot_password": "Forgot password?"
+    },
+    "lang": {
+      "en": "English",
+      "de": "German"
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  },
+  "nav": {
+    "go_home": "Go back home",
+    "profile": "Your Profile",
+    "settings": "Settings",
+    "sign_out": "Sign out",
+    "login": "Log in",
+    "sign_up": "Sign up"
+  },
+  "login": {
+    "title": "Sign in to your account",
+    "submit": "Sign in",
+    "oauth": "Or continue with",
+    "no_account": "No account?",
+    "sign_up": "Sign Up Now"
+  },
+  "footer": {
+    "title": "Footer"
+  }
+}

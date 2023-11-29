@@ -1,0 +1,17 @@
+{
+  "exception": {
+    "conflict_username": "Conflict! E-Mail is already in use!",
+    "create": "User could not be created. Try again later!",
+    "forbidden_password": "Forbidden! Wrong old password!",
+    "invalid_name": "Invalid name! Name must be between 3 and 20 characters and start with a capital letter!",
+    "invalid_password": "Invalid password! Password must be minimum eight characters, at least one letter and one number!",
+    "invalid_username": "Invalid email! Username must be a valid email address!"
+  },
+  "success": {
+    "delete": "Your account, votes and proposed movies has been successfully deleted!",
+    "email_opt_in": "E-Mail option updated successfully!",
+    "password": "Password updated successfully! The next time you log in, you will need to log in with your email address and new password!",
+    "profile": "Profile updated successfully!",
+    "username": "E-Mail updated successfully! Please confirm your new email address by clicking the link sent to your new inbox. The next time you log in, you will need to log in with your new verified email address and password!"
+  }
+}
