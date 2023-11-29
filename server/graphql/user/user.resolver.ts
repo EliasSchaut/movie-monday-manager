@@ -28,7 +28,7 @@ export class UserResolver {
   async user_update(
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
-    @UserID() user_id: number,
+    @UserID() user_id: string,
     @Args({
       name: 'user_update_input_data',
       type: () => UserUpdateInputModel,
@@ -47,7 +47,7 @@ export class UserResolver {
   async user_delete(
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
-    @UserID() user_id: number,
+    @UserID() user_id: string,
   ): Promise<UserModel | null> {
     return this.userService.delete({ server_id, i18n, user_id });
   }
