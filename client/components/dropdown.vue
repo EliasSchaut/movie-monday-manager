@@ -46,9 +46,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { ChevronDownIcon } from '@heroicons/vue/24/outline';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue';
+
+type Item = {
+  icon: () => {};
+  label: string;
+  callback: () => {};
+};
 
 export default defineComponent({
   name: 'SettingLang',
@@ -61,13 +67,7 @@ export default defineComponent({
   },
   props: {
     items: {
-      type: Object as PropType<
-        {
-          icon: () => {};
-          label: string;
-          callback: () => {};
-        }[]
-      >,
+      type: Array as () => Array<Item>,
       required: true,
     },
   },

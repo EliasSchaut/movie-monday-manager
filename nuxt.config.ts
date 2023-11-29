@@ -28,7 +28,6 @@ export default async () => {
       '@nuxtjs/apollo',
       '@nuxtjs/tailwindcss',
       '@nuxtjs/color-mode',
-      '@kevinmarrec/nuxt-pwa',
       'dayjs-nuxt',
       '@pinia/nuxt',
       '@pinia-plugin-persistedstate/nuxt',

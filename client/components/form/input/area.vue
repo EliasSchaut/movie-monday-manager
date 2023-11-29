@@ -35,7 +35,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
+
+type SideLabel = {
+  label: string;
+  href: string | null;
+};
 
 export default defineComponent({
   name: 'FormInputArea',
@@ -49,7 +54,7 @@ export default defineComponent({
       default: 'About',
     },
     side_label: {
-      type: Object as PropType<{ label: string; href: string | null }>,
+      type: Object as () => SideLabel,
       default: null,
     },
     sub_label: {

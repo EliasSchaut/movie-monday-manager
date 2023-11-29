@@ -1,5 +1,5 @@
 <template>
-  <ElementDropdown
+  <Dropdown
     :compo="IconFlagDe"
     :items="[
       {
@@ -22,7 +22,7 @@
       v-else
       class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
     />
-  </ElementDropdown>
+  </Dropdown>
 </template>
 
 <script lang="ts">

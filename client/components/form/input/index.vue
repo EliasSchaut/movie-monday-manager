@@ -42,7 +42,12 @@
         >{{ inside_label }}</span
       >
       <input
-        @input="(e: Event) => { set_invalid_pattern_feedback();$emit('input', e) }"
+        @input="
+          (e: Event) => {
+            set_invalid_pattern_feedback();
+            $emit('input', e);
+          }
+        "
         :id="id"
         :name="id"
         :type="type"
@@ -66,8 +71,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
 import { EnvelopeIcon } from '@heroicons/vue/20/solid';
+
+type SideLabel = {
+  label: string;
+  href: string | null;
+};
 
 export default defineComponent({
   name: 'FormInput',
@@ -112,7 +122,7 @@ export default defineComponent({
       default: false,
     },
     side_label: {
-      type: Object as PropType<{ label: string; href: string | null }>,
+      type: Object as () => SideLabel,
       default: null,
     },
     inside_label: {
@@ -145,7 +155,7 @@ export default defineComponent({
     },
   },
   emits: {
-    input: (e: Event) => true,
+    input: () => true,
   },
 });
 </script>
