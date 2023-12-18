@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/db/prisma.service';
+import { PrismaService } from '@/common/services/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModel } from '@/types/models/auth.model';
 import { CtxType } from '@/types/ctx.type';
-import { GraphQLError } from 'graphql/error';
-import { PasswordService } from '@/common/util/password.service';
+import { PasswordService } from '@/common/services/password.service';
 import { UserPwResetInputModel } from '@/types/models/inputs/user_pw_reset.input';
 import { UserModel } from '@/types/models/user.model';
-import { EmailService } from '@/common/util/email.service';
+import { EmailService } from '@/common/services/email.service';
 import { UserInputModel } from '@/types/models/inputs/user.input';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
+import { Prisma } from '@prisma/client';
+import { WarningException } from '@/common/exceptions/WarningException';
 
 @Injectable()
 export class AuthService {
@@ -30,31 +30,21 @@ export class AuthService {
       where: { email: email },
     });
 
-    if (user === null) {
-      return {
-        code: 'warn',
-        response: ctx.i18n.t('auth.exception.forbidden_login'),
-      } as AuthModel;
-    }
-    if (!(await this.passwordService.compare(password, user.password))) {
-      return {
-        code: 'warn',
-        response: ctx.i18n.t('auth.exception.forbidden_login'),
-      } as AuthModel;
-    }
-    if (!user.verified) {
-      return {
-        code: 'warn',
-        response: ctx.i18n.t('auth.exception.forbidden_not_verified'),
-      } as AuthModel;
-    }
+    if (user === null)
+      throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
 
-    const payload = { username: user.id, sub: null };
+    if (!(await this.passwordService.compare(password, user.password)))
+      throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
+
+    if (!user.verified)
+      throw new WarningException(
+        ctx.i18n.t('auth.exception.forbidden_not_verified'),
+      );
+
+    const payload = { username: user.id, sub: { is_admin: user.is_admin } };
     return {
       barrier_token: await this.jwtService.signAsync(payload),
       is_admin: user.is_admin,
-      success: true,
-      code: 'success',
     } as AuthModel;
   }
 
@@ -79,24 +69,15 @@ export class AuthService {
           this.emailService.generate_verify_url(user.challenge as string),
         );
         user.challenge = '';
-        return {
-          ...user,
-          success: true,
-          code: 'success',
-          response: ctx.i18n.t('auth.success.register'),
-        } as UserModel;
+        return user as UserModel;
       })
-      .catch((e: PrismaClientKnownRequestError) => {
+      .catch((e: Prisma.PrismaClientKnownRequestError) => {
         if (e.code === 'P2002') {
-          return {
-            code: 'warn',
-            response: ctx.i18n.t('user.exception.conflict_username'),
-          } as UserModel;
+          throw new WarningException(
+            ctx.i18n.t('user.exception.conflict_username'),
+          );
         } else {
-          return {
-            code: 'danger',
-            response: ctx.i18n.t('user.exception.create'),
-          } as UserModel;
+          throw new WarningException(ctx.i18n.t('user.exception.create'));
         }
       });
   }
@@ -106,9 +87,7 @@ export class AuthService {
       where: { challenge: challenge },
     });
     if (!user || user.verified) {
-      throw new GraphQLError(ctx.i18n.t('auth.exception.not_found_verify'), {
-        extensions: { code: 'WARNING' },
-      });
+      throw new WarningException(ctx.i18n.t('auth.exception.not_found_verify'));
     }
 
     return (await this.prisma.user.update({
@@ -127,11 +106,8 @@ export class AuthService {
       where: { challenge: user_pw_reset_input_data.challenge },
     });
     if (!user || !user.pw_reset) {
-      throw new GraphQLError(
+      throw new WarningException(
         ctx.i18n.t('auth.exception.not_found_password_reset'),
-        {
-          extensions: { code: 'WARNING' },
-        },
       );
     }
 

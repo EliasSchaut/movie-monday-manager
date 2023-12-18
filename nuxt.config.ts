@@ -34,7 +34,7 @@ export default async () => {
     ],
     serverHandlers: is_dev
       ? []
-      : [{ route: '/', handler: await get_http_adapter_instance() }],
+      : [/*{ route: '/', handler: await get_http_adapter_instance() }*/],
     runtimeConfig: {
       api_secret: process.env.SECRET_API_KEY as string,
     },

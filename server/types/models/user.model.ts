@@ -4,15 +4,13 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 export class UserModel {
   @Field(() => ID, {
     description: 'Unique id number of user used for comparison',
-    nullable: true,
   })
-  id?: string;
+  id!: string;
 
   @Field(() => String, {
     description: 'Unique public username of user used to display to others',
-    nullable: true,
   })
-  username?: string;
+  username!: string;
 
   @Field(() => String, {
     description:

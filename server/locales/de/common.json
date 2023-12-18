@@ -1,1 +1,5 @@
-{}
+{
+  "exception": {
+    "internal": "Ein Fehler ist aufgetreten! Versuche es später erneut."
+  }
+}

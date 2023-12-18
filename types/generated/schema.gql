@@ -156,7 +156,7 @@ input UserUpdateInputModel {
 
 input MovieHistoryInputModel {
   imdb_id: String!
-  watched_at: DateTime = "2023-12-18T15:52:07.525Z"
+  watched_at: DateTime = "2023-12-18T15:54:52.163Z"
 }
 
 input ImdbIdInputModel {

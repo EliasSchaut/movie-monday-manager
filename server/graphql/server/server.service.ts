@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/db/prisma.service';
+import { PrismaService } from '@/common/services/prisma.service';
 import { CtxType } from '@/types/ctx.type';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';
 import { ServerModel } from '@/types/models/server.model';

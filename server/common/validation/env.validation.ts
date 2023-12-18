@@ -4,7 +4,6 @@ export const EnvValidationSchema = Joi.object({
   PROJECT_NAME: Joi.string().required().description('The name of the project'),
   FRONTEND_URL: Joi.string()
     .required()
-    .uri()
     .description(
       'The URL of the client application (frontend). This is used for CORS and the email confirmation link',
     ),
@@ -14,6 +13,12 @@ export const EnvValidationSchema = Joi.object({
     .port()
     .description('The port the server should listen on'),
 
+  IMDB_API_KEY: Joi.string()
+    .required()
+    .pattern(/^k_.+$/)
+    .description(
+      'An API key of website https://imdb-api.com/ to retrieve movie data',
+    ),
   DATABASE_URL: Joi.string()
     .required()
     .default('file:./dev.db')
