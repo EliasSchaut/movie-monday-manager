@@ -16,6 +16,8 @@ import { UserModel } from '@/types/models/user.model';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 import { UserID } from '@/common/decorators/user.decorator';
+import { MovieSearchModel } from '@/types/models/movie_search.model';
+import { MovieSearchInputModel } from '@/types/models/inputs/movie_search.input';
 
 @Resolver(() => MovieModel)
 export class MovieResolver {
@@ -43,6 +45,23 @@ export class MovieResolver {
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel[]> {
     return this.movie_service.find_many({ server_id, i18n });
+  }
+
+  @Role(RoleEnum.USER)
+  @Query(() => MovieSearchModel, {
+    name: 'movie_search',
+  })
+  async search(
+    @Args('movie_search_input') movie_search_input: MovieSearchInputModel,
+    @UserID() user_id: string,
+    @ServerID() server_id: number,
+    @I18n() i18n: I18nContext<I18nTranslations>,
+  ): Promise<MovieSearchModel> {
+    return this.movie_service.search(movie_search_input.query, {
+      user_id,
+      server_id,
+      i18n,
+    });
   }
 
   @Role(RoleEnum.USER)

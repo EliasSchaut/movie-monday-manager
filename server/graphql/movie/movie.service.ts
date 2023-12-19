@@ -7,6 +7,7 @@ import { UserModel } from '@/types/models/user.model';
 import { ImdbApiService } from '@/common/services/imdb_api.service';
 import { Prisma } from '@prisma/client';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
+import { MovieSearchModel } from '@/types/models/movie_search.model';
 
 @Injectable()
 export class MovieService {
@@ -49,6 +50,10 @@ export class MovieService {
     });
 
     return movies.map((movie) => new MovieModel(movie));
+  }
+
+  async search(search_query: string, ctx: CtxType): Promise<MovieSearchModel> {
+    return await this.imdb_api_service.search(search_query, ctx.i18n.lang);
   }
 
   async create(imdb_id: string, ctx: CtxType): Promise<MovieModel> {
