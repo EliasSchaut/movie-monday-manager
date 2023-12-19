@@ -1,5 +1,11 @@
 {
   "exception": {
+    "db": {
+      "duplication": "The entry already exists!",
+      "internal": "Internal database error! Please contact the website operator.",
+      "not_reached": "The database cannot be reached! Please try again later.",
+      "record_not_found": "The entry you are looking for could not be found!"
+    },
     "internal": "An error has occurred! Try again later."
   }
 }

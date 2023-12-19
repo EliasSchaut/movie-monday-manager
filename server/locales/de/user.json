@@ -5,7 +5,8 @@
     "forbidden_password": "Verboten! Falsches altes Passwort!",
     "invalid_name": "Ungültiger Name! Der Name muss zwischen 3 und 20 Zeichen lang sein und mit einem Großbuchstaben beginnen!",
     "invalid_password": "Ungültiges Passwort! Das Passwort muss mindestens acht Zeichen lang sein und mindestens einen Buchstaben und eine Zahl enthalten!",
-    "invalid_username": "Ungültige E-Mail! Der Benutzername muss eine gültige E-Mail Adresse sein!"
+    "invalid_username": "Ungültige E-Mail! Der Benutzername muss eine gültige E-Mail Adresse sein!",
+    "not_found": "Der Benutzer konnte nicht gefunden werden!"
   },
   "success": {
     "delete": "Das Konto wurde erfolgreich mit allen zugehörigen Stimmen und vorgeschlagenen Filmen gelöscht!",

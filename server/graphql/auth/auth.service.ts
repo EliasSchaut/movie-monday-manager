@@ -9,7 +9,7 @@ import { UserModel } from '@/types/models/user.model';
 import { EmailService } from '@/common/services/email.service';
 import { UserInputModel } from '@/types/models/inputs/user.input';
 import { Prisma } from '@prisma/client';
-import { WarningException } from '@/common/exceptions/WarningException';
+import { WarningException } from '@/common/exceptions/warning.exception';
 
 @Injectable()
 export class AuthService {
@@ -68,8 +68,7 @@ export class AuthService {
           user.username,
           this.emailService.generate_verify_url(user.challenge as string),
         );
-        user.challenge = '';
-        return user as UserModel;
+        return new UserModel(user).convert_to_public();
       })
       .catch((e: Prisma.PrismaClientKnownRequestError) => {
         if (e.code === 'P2002') {
@@ -90,12 +89,14 @@ export class AuthService {
       throw new WarningException(ctx.i18n.t('auth.exception.not_found_verify'));
     }
 
-    return (await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        verified: true,
-      },
-    })) as UserModel;
+    return new UserModel(
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          verified: true,
+        },
+      }),
+    );
   }
 
   async reset_password(
@@ -111,15 +112,17 @@ export class AuthService {
       );
     }
 
-    return (await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        password: await this.passwordService.hash(
-          user_pw_reset_input_data.password,
-        ),
-        pw_reset: false,
-      },
-    })) as UserModel;
+    return new UserModel(
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          password: await this.passwordService.hash(
+            user_pw_reset_input_data.password,
+          ),
+          pw_reset: false,
+        },
+      }),
+    );
   }
 
   async reset_password_request(

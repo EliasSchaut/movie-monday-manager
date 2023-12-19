@@ -5,7 +5,8 @@
     "forbidden_password": "Forbidden! Wrong old password!",
     "invalid_name": "Invalid name! Name must be between 3 and 20 characters and start with a capital letter!",
     "invalid_password": "Invalid password! Password must be minimum eight characters, at least one letter and one number!",
-    "invalid_username": "Invalid email! Username must be a valid email address!"
+    "invalid_username": "Invalid email! Username must be a valid email address!",
+    "not_found": "The user could not be found!"
   },
   "success": {
     "delete": "Your account, votes and proposed movies has been successfully deleted!",

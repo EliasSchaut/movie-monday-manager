@@ -1,6 +1,6 @@
 {
   "exception": {
-    "duplication": "The specified film has already been seen!",
-    "not_found": "The specified film has not yet been watched!"
+    "duplication": "The specified movie has already been seen!",
+    "not_found": "The specified movie has not yet been watched!"
   }
 }

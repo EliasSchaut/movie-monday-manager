@@ -1,7 +1,26 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { User } from '@prisma/client';
 
 @ObjectType()
 export class UserModel {
+  constructor(user: User) {
+    this.id = user.id;
+    this.username = user.username;
+    this.email = user.email;
+    this.password = user.password;
+    this.first_name = user.first_name;
+    this.last_name = user.last_name;
+    this.avatar = user.avatar ?? undefined;
+    this.bio = user.bio ?? undefined;
+    this.profile_public = user.profile_public;
+    this.email_opt_in = user.email_opt_in;
+    this.is_admin = user.is_admin;
+    this.challenge = user.challenge;
+    this.server_id = user.server_id;
+    this.verified = user.verified;
+    this.pw_reset = user.pw_reset;
+  }
+
   @Field(() => ID, {
     description: 'Unique id number of user used for comparison',
   })
@@ -93,4 +112,31 @@ export class UserModel {
     nullable: true,
   })
   pw_reset?: boolean;
+
+  // clears all user fields that are not meant to be seen by public
+  public convert_to_public(): this {
+    if (!this.profile_public) {
+      this.clear_user_profile();
+    }
+    this.clear_system_info();
+    return this;
+  }
+
+  private clear_user_profile() {
+    this.first_name = undefined;
+    this.last_name = undefined;
+    this.avatar = undefined;
+    this.bio = undefined;
+  }
+
+  private clear_system_info() {
+    this.email = undefined;
+    this.password = undefined;
+    this.email_opt_in = undefined;
+    this.is_admin = undefined;
+    this.challenge = undefined;
+    this.server_id = undefined;
+    this.verified = undefined;
+    this.pw_reset = undefined;
+  }
 }

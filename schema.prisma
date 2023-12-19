@@ -106,15 +106,15 @@ model MovieMetadata {
   title        String
   year         Int
   genre        String
-  director     String
-  actors       String
-  imdb_rate    String
-  meta_score   String
-  rotten_score String
-  languages    String
-  plot         String
+  director     String?
+  actors       String?
+  imdb_rate    String?
+  meta_score   String?
+  rotten_score String?
+  languages    String?
+  plot         String?
   runtime      Int
-  poster_link  String
+  poster_link  String?
   movie        Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
 
   @@unique([movie_id, lang_meta])

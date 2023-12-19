@@ -1,5 +1,9 @@
 {
   "exception": {
-    "duplication": "Der angegebene Film existiert bereits!"
+    "create_api_not_found": "Die Metadaten für den angegebenen Film konnten nicht abgerufen werden! Versuchen Sie es später noch einmal.",
+    "duplication": "Der angegebene Film existiert bereits!",
+    "no_metadata": "Es konnten keine Metadaten zum Film gefunden wernden!",
+    "not_found": "Der angegebene Film konnte nicht gefunden werden!",
+    "not_found_or_proposed": "Der angegebene Film konnte nicht gefunden werden oder wurde von Ihnen nicht vorgeschlagen!"
   }
 }

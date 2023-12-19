@@ -3,15 +3,15 @@ import { PrismaService } from '@/common/services/prisma.service';
 import { CtxType } from '@/types/ctx.type';
 import { MovieHistoryModel } from '@/types/models/movie_history.model';
 import { MovieHistoryInputModel } from '@/types/models/inputs/movie_history.input';
-import { MovieMetadata } from '@prisma/client';
-import { WarningException } from '@/common/exceptions/WarningException';
+import { MovieMetadata, Prisma } from '@prisma/client';
+import { WarningException } from '@/common/exceptions/warning.exception';
 import { ImdbApiService } from '@/common/services/imdb_api.service';
 
 @Injectable()
 export class HistoryService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async get(imdb_id: string, ctx: CtxType) {
+  async find_by_id(imdb_id: string, ctx: CtxType) {
     const history_movie = await this.prisma.movieHistory.findUnique({
       where: {
         imdb_id_server_id: {
@@ -35,7 +35,7 @@ export class HistoryService {
     }
   }
 
-  async get_all(ctx: CtxType): Promise<MovieHistoryModel[]> {
+  async find_many(ctx: CtxType): Promise<MovieHistoryModel[]> {
     return (
       await this.prisma.movieHistory.findMany({
         where: {
@@ -54,39 +54,47 @@ export class HistoryService {
     ).map((history_item) => new MovieHistoryModel(history_item));
   }
 
-  async add(
+  async create(
     history_item: MovieHistoryInputModel,
     ctx: CtxType,
   ): Promise<MovieHistoryModel> {
-    if (await this.get(history_item.imdb_id, ctx)) {
-      throw new WarningException(ctx.i18n.t('history.exception.duplication'));
-    }
-
-    const movie_title_multilang = await this.find_movie_titles_multilang(
+    const movie_title_multilang = await this.find_movie_metadata_multilang(
       history_item.imdb_id,
       ctx,
     );
-    const createdHistory = await this.prisma.movieHistory.create({
-      data: {
-        server_id: ctx.server_id,
-        imdb_id: history_item.imdb_id,
-        watched_at: history_item.watched_at ?? undefined,
-        imdb_link: ImdbApiService.gen_imdb_link(history_item.imdb_id),
-        metadata: {
-          createMany: {
-            data: movie_title_multilang.map((metadata) => {
-              return {
-                lang_meta: metadata.lang_meta,
-                title: metadata.title,
-              };
-            }),
+    const createdHistory = await this.prisma.movieHistory
+      .create({
+        data: {
+          server_id: ctx.server_id,
+          imdb_id: history_item.imdb_id,
+          watched_at: history_item.watched_at ?? undefined,
+          imdb_link: ImdbApiService.gen_imdb_link(history_item.imdb_id),
+          metadata: {
+            createMany: {
+              data: movie_title_multilang.map((metadata) => {
+                return {
+                  lang_meta: metadata.lang_meta,
+                  title: metadata.title,
+                };
+              }),
+            },
           },
         },
-      },
-      include: {
-        metadata: true,
-      },
-    });
+        include: {
+          metadata: true,
+        },
+      })
+      .catch((e: Error) => {
+        if (
+          e instanceof Prisma.PrismaClientKnownRequestError &&
+          e.code === 'P2002'
+        ) {
+          throw new WarningException(
+            ctx.i18n.t('history.exception.duplication'),
+          );
+        }
+        throw e;
+      });
 
     return new MovieHistoryModel(createdHistory);
   }
@@ -107,7 +115,7 @@ export class HistoryService {
     );
   }
 
-  private async find_movie_titles_multilang(
+  private async find_movie_metadata_multilang(
     imdb_id: string,
     ctx: CtxType,
   ): Promise<MovieMetadata[]> {

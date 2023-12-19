@@ -4,10 +4,10 @@ import { Request } from 'express';
 import * as process from 'process';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { I18nContext } from 'nestjs-i18n';
-import { WarningException } from '@/common/exceptions/WarningException';
-import { UserService } from '@/graphql/user/user.service';
+import { WarningException } from '@/common/exceptions/warning.exception';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/common/decorators/role.decorator';
+import { RoleEnum } from '@/types/enums/role.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

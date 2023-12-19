@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@/app.module';
 import helmet from 'helmet';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { PrismaExceptionFilter } from '@/common/exceptions/filter/prisma.exception_filter';
+import { AllExceptionFilter } from '@/common/exceptions/filter/all.exception_filter';
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +23,8 @@ export async function createApp(): Promise<INestApplication> {
     }),
   );
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalFilters(new PrismaExceptionFilter());
   return app;
 }
 

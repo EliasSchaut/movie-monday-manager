@@ -1,17 +1,27 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { MovieSearchItemModel } from '@/types/models/movie_search_item.model';
-import { MovieInputModel } from '@/types/models/inputs/movie.input';
+import { ImdbApiMovieType } from '@/types/imdb_api_movie.type';
+import { I18nContext } from 'nestjs-i18n';
 
 @Injectable()
 export class ImdbApiService {
-  private readonly api_key: string = process.env.IMDB_API_KEY as string;
-  private readonly MAX_SEARCH_ITEMS = 5;
-  private readonly AVAILABLE_LANGS = ['en', 'de'];
+  private readonly api_key: string;
+  private readonly MAX_SEARCH_ITEMS: number;
+  private readonly AVAILABLE_LANGS: string[];
 
-  public async get(
+  constructor() {
+    const i18n = I18nContext.current();
+    this.api_key = process.env.IMDB_API_KEY as string;
+    this.MAX_SEARCH_ITEMS = 5;
+    this.AVAILABLE_LANGS = i18n
+      ? i18n.service.getSupportedLanguages()
+      : ['en', 'de'];
+  }
+
+  public async find(
     imdb_id: string,
     lang: string = 'en',
-  ): Promise<Omit<MovieInputModel, 'proposer_id'> | null> {
+  ): Promise<ImdbApiMovieType | null> {
     const response = await fetch(
       `https://imdb-api.com/${lang}/API/Title/${this.api_key}/${imdb_id}/Ratings`,
     ).catch(() => {
@@ -35,18 +45,17 @@ export class ImdbApiService {
       languages: movie.languages,
       plot: movie.plotLocal !== '' ? movie.plotLocal : movie.plot,
       runtime: Number(movie.runtimeMins),
-      imdb_link: ImdbApiService.gen_imdb_link(movie.id),
       poster_link: movie.image,
-    };
+    } as ImdbApiMovieType;
   }
 
-  public async get_all_langs(
+  public async find_all_langs(
     imdb_id: string,
-  ): Promise<Omit<MovieInputModel, 'proposer_id'>[] | null> {
-    const movie_infos: Omit<MovieInputModel, 'proposer_id'>[] = [];
+  ): Promise<ImdbApiMovieType[] | null> {
+    const movie_infos: ImdbApiMovieType[] = [];
 
     for (const lang of this.AVAILABLE_LANGS) {
-      const movie_info = await this.get(imdb_id, lang);
+      const movie_info = await this.find(imdb_id, lang);
       if (movie_info !== null) movie_infos.push(movie_info);
       else return null;
     }

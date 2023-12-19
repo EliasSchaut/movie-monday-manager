@@ -1,4 +1,4 @@
-schema: ./.nest/types/generated/schema.gql
+schema: ./types/generated/schema.gql
 extensions:
   endpoints:
     Local GraphQL Endpoint:

@@ -27,13 +27,16 @@ export type I18nTranslations = {
   };
   history: {
     exception: {
-      not_found: string;
       duplication: string;
+      not_found: string;
     };
   };
   movie: {
     exception: {
       duplication: string;
+      not_found: string;
+      create_api_not_found: string;
+      not_found_or_proposed: string;
     };
   };
   user: {
@@ -44,6 +47,7 @@ export type I18nTranslations = {
       invalid_name: string;
       invalid_password: string;
       invalid_username: string;
+      not_found: string;
     };
     success: {
       delete: string;

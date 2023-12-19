@@ -12,7 +12,6 @@ import { ServerModule } from '@/graphql/server/server.module';
 import { UserModule } from '@/graphql/user/user.module';
 import { MovieModule } from '@/graphql/movie/movie.module';
 import { HistoryModule } from '@/graphql/history/history.module';
-import * as process from 'process';
 
 @Module({
   imports: [
