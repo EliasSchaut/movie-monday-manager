@@ -78,13 +78,21 @@ export class ImdbApiService {
     search_query: string,
     lang: string = 'en',
   ): Promise<MovieSearchModel> {
+    const fetch_timeout = setTimeout(() => {
+      throw new DangerException(
+        I18nContext.current()!.t('movie.exception.create_api_not_found'),
+      );
+    }, this.TIMEOUT_IN_MS);
     const response = await fetch(
       `https://imdb-api.com/${lang}/API/SearchMovie/${this.api_key}/${search_query}`,
     ).catch(() => {
+      clearTimeout(fetch_timeout);
       throw new DangerException(
         I18nContext.current()!.t('movie.exception.create_api_not_found'),
       );
     });
+    clearTimeout(fetch_timeout);
+
     const data = (await response.json()) as any;
     const movies = (data.results as ImdbApiSearchType[]).slice(
       0,

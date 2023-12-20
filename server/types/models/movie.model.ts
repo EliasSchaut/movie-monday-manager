@@ -108,5 +108,5 @@ export class MovieModel {
   @Field(() => Int, {
     nullable: true,
   })
-  votes?: number;
+  rank?: number;
 }

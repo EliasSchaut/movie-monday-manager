@@ -1,7 +1,6 @@
 import * as Joi from 'joi';
 
 export const EnvValidationSchema = Joi.object({
-  PROJECT_NAME: Joi.string().required().description('The name of the project'),
   FRONTEND_URL: Joi.string()
     .required()
     .description(

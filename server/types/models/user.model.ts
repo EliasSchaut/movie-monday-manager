@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { User } from '@prisma/client';
+import { VoteModel } from '@/types/models/vote.model';
 
 @ObjectType()
 export class UserModel {
@@ -112,6 +113,11 @@ export class UserModel {
     nullable: true,
   })
   pw_reset?: boolean;
+
+  @Field(() => [VoteModel], {
+    nullable: true,
+  })
+  votes?: VoteModel[];
 
   // clears all user fields that are not meant to be seen by public
   public convert_to_public(): this {

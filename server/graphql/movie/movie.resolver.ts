@@ -115,7 +115,9 @@ export class MovieResolver {
     });
   }
 
-  @ResolveField(() => UserModel)
+  @ResolveField(() => UserModel, {
+    name: 'proposer',
+  })
   async resolve_proposer(
     @Parent() movie: MovieModel,
     @ServerID() server_id: number,
@@ -127,12 +129,15 @@ export class MovieResolver {
     });
   }
 
-  @ResolveField(() => Number)
-  async resolve_votes(
+  @ResolveField(() => Number, {
+    name: 'rank',
+    complexity: 2,
+  })
+  async resolve_rank(
     @Parent() movie: MovieModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<number> {
-    return this.movie_service.resolve_votes(movie.imdb_id, { server_id, i18n });
+    return this.movie_service.resolve_rank(movie.imdb_id, { server_id, i18n });
   }
 }

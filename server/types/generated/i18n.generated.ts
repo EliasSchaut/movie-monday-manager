@@ -57,5 +57,10 @@ export type I18nTranslations = {
       username: string;
     };
   };
+  vote: {
+    exception: {
+      not_found: string;
+    };
+  };
 };
 export type I18nPath = Path<I18nTranslations>;

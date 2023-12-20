@@ -169,8 +169,8 @@ export class MovieService {
     return new UserModel(movie.proposer).convert_to_public();
   }
 
-  // TODO: Implement vote system
-  async resolve_votes(imdb_id: string, ctx: CtxType) {
-    return 0;
+  // TODO: Implement rank system
+  async resolve_rank(imdb_id: string, ctx: CtxType): Promise<number> {
+    return 1;
   }
 }

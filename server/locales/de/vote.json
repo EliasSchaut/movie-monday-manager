@@ -1,0 +1,5 @@
+{
+  "exception": {
+    "not_found": "Die gesuchte Abstimmung existiert nicht!"
+  }
+}
