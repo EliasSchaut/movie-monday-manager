@@ -6,7 +6,8 @@ type VotingBallot = {
   user_id: string,
   weight: number,
   preferences: number[][] //ids of movies. First index is preference (0 = best)
-}
+};
+
 type CountingResults = {movie_id:number, weight:number}[]
 
 @Injectable()
@@ -20,17 +21,18 @@ export class ElectionService {
   */
 
   //returns all candidate ids that are elected.
-  public elect(count: number, voting_ballots: VotingBallot[], ctx: CtxType) {
+  public elect(count: number, voting_ballots: VotingBallot[]) {
     var elected: number[] = []
     var voted_out: number[] = []
-    var totalVotes = voting_ballots.reduce((a,b) => a + b.weight, 0)
-    var votesNeededForAnElection = totalVotes / count
 
     while(elected.length < count) {
-      //1. clean ballots, remove empty ballots
+      //1. clean ballots, remove empty ballots, check conditions
       voting_ballots.forEach(ballot => cleanBallot(ballot,voted_out.concat(elected)))
       voting_ballots = voting_ballots.filter(ballot => isEmptyBallot(ballot))
       if (voting_ballots.length == 0) return elected //TODO throw exception.
+
+      var totalVotes = voting_ballots.reduce((a,b) => a + b.weight, 0)
+      var votesNeededForAnElection = totalVotes / (count - elected.length)
       //2. collect votes
       var results : CountingResults = countVotes(voting_ballots)
       var votesOfBestCandidate = Math.max(...results.map(x => x.weight))
