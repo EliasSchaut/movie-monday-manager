@@ -14,7 +14,6 @@ export class ElectionService {
   constructor(
   ) {}
 
-  // TODO: Implement vote system
   //example voting ballot (voting 4 stars for movie 12 and movie 13, 3 stars for movie 1):
   /*
     [{weight: 0, preferences: [12,13],[1]}]
@@ -37,7 +36,7 @@ export class ElectionService {
       var votesOfBestCandidate = Math.max(...results.map(x => x.weight))
       //3. elect candidate with majority or throw out weakest candidate
       if (votesOfBestCandidate > votesNeededForAnElection) {
-        var bestCandidateId = results.filter(x => x.weight === votesOfBestCandidate)[0].movie_id
+        var bestCandidateId = getCandidateWithWeight(votesOfBestCandidate, results)
         elected.push(bestCandidateId)
         //how much of the maxResult voting power is consumed by electing the candidate
         let votePercentageConsumedByElection = votesNeededForAnElection / votesOfBestCandidate
@@ -54,7 +53,7 @@ export class ElectionService {
       }
       else {
         var votesOfWorstCandidate = Math.min(...results.map(x => x.weight))
-        var worstCandidate = results.filter(x => x.weight === votesOfWorstCandidate)[0].movie_id
+        var worstCandidate = getCandidateWithWeight(votesOfWorstCandidate, results).movie_id
         voted_out.push(worstCandidate)
         console.log(`[election-service] voted out candidate ${worstCandidate} having only ${votesOfWorstCandidate} votes.`)
       }
@@ -98,4 +97,14 @@ function castVote(chosen_candidate: number, vote_weight: number, results: Counti
       weight: vote_weight
     })
   }
+}
+
+const getRandomElement = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)]
+
+function getCandidateWithWeight(votesOfBestCandidate: number, results: CountingResults) {
+  let possibleCandidates = results.filter(x => x.weight === votesOfBestCandidate)
+  if (possibleCandidates.length == 1) return possibleCandidates[0].movie_id
+  if (possibleCandidates.length == 0) throw new Error("No candidate found with weight " + votesOfBestCandidate)
+  
+  return getRandomElement(possibleCandidates).movie_id
 }
