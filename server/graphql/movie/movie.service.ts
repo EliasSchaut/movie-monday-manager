@@ -70,6 +70,8 @@ export class MovieService {
           server_id: ctx.server_id,
           proposer_id: ctx.user_id!,
           imdb_link: ImdbApiService.gen_imdb_link(imdb_id),
+          runtime: api_movies[0].runtime,
+          year: api_movies[0].year,
           metadata: {
             createMany: {
               data: api_movies as Prisma.MovieMetadataCreateManyMovieInput[],

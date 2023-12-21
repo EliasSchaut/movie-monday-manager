@@ -17,8 +17,8 @@ export class MovieModel {
     this.imdb_id = movie.imdb_id;
     this.lang_meta = metadata.lang_meta;
     this.title = metadata.title;
-    this.year = metadata.year;
-    this.runtime = metadata.runtime;
+    this.year = movie.year;
+    this.runtime = movie.runtime;
     this.imdb_link = movie.imdb_link;
     this.genre = metadata.genre;
     this.director = metadata.director;
@@ -29,7 +29,7 @@ export class MovieModel {
     this.languages = metadata.languages;
     this.plot = metadata.plot;
     this.poster_link = metadata.poster_link;
-    this.proposed_at = movie.created_at;
+    this.proposed_at = movie.proposed_at;
   }
 
   @Field(() => String)

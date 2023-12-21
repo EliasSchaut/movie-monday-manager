@@ -92,7 +92,9 @@ model Movie {
   server         Server          @relation(fields: [server_id], references: [id], onDelete: Cascade)
   imdb_id        String
   imdb_link      String
-  created_at     DateTime        @default(now())
+  runtime        Int
+  year           Int
+  proposed_at    DateTime        @default(now())
   proposer_id    String
   proposer       User            @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
   metadata       MovieMetadata[]
@@ -106,7 +108,6 @@ model MovieMetadata {
   movie_id     Int
   lang_meta    String
   title        String
-  year         Int
   genre        String
   director     String?
   actors       String?
@@ -115,7 +116,6 @@ model MovieMetadata {
   rotten_score String?
   languages    String?
   plot         String?
-  runtime      Int
   poster_link  String?
   movie        Movie   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
 
@@ -137,7 +137,7 @@ model MovieVote {
 }
 
 model MovieWatchlist {
-  imdb_id    String   @id
+  imdb_id    String
   movie      Movie    @relation(fields: [imdb_id, server_id], references: [imdb_id, server_id], onDelete: Cascade)
   server_id  Int
   server     Server   @relation(fields: [server_id], references: [id], onDelete: Cascade)

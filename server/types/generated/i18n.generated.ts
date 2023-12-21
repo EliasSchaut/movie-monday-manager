@@ -62,5 +62,11 @@ export type I18nTranslations = {
       not_found: string;
     };
   };
+  watchlist: {
+    exception: {
+      item_not_found: string;
+      movie_not_found: string;
+    };
+  };
 };
 export type I18nPath = Path<I18nTranslations>;

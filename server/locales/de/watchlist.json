@@ -1,0 +1,6 @@
+{
+  "exception": {
+    "item_not_found": "Der gesuchte Watchlist Eintrag konnte nicht gefunden werden!",
+    "movie_not_found": "Nur Filme, die bereits in der Datenbank enthalten sind, können in die Watchlist aufgenommen werden!"
+  }
+}
