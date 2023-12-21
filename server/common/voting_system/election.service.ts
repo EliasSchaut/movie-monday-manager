@@ -24,7 +24,8 @@ export class ElectionService {
   public elect(count: number, voting_ballots: VotingBallot[]) {
     var elected: number[] = []
     var voted_out: number[] = []
-
+    //dummy to ensure that candidates that get no first-prio votes are kicked before any other are kicked.
+    voting_ballots.push({user_id: "dummy__collection_of_all_possible_candidates", weight: 0, preferences: [[...new Set(voting_ballots.map(x => x.preferences.flat()).flat())]]})
     while(elected.length < count) {
       //1. clean ballots, remove empty ballots, check conditions
       voting_ballots.forEach(ballot => cleanBallot(ballot,voted_out.concat(elected)))

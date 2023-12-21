@@ -113,7 +113,7 @@ test('5 of 9 hate 3', () => {
     },
   ];
   let elected = new ElectionService().elect(2, voting_ballots);
-  expect(elected).toBe([1, 2]);
+  expect(elected).toBe([1, 3]);
 });
 
 test('7 candidates', () => {
@@ -217,6 +217,38 @@ test('splitted_but_majority', () => {
     kick[8,9,10,11]
     kick[1,2,4,5]
     elect3(100, 100 quota)
+    */
+    expect(elected).toBe([3])
+});
+
+test('ignored_consensus_candidate', () => {
+    var voting_ballots = [
+        {
+            user_id: 'near_consensus1',
+            weight: 2,
+            preferences: [[1], [12]]
+        },
+        {
+            user_id: 'near_consensus2',
+            weight: 2,
+            preferences: [[2], [12]]
+        },
+        {
+            user_id: 'near_consensus3',
+            weight: 1,
+            preferences: [[12]]
+        },
+        {
+            user_id:'opposite_party',
+            weight: 3,
+            preferences: [[3]]
+        }
+    ];
+    let elected = new ElectionService().elect(1, voting_ballots);
+    /*
+    expected: 
+    12 is kicked early.
+    would be nice if 12 would still be elected as clearly first three users support him. But not possible with current voting system.
     */
     expect(elected).toBe([3])
 });
