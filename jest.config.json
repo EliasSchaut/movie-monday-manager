@@ -1,17 +1,17 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": "./server/",
+  "rootDir": "./",
   "testEnvironment": "node",
   "preset": "ts-jest",
-  "testMatch": ["<rootDir>/**/*spec.ts"],
+  "testMatch": ["<rootDir>/server/**/*spec.ts"],
   "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/$1"
+    "^@/(.*)$": "<rootDir>/server/$1"
   },
   "transform": {
     "^.+\\.(t|j)s$": [
       "ts-jest",
       {
-        "tsconfig": "<rootDir>/tsconfig.json",
+        "tsconfig": "<rootDir>/server/tsconfig.json",
         "ignoreCodes": ["TS151001"]
       }
     ]
