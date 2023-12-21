@@ -54,7 +54,7 @@
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",
     "@nestjs/schematics": "^10.0.3",
-    "@nestjs/testing": "^10.2.10",
+    "@nestjs/testing": "^10.3.0",
     "@nuxt/devtools": "^1.0.4",
     "@nuxtjs/apollo": "^5.0.0-alpha.9",
     "@nuxtjs/color-mode": "^3.3.2",
