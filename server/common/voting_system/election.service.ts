@@ -51,7 +51,7 @@ export class ElectionService {
             //TODO throw some exception if now ballot.weight < 0
           }
         })
-        console.log(`[election-service] elected ${bestCandidateId} having ${votesOfBestCandidate} votes.`)
+        console.log(`[election-service] elected ${bestCandidateId} having ${votesOfBestCandidate} votes (quota: ${votesNeededForAnElection}).`)
       }
       else {
         var votesOfWorstCandidate = Math.min(...results.map(x => x.weight))
