@@ -26,18 +26,21 @@ model Server {
 }
 
 model ServerSettings {
-  id                 Int     @id @default(autoincrement())
-  server_id          Int     @unique
-  server             Server  @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  max_votes          Int     @default(50)
-  max_proposals      Int     @default(5)
-  max_movies         Int     @default(30)
-  max_watchlist      Int     @default(2)
-  schedule_watchlist String  @default("0 20 * * 1")
-  schedule_start     String  @default("0 20 * * 1")
-  movie_gap_mins     Int     @default(15)
-  round_to_5mins     Boolean @default(true)
-  discord_webhook    String?
+  id                          Int     @id @default(autoincrement())
+  server_id                   Int     @unique
+  server                      Server  @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  max_votes                   Int     @default(50)
+  max_proposals               Int     @default(5)
+  max_movies                  Int     @default(30)
+  watchlist_auto              Boolean @default(false)
+  watchlist_num_of_movies     Int     @default(2)
+  watchlist_schedule_creation String  @default("0 20 * * 1")
+  watchlist_schedule_start    String  @default("0 20 * * 1")
+  movie_gap_mins              Int     @default(15)
+  round_to_5mins              Boolean @default(true)
+  discord_auto                Boolean @default(false)
+  discord_webhook             String?
+  discord_msg                 String?
 }
 
 model ServerOAuth {
