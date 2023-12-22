@@ -14,7 +14,7 @@
     "start": "nuxt start",
     "dev:client": "nuxt dev --cwd . client",
     "dev:server": "nest start --debug --watch",
-    "server:test": "jest --config=jest.config.json",
+    "test:server": "jest --config=jest.config.json",
     "build": "npm run build:server && npm run build:client && npm run build:db",
     "build:server": "nest build",
     "build:client": "nuxt build",

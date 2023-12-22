@@ -20,7 +20,7 @@ describe('ElectionService', () => {
       },
     ];
     let elected = electionService.elect(1, voting_ballots);
-    expect(elected).toBe([293]);
+    expect(elected).toEqual([293]);
   });
 
   it('5 of 9 hate 3', () => {
@@ -72,10 +72,14 @@ describe('ElectionService', () => {
       },
     ];
     const elected = electionService.elect(1, voting_ballots);
-    expect(elected).toBe([1]);
+
+    /*
+    expect: kick 2, kick 3, elect 1
+     */
+    expect(elected).toEqual([1]);
   });
 
-  it('5 of 9 hate 3', () => {
+  it('4 of 9 like 3', () => {
     const voting_ballots = [
       {
         user_id: 'one0',
@@ -124,7 +128,7 @@ describe('ElectionService', () => {
       },
     ];
     const elected = electionService.elect(2, voting_ballots);
-    expect(elected).toBe([1, 3]);
+    expect(elected).toEqual([1, 3]);
   });
 
   it('7 candidates', () => {
@@ -165,7 +169,7 @@ describe('ElectionService', () => {
         preferences: [[7], [5], [6]],
       },
     ];
-    const elected = electionService.elect(1, voting_ballots);
+    const elected = electionService.elect(3, voting_ballots);
     //expected:
     /*
       elect2(8, 7.66 quota),
@@ -180,7 +184,7 @@ describe('ElectionService', () => {
     //wikipedia quota: votes/(seats-1) + 1
     //my quota: votes/seats
     //3 and 7 are kicked in random order.
-    expect(elected).toBe([2, 6, 4]);
+    expect(elected).toEqual([2, 6, 4]);
   });
 
   it('same priority', () => {
@@ -213,10 +217,10 @@ describe('ElectionService', () => {
       kick[8,9,10,11]
       elect3(25, 25 quota).
       */
-    expect(elected).toBe([1, 2, 7, 3]);
+    expect(elected).toEqual([1, 2, 7, 3]);
   });
 
-  it('splitted_but_majority', () => {
+  it('split but majority', () => {
     const voting_ballots = [
       {
         user_id: 'mighty_user',
@@ -229,14 +233,14 @@ describe('ElectionService', () => {
         preferences: [[3], [1, 2, 8, 9], [5, 10, 11]],
       },
     ];
-    const elected = electionService.elect(4, voting_ballots);
+    const elected = electionService.elect(1, voting_ballots);
     /*
       expected:
       kick[8,9,10,11]
       kick[1,2,4,5]
       elect3(100, 100 quota)
       */
-    expect(elected).toBe([3]);
+    expect(elected).toEqual([3]);
   });
 
   it('ignored_consensus_candidate', () => {
@@ -268,6 +272,6 @@ describe('ElectionService', () => {
       12 is kicked early.
       would be nice if 12 would still be elected as clearly first three users support him. But not possible with current voting system.
       */
-    expect(elected).toBe([3]);
+    expect(elected).toEqual([3]);
   });
 });

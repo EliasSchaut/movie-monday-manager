@@ -46,7 +46,7 @@ and type definitions for internal data structures and data transmission objects 
 
 To run the backend in development mode, you need to `npm install` the dependencies and run ```npm run start:dev``` in the root folder of the project. Note, that the client has to be built via `npm run build:client` because the client is only statically served from the  `/client/dist` folder. So every change in the client has to be built to show up in the backend project. Also note, that the database should also be built (see `WatchVote-DB` below). The backend can generate docs as static website by run `npm run build:docs` and shown by `npm run start:docs`. The backend itself can be build with `npm run build`. The build files are located in the `/dist` folder. The `npm run build:all` command can be used to build everything in with just one step.
 
-To run the backend unit tests (jest), run `npm test`.
+To run the backend unit tests (jest), run `npm test:server`.
 
 ### WatchVote-Client (Frontend)
 The frontend uses the [Vue.js](https://vuejs.org/) framework to handle the user interface. 

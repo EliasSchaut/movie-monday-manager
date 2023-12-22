@@ -3,11 +3,11 @@ import { RandomService } from '@/common/services/random.service';
 
 type VotingBallot = {
   user_id: string;
-  weight: number;
-  preferences: number[][]; //ids of movies. First index is preference (0 = best)
+  weight: number; //TODO when no wheight, then weight = 1
+  preferences: number[][]; //ids of movies. First index is preference (0 = best)//todo: film ids sind strings
 };
 
-type CountingResults = { movie_id: number; weight: number }[];
+type CountingResults = { movie_id: number; weight: number }[]; //todo maybe refactor to dict.
 
 @Injectable()
 export class ElectionService {
@@ -40,7 +40,7 @@ export class ElectionService {
         this.clean_ballot(ballot, voted_out.concat(elected)),
       );
       voting_ballots = voting_ballots.filter((ballot) =>
-        this.is_empty_ballot(ballot),
+        !this.is_empty_ballot(ballot),
       );
       if (voting_ballots.length == 0) return elected; //TODO throw exception.
 
@@ -53,7 +53,7 @@ export class ElectionService {
       const votes_of_best_candidate = Math.max(...results.map((x) => x.weight));
 
       // 3. elect candidate with majority or throw out weakest candidate
-      if (votes_of_best_candidate > votes_needed_for_an_election) {
+      if (votes_of_best_candidate >= votes_needed_for_an_election) {
         const best_candidate_id = this.get_candidate_with_weight(
           votes_of_best_candidate,
           results,
@@ -64,7 +64,7 @@ export class ElectionService {
           votes_needed_for_an_election / votes_of_best_candidate;
         // remove voting power from ballots that voted for elected candidate
         voting_ballots.forEach((ballot) => {
-          if (best_candidate_id in ballot.preferences[0]) {
+          if (ballot.preferences[0].includes(best_candidate_id)) {
             let voted_with_power = ballot.weight / ballot.preferences[0].length;
             let votesConsumedByElection =
               voted_with_power * vote_percentage_consumed_by_election;
@@ -82,7 +82,7 @@ export class ElectionService {
         const worst_candidate = this.get_candidate_with_weight(
           votes_of_worst_candidate,
           results,
-        ).movie_id;
+        );
         voted_out.push(worst_candidate);
         this.logger.log(
           `[election-service] voted out candidate ${worst_candidate} having only ${votes_of_worst_candidate} votes.`,
