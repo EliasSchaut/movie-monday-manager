@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { ServerService } from '@/graphql/server/server.service';
 import { ServerModel } from '@/types/models/server.model';
-import { ServerID } from '@/common/decorators/server.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';

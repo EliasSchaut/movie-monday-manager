@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MovieHistoryModel } from '@/types/models/movie_history.model';
 import { HistoryService } from '@/graphql/history/history.service';
-import { ServerID } from '@/common/decorators/server.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieHistoryInputModel } from '@/types/models/inputs/movie_history.input';

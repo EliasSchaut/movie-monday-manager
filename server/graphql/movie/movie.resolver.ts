@@ -8,14 +8,14 @@ import {
 } from '@nestjs/graphql';
 import { MovieModel } from '@/types/models/movie.model';
 import { MovieService } from '@/graphql/movie/movie.service';
-import { ServerID } from '@/common/decorators/server.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
 import { UserModel } from '@/types/models/user.model';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
-import { UserID } from '@/common/decorators/user.decorator';
+import { UserID } from '@/common/decorators/user_id.decorator';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
 import { MovieSearchInputModel } from '@/types/models/inputs/movie_search.input';
 

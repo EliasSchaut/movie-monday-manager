@@ -5,8 +5,8 @@ import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
-import { ServerID } from '@/common/decorators/server.decorator';
-import { UserID } from '@/common/decorators/user.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
+import { UserID } from '@/common/decorators/user_id.decorator';
 import { VoteModel } from '@/types/models/vote.model';
 import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
 
