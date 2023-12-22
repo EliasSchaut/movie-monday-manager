@@ -15,7 +15,7 @@ model Server {
   name      String           @unique
   title     String
   desc      String?
-  host      String           @unique
+  origin      String           @unique
   settings  ServerSettings?
   oauth     ServerOAuth[]
   users     User[]

@@ -1,11 +1,4 @@
-import {
-  Args,
-  Mutation,
-  Parent,
-  Query,
-  ResolveField,
-  Resolver,
-} from '@nestjs/graphql';
+import { Args, Mutation, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { ServerService } from '@/graphql/server/server.service';
 import { ServerModel } from '@/types/models/server.model';
 import { ServerID } from '@/common/decorators/server.decorator';
@@ -46,7 +39,6 @@ export class ServerResolver {
     name: 'settings',
   })
   async resolve_settings(
-    @Parent() server: ServerModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<ServerSettingsModel> {
