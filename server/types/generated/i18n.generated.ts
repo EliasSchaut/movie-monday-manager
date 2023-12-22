@@ -39,6 +39,11 @@ export type I18nTranslations = {
       not_found_or_proposed: string;
     };
   };
+  server: {
+    exception: {
+      not_found: string;
+    };
+  };
   user: {
     exception: {
       conflict_username: string;
