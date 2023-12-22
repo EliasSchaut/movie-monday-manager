@@ -8,13 +8,13 @@ import {
 } from '@nestjs/graphql';
 import { WatchlistService } from '@/graphql/watchlist/watchlist.service';
 import { WatchlistModel } from '@/types/models/watchlist.model';
-import { ServerID } from '@/common/decorators/server.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 import { WatchlistItemModel } from '@/types/models/watchlist_item.model';
-import { UserID } from '@/common/decorators/user.decorator';
+import { UserID } from '@/common/decorators/user_id.decorator';
 import { WatchlistInputModel } from '@/types/models/inputs/watchlist.input';
 import { UserModel } from '@/types/models/user.model';
 import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
