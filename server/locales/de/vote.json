@@ -1,5 +1,6 @@
 {
   "exception": {
-    "not_found": "Die gesuchte Abstimmung existiert nicht!"
+    "not_found": "Die gesuchte Abstimmung existiert nicht!",
+    "to_less_votes": "Es gab nicht genügend Stimmen, um die erforderliche Anzahl von Filmen zu auszuwählen!"
   }
 }

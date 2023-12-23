@@ -1,5 +1,6 @@
 {
   "exception": {
-    "not_found": "The vote you are looking for does not exist!"
+    "not_found": "The vote you are looking for does not exist!",
+    "to_less_votes": "There were not enough votes to select the required number of films!"
   }
 }

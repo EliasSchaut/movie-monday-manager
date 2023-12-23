@@ -34,6 +34,18 @@ export class WatchlistResolver {
   }
 
   @Role(RoleEnum.ADMIN)
+  @Query(() => WatchlistModel, {
+    name: 'watchlist_auto_info',
+  })
+  async auto_info(
+    @UserID() user_id: string,
+    @ServerID() server_id: number,
+    @I18n() i18n: I18nContext<I18nTranslations>,
+  ) {
+    //return this.watchlist_service.auto_info({ user_id, server_id, i18n });
+  }
+
+  @Role(RoleEnum.ADMIN)
   @Mutation(() => WatchlistItemModel, {
     name: 'watchlist_add_or_update',
   })
