@@ -1,11 +1,6 @@
 import * as Joi from 'joi';
 
 export const EnvValidationSchema = Joi.object({
-  FRONTEND_URL: Joi.string()
-    .required()
-    .description(
-      'The URL of the client application (frontend). This is used for CORS and the email confirmation link',
-    ),
   PORT: Joi.number()
     .required()
     .default('3000')
