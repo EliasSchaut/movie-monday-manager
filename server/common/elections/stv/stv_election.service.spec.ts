@@ -1,8 +1,15 @@
-import { ElectionService } from '@/common/services/election.service';
-import { VotingBallotArray } from '@/common/util/voting_ballot_array.util';
-import { VotingBallot } from '@/common/util/voting_ballot.util';
+import { StvElectionService } from '@/common/elections/stv/stv_election.service';
+import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_array.util';
+import { VotingBallot } from '@/common/elections/stv/util/voting_ballot.util';
 
 describe('ElectionService', () => {
+
+  let election_service: StvElectionService
+
+  beforeEach(() => {
+    election_service = new StvElectionService()
+  })
+
   it('one candidate, one vote', () => {
     const voting_ballots = new VotingBallotArray([
       {
@@ -11,8 +18,8 @@ describe('ElectionService', () => {
         preferences: [['293']],
       },
     ] as VotingBallot[]);
-    const elected = new ElectionService(1, voting_ballots);
-    expect(elected.get_elected_candidates()).toEqual(['293']);
+    const elected_candidates = election_service.election(1, voting_ballots);
+    expect(elected_candidates).toEqual(['293']);
   });
 
   it('5 of 9 hate 3', () => {
@@ -63,12 +70,12 @@ describe('ElectionService', () => {
         preferences: [['3']],
       },
     ]);
-    const elected = new ElectionService(1, voting_ballots);
+    const elected_candidates = election_service.election(1, voting_ballots);
 
     /*
     expect: kick 2, kick 3, elect 1
      */
-    expect(elected.get_elected_candidates()).toEqual(['1']);
+    expect(elected_candidates).toEqual(['1']);
   });
 
   it('4 of 9 like 3', () => {
@@ -119,8 +126,8 @@ describe('ElectionService', () => {
         preferences: [['3']],
       },
     ]);
-    const elected = new ElectionService(2, voting_ballots);
-    expect(elected.get_elected_candidates()).toEqual(['1', '3']);
+    const elected_candidates = election_service.election(2, voting_ballots);
+    expect(elected_candidates).toEqual(['1', '3']);
   });
 
   it('7 candidates', () => {
@@ -161,7 +168,7 @@ describe('ElectionService', () => {
         preferences: [['7'], ['5'], ['6']],
       },
     ]);
-    const elected = new ElectionService(3, voting_ballots);
+    const elected_candidates = election_service.election(3, voting_ballots);
     //expected:
     /*
       elect2(8, 7.66 quota),
@@ -176,7 +183,7 @@ describe('ElectionService', () => {
     //wikipedia quota: votes/(seats-1) + 1
     //my quota: votes/seats
     //3 and 7 are kicked in random order.
-    expect(elected.get_elected_candidates()).toEqual(['2', '6', '4']);
+    expect(elected_candidates).toEqual(['2', '6', '4']);
   });
 
   it('same priority', () => {
@@ -200,7 +207,7 @@ describe('ElectionService', () => {
         ],
       },
     ]);
-    const elected = new ElectionService(4, voting_ballots);
+    const elected_candidates = election_service.election(4, voting_ballots);
     /*
       expected:
       elect1(50, 25 quota), (mighty weight now 45, weak weight now 30)
@@ -209,7 +216,7 @@ describe('ElectionService', () => {
       kick[8,9,10,11]
       elect3(25, 25 quota).
       */
-    expect(elected.get_elected_candidates()).toEqual(['1', '2', '7', '3']);
+    expect(elected_candidates).toEqual(['1', '2', '7', '3']);
   });
 
   it('split but majority', () => {
@@ -225,14 +232,14 @@ describe('ElectionService', () => {
         preferences: [['3'], ['1', '2', '8', '9'], ['5', '10', '11']],
       },
     ]);
-    const elected = new ElectionService(1, voting_ballots);
+    const elected_candidates = election_service.election(1, voting_ballots);
     /*
       expected:
       kick[8,9,10,11]
       kick[1,2,4,5]
       elect3(100, 100 quota)
       */
-    expect(elected.get_elected_candidates()).toEqual(['3']);
+    expect(elected_candidates).toEqual(['3']);
   });
 
   it('ignored_consensus_candidate', () => {
@@ -258,12 +265,12 @@ describe('ElectionService', () => {
         preferences: [['3']],
       },
     ]);
-    const elected = new ElectionService(1, voting_ballots);
+    const elected_candidates = election_service.election(1, voting_ballots);
     /*
       expected:
       12 is kicked early.
       would be nice if 12 would still be elected as clearly first three users support him. But not possible with current voting system.
       */
-    expect(elected.get_elected_candidates()).toEqual(['3']);
+    expect(elected_candidates).toEqual(['3']);
   });
 });

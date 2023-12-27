@@ -1,6 +1,6 @@
-import { Logger } from '@nestjs/common';
-import { CountingResultArray } from '@/common/util/counting_result_array.util';
-import { VotingBallotArray } from '@/common/util/voting_ballot_array.util';
+import { Injectable, Logger } from '@nestjs/common';
+import { CountingResultArray } from '@/common/elections/stv/util/counting_result_array.util';
+import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_array.util';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
 
@@ -11,30 +11,23 @@ import { I18nContext } from 'nestjs-i18n';
  *   [{weight: 0, preferences: [12,13],[1]}]
  *
  */
-export class ElectionService {
-  private readonly num_candidates_to_elect!: number;
-  private readonly ballots!: VotingBallotArray;
-  private readonly elected_candidates: string[] = [];
-  private readonly voted_out_candidates: string[] = [];
+@Injectable()
+export class StvElectionService implements ElectionInterface {
+  private num_candidates_to_elect!: number;
+  private ballots!: VotingBallotArray;
+  private elected_candidates: string[] = [];
+  private voted_out_candidates: string[] = [];
 
-  constructor(
-    num_candidates_to_elect: number,
-    voting_ballots: VotingBallotArray,
-  ) {
+  // returns all candidates that are elected.
+  public election(num_candidates_to_elect: number,
+                  voting_ballots: VotingBallotArray): string[] {
     this.num_candidates_to_elect = num_candidates_to_elect;
     this.ballots = voting_ballots;
+    this.reset_election_fields();
 
     // dummy to ensure that candidates that get no first-prio votes are kicked before any other are kicked.
     this.ballots.add_dummy();
-    this.election();
-  }
 
-  public get_elected_candidates(): string[] {
-    return this.elected_candidates;
-  }
-
-  // returns all candidates that are elected.
-  private election(): void {
     while (this.elected_candidates.length < this.num_candidates_to_elect) {
       this.clean_ballots();
       if (this.ballots.is_empty()) {
@@ -84,6 +77,8 @@ export class ElectionService {
         );
       }
     }
+
+    return this.elected_candidates
   }
 
   private elect(candidate: string): void {
@@ -116,5 +111,10 @@ export class ElectionService {
     weight_best_candidate: number,
   ): number {
     return weight_needed_to_be_elected / weight_best_candidate;
+  }
+
+  private reset_election_fields() {
+    this.elected_candidates = [];
+    this.voted_out_candidates = [];
   }
 }

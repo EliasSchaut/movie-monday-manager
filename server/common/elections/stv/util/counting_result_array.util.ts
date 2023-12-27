@@ -1,6 +1,6 @@
-import { CountingResult } from '@/common/util/counting_result.util';
-import { VotingBallotArray } from '@/common/util/voting_ballot_array.util';
-import { VotingBallot } from '@/common/util/voting_ballot.util';
+import { CountingResult } from '@/common/elections/stv/util/counting_result.util';
+import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_array.util';
+import { VotingBallot } from '@/common/elections/stv/util/voting_ballot.util';
 import { RandomService } from '@/common/services/random.service';
 
 export class CountingResultArray {

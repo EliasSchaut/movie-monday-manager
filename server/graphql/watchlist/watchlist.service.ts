@@ -6,7 +6,7 @@ import { WatchlistInputModel } from '@/types/models/inputs/watchlist.input';
 import { UserModel } from '@/types/models/user.model';
 import { WatchlistItemModel } from '@/types/models/watchlist_item.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
-import { TimeService } from '@/common/services/time.service';
+import { DateService } from '@/common/services/date.service';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
 
 @Injectable()
@@ -19,7 +19,8 @@ export class WatchlistService {
     },
   };
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {
+  }
 
   async find(ctx: CtxType): Promise<WatchlistModel> {
     const watchlist = await this.prisma.movieWatchlist.findMany({
@@ -53,10 +54,10 @@ export class WatchlistService {
       );
     }
 
-    const end_time = TimeService.add_minutes_rounded_to_5(
-      watchlist_input.start_time,
+    const end_time = new DateService(watchlist_input.start_time).add_minutes_rounded_to_5(
       movie.runtime,
-    );
+    ).to_date()
+
     const watchlist_item = await this.prisma.movieWatchlist.upsert({
       create: {
         movie: {
