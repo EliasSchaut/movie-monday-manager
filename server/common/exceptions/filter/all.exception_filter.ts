@@ -9,7 +9,16 @@ export class AllExceptionFilter implements GqlExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): DangerException {
     if (exception instanceof Exception) return exception;
 
-    const i18n = I18nContext.current() ?? { t: () => "An error has occurred! Try again later."};
-    return new DangerException(i18n.t('common.exception.internal'), exception);
+    const i18n = I18nContext.current();
+    if (i18n)
+      return new DangerException(
+        i18n.t('common.exception.internal'),
+        exception,
+      );
+    else
+      return new DangerException(
+        'An error has occurred! Try again later.',
+        exception,
+      );
   }
 }

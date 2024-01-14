@@ -32,13 +32,7 @@ import { JwtModule } from '@nestjs/jwt';
             logLevel: 'log',
           }),
         ],
-        explicitConnect: true,
       },
-    }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET as string,
-      signOptions: { expiresIn: process.env.JWT_EXPIRATION as string },
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
@@ -62,6 +56,11 @@ import { JwtModule } from '@nestjs/jwt';
       },
       context: (ctx: ContextType) => ctx,
       autoSchemaFile: join(__dirname, 'types', 'generated', 'schema.gql'),
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET as string,
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION as string },
     }),
     AuthModule,
     ServerModule,
