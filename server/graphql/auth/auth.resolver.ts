@@ -7,10 +7,16 @@ import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { UserModel } from '@/types/models/user.model';
 import { UserPwResetInputModel } from '@/types/models/inputs/user_pw_reset.input';
 import { UserInputModel } from '@/types/models/inputs/user.input';
+import { ServerModel } from '@/types/models/server.model';
+import { Server } from '@/common/decorators/server.decorator';
+import { PrismaService } from 'nestjs-prisma';
 
 @Resolver(() => AuthModel)
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Query(() => AuthModel, { name: 'auth_sign_in' })
   async sign_in(
@@ -28,11 +34,12 @@ export class AuthResolver {
   @Mutation(() => UserModel, { name: 'auth_register' })
   async register(
     @Args('user_input_data') user_input_data: UserInputModel,
-    @ServerID() server_id: number,
+    @Server() server: ServerModel,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<UserModel | null> {
     return await this.authService.register(user_input_data, {
-      server_id,
+      server_id: server.id,
+      server,
       i18n,
     });
   }
@@ -65,12 +72,13 @@ export class AuthResolver {
       "Request a password reset for a user. A new challenge will sent to the user's email. Returns true if the request was successful.",
   })
   async user_pw_reset_request(
-    @ServerID() server_id: number,
+    @Server() server: ServerModel,
     @I18n() i18n: I18nContext<I18nTranslations>,
     @Args('username') username: string,
   ): Promise<boolean> {
     return this.authService.reset_password_request(username, {
-      server_id,
+      server_id: server.id,
+      server: server,
       i18n,
     });
   }

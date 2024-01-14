@@ -1,17 +1,19 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';
 import { ServerSettingsModel } from '@/types/models/server_settings.model';
-import { Server } from '@prisma/client';
+import { Server, ServerSettings } from '@prisma/client';
 
 @ObjectType({
   description: 'Server Information',
 })
 export class ServerModel {
-  constructor(server: Server) {
+  constructor(server: Server & { settings?: ServerSettings | null }) {
     this.id = server.id;
     this.title = server.title;
     this.name = server.name;
     this.desc = server.desc;
+    this.origin = server.origin;
+    this.settings = server.settings ?? undefined;
   }
 
   @Field(() => Int, {
@@ -34,6 +36,12 @@ export class ServerModel {
     nullable: true,
   })
   desc?: string | null;
+
+  @Field(() => String, {
+    description: "Origin URL of the server",
+    nullable: true
+  })
+  origin?: string | null
 
   @Field(() => ServerSettingsModel, {
     nullable: true,

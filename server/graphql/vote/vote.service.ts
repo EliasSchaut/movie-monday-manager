@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/services/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
 import { CtxType } from '@/types/ctx.type';
 import { VoteInputModel } from '@/types/models/inputs/vote.input';
 import { VoteModel } from '@/types/models/vote.model';

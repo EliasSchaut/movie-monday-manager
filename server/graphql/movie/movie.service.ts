@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/services/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
 import { CtxType } from '@/types/ctx.type';
 import { MovieModel } from '@/types/models/movie.model';
 import { WarningException } from '@/common/exceptions/warning.exception';

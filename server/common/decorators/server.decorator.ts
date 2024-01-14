@@ -1,15 +1,20 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { PrismaService } from '@/common/services/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
-import { ServerSettingsModel } from '@/types/models/server_settings.model';
+import { ServerModel } from '@/types/models/server.model';
+import { ModuleRef } from '@nestjs/core';
 
-export const ServerSettings = createParamDecorator(
+export const Server = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const gql_ctx = GqlExecutionContext.create(ctx);
     const req = gql_ctx.getContext().req;
-    const prisma = new PrismaService();
+    const prisma = ctx
+      .switchToHttp()
+      .getRequest()
+      .app.get(ModuleRef)
+      .get(PrismaService);
     const server = await prisma.server.findUnique({
       include: {
         settings: true,
@@ -19,12 +24,11 @@ export const ServerSettings = createParamDecorator(
       },
     });
 
-    if (!server || !server.settings) {
+    if (server === null || server.settings === null) {
       throw new DangerException(
         I18nContext.current()!.t('server.exception.not_found'),
       );
     }
-
-    return new ServerSettingsModel(server.settings);
+    return new ServerModel(server);
   },
 );

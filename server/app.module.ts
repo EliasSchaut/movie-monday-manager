@@ -1,4 +1,4 @@
-import { ContextType, Module } from '@nestjs/common';
+import { ContextType, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { I18nJsonLoader, I18nModule } from 'nestjs-i18n';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -14,12 +14,31 @@ import { MovieModule } from '@/graphql/movie/movie.module';
 import { HistoryModule } from '@/graphql/history/history.module';
 import { VoteModule } from '@/graphql/vote/vote.module';
 import { WatchlistModule } from '@/graphql/watchlist/watchlist.module';
+import { loggingMiddleware, PrismaModule } from 'nestjs-prisma';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: EnvValidationSchema,
+    }),
+    PrismaModule.forRoot({
+      isGlobal: true,
+      prismaServiceOptions: {
+        middlewares: [
+          loggingMiddleware({
+            logger: new Logger('PrismaMiddleware'),
+            logLevel: 'log',
+          }),
+        ],
+        explicitConnect: true,
+      },
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET as string,
+      signOptions: { expiresIn: process.env.JWT_EXPIRATION as string },
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
@@ -52,7 +71,5 @@ import { WatchlistModule } from '@/graphql/watchlist/watchlist.module';
     HistoryModule,
     WatchlistModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}

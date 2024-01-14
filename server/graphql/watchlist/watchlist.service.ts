@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/services/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
 import { CtxType } from '@/types/ctx.type';
 import { WatchlistModel } from '@/types/models/watchlist.model';
 import { WatchlistInputModel } from '@/types/models/inputs/watchlist.input';

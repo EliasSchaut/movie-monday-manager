@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '@/common/services/prisma.service';
+import { PrismaService } from 'nestjs-prisma';
 import { CtxType } from '@/types/ctx.type';
 import { UserModel } from '@/types/models/user.model';
 import { UserUpdateInputModel } from '@/types/models/inputs/user_update.input';

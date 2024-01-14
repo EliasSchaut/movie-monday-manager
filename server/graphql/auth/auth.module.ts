@@ -5,20 +5,12 @@ import { AuthResolver } from './auth.resolver';
 import { AuthGuard } from './auth.guard';
 import { PasswordService } from '@/common/services/password.service';
 import { EmailService } from '@/common/services/email.service';
-import { PrismaService } from '@/common/services/prisma.service';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET as string,
-      signOptions: { expiresIn: process.env.JWT_EXPIRATION as string },
-    }),
-  ],
   providers: [
     AuthService,
     AuthGuard,
     AuthResolver,
-    PrismaService,
     PasswordService,
     EmailService,
   ],
