@@ -22,7 +22,7 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
   imports: [
     DevtoolsModule.register({
       http: process.env.NODE_ENV !== 'production',
-      port: 8098,
+      port: Number(process.env.PORT_NEST_DEVTOOLS),
     }),
     ConfigModule.forRoot({
       isGlobal: true,
