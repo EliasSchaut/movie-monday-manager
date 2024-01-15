@@ -7,7 +7,9 @@ import { AllExceptionFilter } from '@/common/exceptions/filter/all.exception_fil
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
 
 export async function createApp(): Promise<INestApplication> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    snapshot: true,
+  });
   app.enableShutdownHooks();
   app.setGlobalPrefix('api');
   app.use(
