@@ -17,10 +17,15 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
-    const i18n = I18nContext.current();
+    const role: RoleEnum | undefined = this.reflector.get(
+      Role,
+      ctx.getHandler(),
+    );
+    if (!role) return true;
+
     const gql_ctx = GqlExecutionContext.create(ctx);
+    const i18n = I18nContext.current();
     const req = gql_ctx.getContext().req;
-    const role = this.reflector.get(Role, gql_ctx.getHandler());
     const token = this.extractTokenFromHeader(req);
     if (!token) {
       throw new WarningException(i18n!.t('auth.invalid.no_token'));
@@ -35,7 +40,7 @@ export class AuthGuard implements CanActivate {
       throw new WarningException(i18n!.t('auth.invalid.token'));
     }
 
-    req['user'] = Number(payload.username);
+    req['user'] = payload.username;
     if (role === RoleEnum.ADMIN) {
       return payload.sub.is_admin;
     }

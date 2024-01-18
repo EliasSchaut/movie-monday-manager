@@ -4,10 +4,6 @@ import { UserResolver } from '@/graphql/user/user.resolver';
 import { PasswordService } from '@/common/services/password.service';
 
 @Module({
-  providers: [
-    UserService,
-    UserResolver,
-    PasswordService,
-  ],
+  providers: [UserService, UserResolver, PasswordService],
 })
 export class UserModule {}

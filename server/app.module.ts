@@ -17,6 +17,8 @@ import { WatchlistModule } from '@/graphql/watchlist/watchlist.module';
 import { loggingMiddleware, PrismaModule } from 'nestjs-prisma';
 import { JwtModule } from '@nestjs/jwt';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from '@/graphql/auth/auth.guard';
 
 @Module({
   imports: [
@@ -74,6 +76,12 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
     VoteModule,
     HistoryModule,
     WatchlistModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}
