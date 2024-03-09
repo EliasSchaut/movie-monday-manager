@@ -23,6 +23,7 @@ export default defineNuxtConfig({
     'dayjs-nuxt',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
+    'shadcn-nuxt',
   ],
   runtimeConfig: {
     api_secret: process.env.SECRET_API_KEY as string,
