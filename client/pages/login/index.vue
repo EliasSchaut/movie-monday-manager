@@ -87,7 +87,7 @@ export default defineComponent({
     };
   },
   methods: {
-    submit_login(e: Event) {
+    async submit_login(e: Event) {
       const form = e.target as HTMLFormElement;
       const formData = new FormData(form);
 
@@ -100,18 +100,17 @@ export default defineComponent({
         }
       `;
 
-      const { result } = useQuery(query, {
+      const { data } = await useAsyncQuery(query, {
         email: formData.get('email'),
         password: formData.get('password'),
       });
 
-      console.log(result.value);
-
-      if (result.value) {
+      if (data.value) {
         this.auth.login(
-          result.value.auth_sign_in.barrier_token,
-          result.value.auth_sign_in.is_admin,
+          data.value.auth_sign_in.barrier_token,
+          data.value.auth_sign_in.is_admin,
         );
+        this.$router.push('/');
       } else {
         this.alert.show('Invalid credentials', 'warn');
       }

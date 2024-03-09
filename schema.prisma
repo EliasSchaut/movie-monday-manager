@@ -56,26 +56,27 @@ model ServerOAuth {
 }
 
 model User {
-  id             String      @id @default(uuid())
-  created_at     DateTime    @default(now())
-  server_id      Int
-  server         Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  email          String      @unique
-  username       String      @unique
-  password       String
-  first_name     String
-  last_name      String
-  avatar         String?
-  bio            String?
-  profile_public Boolean     @default(false)
-  email_opt_in   Boolean     @default(false)
-  is_admin       Boolean     @default(false)
-  verified       Boolean     @default(false)
-  pw_reset       Boolean     @default(false)
-  challenge      String      @unique @default(cuid())
-  oauth          UserOAuth[]
-  proposals      Movie[]
-  votes          MovieVote[]
+  id                   String      @id @default(uuid())
+  created_at           DateTime    @default(now())
+  server_id            Int
+  server               Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  email                String      @unique
+  username             String      @unique
+  password             String
+  first_name           String
+  last_name            String
+  avatar               String?
+  bio                  String?
+  profile_public       Boolean     @default(false)
+  email_opt_in         Boolean     @default(false)
+  is_admin             Boolean     @default(false)
+  verified             Boolean     @default(false)
+  pw_reset             Boolean     @default(false)
+  challenge            String      @unique @default(cuid())
+  email_update_request String?
+  oauth                UserOAuth[]
+  proposals            Movie[]
+  votes                MovieVote[]
 }
 
 model UserOAuth {
