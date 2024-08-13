@@ -94,8 +94,8 @@ model Movie {
   id             Int             @id @default(autoincrement())
   server_id      Int
   server         Server          @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  imdb_id        String
-  imdb_link      String
+  tmdb_id        String
+  tmdb_link      String
   runtime        Int
   year           Int
   proposed_at    DateTime        @default(now())
@@ -103,9 +103,9 @@ model Movie {
   proposer       User            @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
   metadata       MovieMetadata[]
   votes          MovieVote[]
-  MovieWatchlist MovieWatchlist?
+  MovieWatchlist MovieWatchlist[]
 
-  @@unique([imdb_id, server_id])
+  @@unique([tmdb_id, server_id])
 }
 
 model MovieMetadata {
@@ -129,38 +129,38 @@ model MovieMetadata {
 model MovieVote {
   id         Int      @id @default(autoincrement())
   created_at DateTime @default(now())
-  imdb_id    String
-  movie      Movie    @relation(fields: [imdb_id, server_id], references: [imdb_id, server_id], onDelete: Cascade)
+  movie_id   Int
+  movie      Movie    @relation(fields: [movie_id], references: [id], onDelete: Cascade)
   user_id    String
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   server_id  Int
   server     Server   @relation(fields: [server_id], references: [id], onDelete: Cascade)
   rank       Int
 
-  @@unique([imdb_id, server_id, user_id])
+  @@unique([movie_id, server_id, user_id])
 }
 
 model MovieWatchlist {
-  imdb_id    String
-  movie      Movie    @relation(fields: [imdb_id, server_id], references: [imdb_id, server_id], onDelete: Cascade)
+  movie_id   Int
+  movie      Movie    @relation(fields: [movie_id], references: [id], onDelete: Cascade)
   server_id  Int
   server     Server   @relation(fields: [server_id], references: [id], onDelete: Cascade)
   start_time DateTime
   end_time   DateTime
 
-  @@unique([imdb_id, server_id])
+  @@unique([movie_id, server_id])
 }
 
 model MovieHistory {
   id         Int                    @id @default(autoincrement())
-  imdb_id    String
+  tmdb_id    String
   server_id  Int
   server     Server                 @relation(fields: [server_id], references: [id], onDelete: Cascade)
   watched_at DateTime               @default(now())
-  imdb_link  String
+  tmdb_link  String
   metadata   MovieHistoryMetadata[]
 
-  @@unique([imdb_id, server_id])
+  @@unique([tmdb_id, server_id])
 }
 
 model MovieHistoryMetadata {

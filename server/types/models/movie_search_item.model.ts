@@ -1,11 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { ImdbApiSearchType } from '@/types/imdb_api_search.type';
+import { TmdbApiSearchType } from '@/types/tmdb_api_search.type';
 
 @ObjectType({
   description: 'Movie with reduced information as on result of a search query',
 })
 export class MovieSearchItemModel {
-  constructor(movie_search: ImdbApiSearchType) {
+  constructor(movie_search: TmdbApiSearchType) {
     this.imdb_id = movie_search.id;
     this.title = movie_search.title;
     this.description = movie_search.description;
