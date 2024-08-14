@@ -1,3 +1,5 @@
+import { MovieApiSearchType } from '@/types/movie/movie_api_search.type';
+
 export class TmdbApiSearchType {
   constructor(tmdb_movie_search: any) {
     this.id = tmdb_movie_search.id;
@@ -14,4 +16,8 @@ export class TmdbApiSearchType {
   poster_path!: string;
   release_date!: string;
   tmdb_rate!: number;
+
+  public to_movie_type(): MovieApiSearchType {
+    return this as MovieApiSearchType;
+  }
 }

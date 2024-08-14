@@ -7,6 +7,7 @@ import { TmdbApiCreditsType } from '@/types/movie/tmdb_api_credits.type';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { MovieApiMovieType } from '@/types/movie/movie_api_movie.type';
 import { TmdbApiMovieType } from '@/types/movie/tmdb_api_movie.type';
+import { MovieApiSearchType } from '@/types/movie/movie_api_search.type';
 
 @Injectable()
 export class TmdbApiService implements MovieAPI {
@@ -54,11 +55,19 @@ export class TmdbApiService implements MovieAPI {
   }
 
   public async search(
-    search_query: string,
+    query: string,
+    lang: string = 'en-US',
+  ): Promise<MovieApiSearchType[]> {
+    const tmdb_search_results = await this.search_tmdb_api(query, lang);
+    return tmdb_search_results.map((result) => result.to_movie_type());
+  }
+
+  private async search_tmdb_api(
+    query: string,
     lang: string = 'en-US',
   ): Promise<TmdbApiSearchType[]> {
     const movie_searches = await this.call_tmdb_api(
-      this.gen_movie_search_link(search_query, lang),
+      this.gen_movie_search_link(query, lang),
     );
 
     return movie_searches
