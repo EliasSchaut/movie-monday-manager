@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import cuid from 'cuid';
-const bcrypt = require('bcrypt');
+import generator from 'generate-password';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class PasswordService {
@@ -12,7 +12,10 @@ export class PasswordService {
     return bcrypt.compare(password, hash);
   }
 
-  async generate_challenge(): Promise<string> {
-    return cuid();
+  generate_challenge(): string {
+    return generator.generate({
+      length: 20,
+      strict: true,
+    });
   }
 }

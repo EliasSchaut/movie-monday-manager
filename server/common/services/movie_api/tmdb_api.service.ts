@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { TmdbApiMovieType } from '@/types/tmdb_api_movie.type';
 import { I18nContext } from 'nestjs-i18n';
-import { TmdbApiSearchType } from '@/types/tmdb_api_search.type';
+import { MovieAPI } from '@/common/services/movie_api/movie_api.interface';
+import { TmdbApiMovieMetadataType } from '@/types/movie/tmdb_api_movie_metadata.type';
+import { TmdbApiSearchType } from '@/types/movie/tmdb_api_search.type';
+import { TmdbApiCreditsType } from '@/types/movie/tmdb_api_credits.type';
 import { DangerException } from '@/common/exceptions/danger.exception';
-import { TmdbApiCreditsType } from '@/types/tmdb_api_credits.type';
+import { MovieApiMovieType } from '@/types/movie/movie_api_movie.type';
+import { TmdbApiMovieType } from '@/types/movie/tmdb_api_movie.type';
 
 @Injectable()
-export class TmdbApiService {
+export class TmdbApiService implements MovieAPI {
   private readonly api_key: string = process.env.TMDB_API_KEY as string;
   private readonly TIMEOUT_IN_MS: number = 10000;
   private readonly MAX_SEARCH_RESULTS: number = 6;
@@ -14,12 +17,36 @@ export class TmdbApiService {
   public async find(
     tmdb_id: string,
     lang: string = 'en-US',
-  ): Promise<TmdbApiMovieType | null> {
-    const movie = await this.call_tmdb_api(this.gen_movie_link(tmdb_id, lang));
-    return new TmdbApiMovieType(movie);
+  ): Promise<MovieApiMovieType | null> {
+    const tmdb_movie = await this.find_tmdb_movie(tmdb_id, lang);
+    return tmdb_movie?.to_movie_type() ?? null;
   }
 
-  public async find_credits(tmdb_id: string): Promise<TmdbApiCreditsType> {
+  private async find_tmdb_movie(
+    tmdb_id: string,
+    lang: string = 'en-US',
+  ): Promise<TmdbApiMovieType | null> {
+    const metadata = await this.find_metadata(tmdb_id, lang);
+    const credits = await this.find_credits(tmdb_id);
+    if (metadata && credits) {
+      return new TmdbApiMovieType({ metadata, credits });
+    }
+    return null;
+  }
+
+  private async find_metadata(
+    tmdb_id: string,
+    lang: string = 'en-US',
+  ): Promise<TmdbApiMovieMetadataType | null> {
+    const movie_metadata = await this.call_tmdb_api(
+      this.gen_movie_link(tmdb_id, lang),
+    );
+    return new TmdbApiMovieMetadataType(movie_metadata);
+  }
+
+  private async find_credits(
+    tmdb_id: string,
+  ): Promise<TmdbApiCreditsType | null> {
     const movie_credits = await this.call_tmdb_api(
       this.gen_credit_link(tmdb_id),
     );

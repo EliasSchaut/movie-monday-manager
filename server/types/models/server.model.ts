@@ -38,10 +38,10 @@ export class ServerModel {
   desc?: string | null;
 
   @Field(() => String, {
-    description: "Origin URL of the server",
-    nullable: true
+    description: 'Origin URL of the server',
+    nullable: true,
   })
-  origin?: string | null
+  origin?: string | null;
 
   @Field(() => ServerSettingsModel, {
     nullable: true,

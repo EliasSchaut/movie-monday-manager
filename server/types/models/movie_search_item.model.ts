@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { TmdbApiSearchType } from '@/types/tmdb_api_search.type';
+import { TmdbApiSearchType } from '@/types/movie/tmdb_api_search.type';
 
 @ObjectType({
   description: 'Movie with reduced information as on result of a search query',

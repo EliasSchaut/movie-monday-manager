@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-const nodemailer = require('nodemailer');
+import nodemailer from 'nodemailer';
 import { TransportOptions } from 'nodemailer';
 
 @Injectable()
@@ -18,7 +18,12 @@ export class EmailService {
     } as TransportOptions);
   }
 
-  async send_verify(dest_mail: string, username: string, verify_url: string, server_title: string) {
+  async send_verify(
+    dest_mail: string,
+    username: string,
+    verify_url: string,
+    server_title: string,
+  ) {
     await this.transporter.sendMail({
       from: `"${server_title}" <noreply@schaut.dev>`,
       to: dest_mail,

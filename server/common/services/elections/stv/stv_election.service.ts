@@ -1,7 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CountingResultArray } from '@/common/elections/stv/util/counting_result_array.util';
-import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_array.util';
+import { CountingResultArray } from '@/common/services/elections/stv/util/counting_result_array.util';
+import { VotingBallotArray } from '@/common/services/elections/stv/util/voting_ballot_array.util';
 import { DangerException } from '@/common/exceptions/danger.exception';
+import { Election } from '@/common/services/elections/election.interface';
 import { I18nContext } from 'nestjs-i18n';
 
 /**
@@ -12,15 +13,17 @@ import { I18nContext } from 'nestjs-i18n';
  *
  */
 @Injectable()
-export class StvElectionService implements ElectionInterface {
+export class StvElectionService implements Election {
   private num_candidates_to_elect!: number;
   private ballots!: VotingBallotArray;
   private elected_candidates: string[] = [];
   private voted_out_candidates: string[] = [];
 
   // returns all candidates that are elected.
-  public election(num_candidates_to_elect: number,
-                  voting_ballots: VotingBallotArray): string[] {
+  public election(
+    num_candidates_to_elect: number,
+    voting_ballots: VotingBallotArray,
+  ): string[] {
     this.num_candidates_to_elect = num_candidates_to_elect;
     this.ballots = voting_ballots;
     this.reset_election_fields();
@@ -78,7 +81,7 @@ export class StvElectionService implements ElectionInterface {
       }
     }
 
-    return this.elected_candidates
+    return this.elected_candidates;
   }
 
   private elect(candidate: string): void {

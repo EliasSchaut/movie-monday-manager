@@ -6,5 +6,5 @@ export class CtxType {
   server_id!: number;
   i18n!: I18nContext<I18nTranslations>;
   user_id?: string;
-  server?: ServerModel
+  server?: ServerModel;
 }

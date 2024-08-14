@@ -19,8 +19,7 @@ export class WatchlistService {
     },
   };
 
-  constructor(private readonly prisma: PrismaService) {
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async find(ctx: CtxType): Promise<WatchlistModel> {
     const watchlist = await this.prisma.movieWatchlist.findMany({
@@ -54,9 +53,9 @@ export class WatchlistService {
       );
     }
 
-    const end_time = new DateService(watchlist_input.start_time).add_minutes_rounded_to_5(
-      movie.runtime,
-    ).to_date()
+    const end_time = new DateService(watchlist_input.start_time)
+      .add_minutes_rounded_to_5(movie.runtime)
+      .to_date();
 
     const watchlist_item = await this.prisma.movieWatchlist.upsert({
       create: {

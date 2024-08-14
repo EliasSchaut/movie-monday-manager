@@ -66,8 +66,11 @@ export class AuthService {
         this.emailService.send_verify(
           user.email,
           user.username,
-          this.emailService.generate_verify_url(user.challenge as string, ctx.server!.origin!),
-          ctx.server!.title
+          this.emailService.generate_verify_url(
+            user.challenge as string,
+            ctx.server!.origin!,
+          ),
+          ctx.server!.title,
         );
         return new UserModel(user).convert_to_public();
       })
@@ -146,12 +149,15 @@ export class AuthService {
       },
     });
 
-    const pw_reset_url = this.emailService.generate_pw_reset_url(challenge, ctx.server!.origin!);
+    const pw_reset_url = this.emailService.generate_pw_reset_url(
+      challenge,
+      ctx.server!.origin!,
+    );
     await this.emailService.send_password_reset(
       user.email,
       user.first_name + ' ' + user.last_name,
       pw_reset_url,
-      ctx.server!.title
+      ctx.server!.title,
     );
     return true;
   }

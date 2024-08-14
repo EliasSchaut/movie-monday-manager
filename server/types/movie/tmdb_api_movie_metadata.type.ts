@@ -1,4 +1,4 @@
-export class TmdbApiMovieType {
+export class TmdbApiMovieMetadataType {
   constructor(tmdb_movie: any) {
     this.tmdb_id = tmdb_movie.id;
     this.title = tmdb_movie.title;

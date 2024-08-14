@@ -3,12 +3,11 @@ import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_arr
 import { VotingBallot } from '@/common/elections/stv/util/voting_ballot.util';
 
 describe('ElectionService', () => {
-
-  let election_service: StvElectionService
+  let election_service: StvElectionService;
 
   beforeEach(() => {
-    election_service = new StvElectionService()
-  })
+    election_service = new StvElectionService();
+  });
 
   it('one candidate, one vote', () => {
     const voting_ballots = new VotingBallotArray([
