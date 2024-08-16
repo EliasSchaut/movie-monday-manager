@@ -1,5 +1,6 @@
 import { EmailService } from '@/common/services/email.service';
 import nodemailer from 'nodemailer';
+
 jest.mock('nodemailer');
 
 describe('EmailService', () => {

@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { I18nContext } from 'nestjs-i18n';
-import { MovieAPI } from '@/common/services/movie_api/movie_api.interface';
+import { MovieApi } from '@/common/services/movie_api/movie_api.interface';
 import { TmdbApiMovieMetadataType } from '@/types/movie/tmdb_api_movie_metadata.type';
 import { TmdbApiSearchType } from '@/types/movie/tmdb_api_search.type';
 import { TmdbApiCreditsType } from '@/types/movie/tmdb_api_credits.type';
 import { DangerException } from '@/common/exceptions/danger.exception';
-import { MovieApiMovieType } from '@/types/movie/movie_api_movie.type';
+import { MovieType } from '@/types/movie/movie.type';
 import { TmdbApiMovieType } from '@/types/movie/tmdb_api_movie.type';
-import { MovieApiSearchType } from '@/types/movie/movie_api_search.type';
+import { MovieSearchType } from '@/types/movie/movie_search.type';
+import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 
 @Injectable()
-export class TmdbApiService implements MovieAPI {
+export class TmdbApiService extends MovieApiService implements MovieApi {
   private readonly API_KEY: string = process.env.TMDB_API_KEY as string;
   private readonly API_BASE: string = 'https://api.themoviedb.org/3/';
-  private readonly TIMEOUT_IN_MS: number = 10000;
-  private readonly MAX_SEARCH_RESULTS: number = 6;
 
   public async find(
     tmdb_id: string,
     lang: string = 'en-US',
-  ): Promise<MovieApiMovieType | null> {
+  ): Promise<MovieType | null> {
     const tmdb_movie = await this.find_tmdb_movie(tmdb_id, lang);
     return tmdb_movie?.to_movie_type() ?? null;
   }
@@ -58,7 +57,7 @@ export class TmdbApiService implements MovieAPI {
   public async search(
     query: string,
     lang: string = 'en-US',
-  ): Promise<MovieApiSearchType[]> {
+  ): Promise<MovieSearchType[]> {
     const tmdb_search_results = await this.search_tmdb_api(query, lang);
     return tmdb_search_results.map((result) => result.to_movie_type());
   }
@@ -77,7 +76,7 @@ export class TmdbApiService implements MovieAPI {
   }
 
   private async call_tmdb_api(url: string): Promise<any> {
-    const tmdb_fetch_timeout = this.create_tmdb_fetch_timeout();
+    const tmdb_fetch_timeout = this.create_fetch_timeout();
     const res: Response = await fetch(url).catch(() => {
       clearTimeout(tmdb_fetch_timeout);
       throw new DangerException(
@@ -86,14 +85,6 @@ export class TmdbApiService implements MovieAPI {
     });
     clearTimeout(tmdb_fetch_timeout);
     return await res.json();
-  }
-
-  private create_tmdb_fetch_timeout() {
-    return setTimeout(() => {
-      throw new DangerException(
-        I18nContext.current()!.t('movie.exception.create_api_not_found'),
-      );
-    }, this.TIMEOUT_IN_MS);
   }
 
   private gen_movie_link(tmdb_id: string, lang: string = 'en-US') {

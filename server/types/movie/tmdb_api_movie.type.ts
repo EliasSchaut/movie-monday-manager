@@ -1,4 +1,4 @@
-import { MovieApiMovieType } from '@/types/movie/movie_api_movie.type';
+import { MovieType } from '@/types/movie/movie.type';
 
 export class TmdbApiMovieType {
   constructor(tmdb_movie: any) {
@@ -34,7 +34,7 @@ export class TmdbApiMovieType {
   writer?: string;
   actors?: string[];
 
-  public to_movie_type(): MovieApiMovieType {
-    return this as MovieApiMovieType;
+  public to_movie_type(): MovieType {
+    return this as MovieType;
   }
 }

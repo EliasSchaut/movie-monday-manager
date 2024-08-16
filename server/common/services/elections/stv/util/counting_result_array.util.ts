@@ -16,7 +16,7 @@ export class CountingResultArray {
   }
 
   public get_candidate_with_weight(weight_of_best_candidate: number): string {
-    let possible_candidates = this.items.filter(
+    const possible_candidates = this.items.filter(
       (x) => x.weight === weight_of_best_candidate,
     );
     if (possible_candidates.length == 1)

@@ -1,4 +1,4 @@
-import { MovieApiSearchType } from '@/types/movie/movie_api_search.type';
+import { MovieSearchType } from '@/types/movie/movie_search.type';
 
 export class TmdbApiSearchType {
   constructor(tmdb_movie_search: any) {
@@ -17,7 +17,7 @@ export class TmdbApiSearchType {
   release_date!: string;
   tmdb_rate!: number;
 
-  public to_movie_type(): MovieApiSearchType {
-    return this as MovieApiSearchType;
+  public to_movie_type(): MovieSearchType {
+    return this as MovieSearchType;
   }
 }

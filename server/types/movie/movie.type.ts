@@ -1,4 +1,4 @@
-export class MovieApiMovieType {
+export class MovieType {
   title!: string;
   genres!: string[];
   director!: string;

@@ -1,4 +1,4 @@
-export class MovieApiSearchType {
+export class MovieSearchType {
   id!: string;
   title!: string;
   plot_overview!: string;

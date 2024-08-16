@@ -1,7 +1,7 @@
 {
   "exception": {
-    "create_api_not_found": "The metadata for the specified movie could not be retrieved! Please try again later.",
     "duplication": "The specified movie already exists!",
+    "fetch_timeout": "The metadata for the specified movie could not be retrieved! Please try again later.",
     "no_metadata": "No metadata could be found for the movie!",
     "not_found": "The specified movie could not be found!",
     "not_found_or_proposed": "The specified movie could not be found or was not proposed by you!"
