@@ -1,12 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { I18nContext } from 'nestjs-i18n';
 import { MovieApi } from '@/common/services/movie_api/movie_api.interface';
-import { TmdbApiMovieMetadataType } from '@/types/movie/tmdb_api_movie_metadata.type';
-import { TmdbApiSearchType } from '@/types/movie/tmdb_api_search.type';
-import { TmdbApiCreditsType } from '@/types/movie/tmdb_api_credits.type';
+import { TmdbSearchType } from '@/types/movie/tmdb_search.type';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { MovieType } from '@/types/movie/movie.type';
-import { TmdbApiMovieType } from '@/types/movie/tmdb_api_movie.type';
+import { TmdbMovieType } from '@/types/movie/tmdb_movie.type';
 import { MovieSearchType } from '@/types/movie/movie_search.type';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 
@@ -26,32 +24,15 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
   private async find_tmdb_movie(
     tmdb_id: string,
     lang: string = 'en-US',
-  ): Promise<TmdbApiMovieType | null> {
-    const metadata = await this.find_metadata(tmdb_id, lang);
-    const credits = await this.find_credits(tmdb_id);
-    if (metadata && credits) {
-      return new TmdbApiMovieType({ metadata, credits });
-    }
-    return null;
-  }
-
-  private async find_metadata(
-    tmdb_id: string,
-    lang: string = 'en-US',
-  ): Promise<TmdbApiMovieMetadataType | null> {
-    const movie_metadata = await this.call_tmdb_api(
+  ): Promise<TmdbMovieType | null> {
+    const tmdb_movie = await this.call_tmdb_api(
       this.gen_movie_link(tmdb_id, lang),
     );
-    return new TmdbApiMovieMetadataType(movie_metadata);
-  }
-
-  private async find_credits(
-    tmdb_id: string,
-  ): Promise<TmdbApiCreditsType | null> {
-    const movie_credits = await this.call_tmdb_api(
-      this.gen_credit_link(tmdb_id),
-    );
-    return new TmdbApiCreditsType(movie_credits);
+    try {
+      return new TmdbMovieType(tmdb_movie);
+    } catch (e) {
+      return null;
+    }
   }
 
   public async search(
@@ -65,14 +46,14 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
   private async search_tmdb_api(
     query: string,
     lang: string = 'en-US',
-  ): Promise<TmdbApiSearchType[]> {
+  ): Promise<TmdbSearchType[]> {
     const movie_searches = await this.call_tmdb_api(
       this.gen_movie_search_link(query, lang),
     );
 
     return movie_searches
       .slice(0, this.MAX_SEARCH_RESULTS + 1)
-      .map((movie: any) => new TmdbApiSearchType(movie));
+      .map((movie: any) => new TmdbSearchType(movie));
   }
 
   private async call_tmdb_api(url: string): Promise<any> {
@@ -88,11 +69,7 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
   }
 
   private gen_movie_link(tmdb_id: string, lang: string = 'en-US') {
-    return `${this.API_BASE}movie/${tmdb_id}?language=${lang}&api_key${this.API_KEY}`;
-  }
-
-  private gen_credit_link(tmdb_id: string, lang: string = 'en-US') {
-    return `${this.API_BASE}movie/${tmdb_id}/credits?language=${lang}&api_key${this.API_KEY}`;
+    return `${this.API_BASE}movie/${tmdb_id}?language=${lang}&api_key=${this.API_KEY}&append_to_response=credits`;
   }
 
   private gen_movie_search_link(search_query: string, lang: string = 'en-US') {

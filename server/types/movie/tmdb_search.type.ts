@@ -1,6 +1,6 @@
 import { MovieSearchType } from '@/types/movie/movie_search.type';
 
-export class TmdbApiSearchType {
+export class TmdbSearchType {
   constructor(tmdb_movie_search: any) {
     this.id = tmdb_movie_search.id;
     this.title = tmdb_movie_search.title;
