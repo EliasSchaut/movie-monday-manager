@@ -1,23 +1,35 @@
 import { MovieSearchType } from '@/types/movie/movie_search.type';
+import { ExternalSearchType } from '@/types/movie/external_search.type';
 
-export class TmdbSearchType {
-  constructor(tmdb_movie_search: any) {
-    this.id = tmdb_movie_search.id;
-    this.title = tmdb_movie_search.title;
-    this.plot_overview = tmdb_movie_search.overview;
-    this.poster_path = tmdb_movie_search.poster_path;
-    this.release_date = tmdb_movie_search.release_date;
-    this.tmdb_rate = tmdb_movie_search.vote_average;
+export class TmdbSearchType extends ExternalSearchType {
+  constructor(tmdb_movie_search: TmdbSearchType) {
+    super();
+    Object.assign(this, tmdb_movie_search);
   }
 
-  id!: string;
-  title!: string;
-  plot_overview!: string;
+  adult!: boolean;
+  backdrop_path!: string;
+  genre_ids!: number[];
+  id!: number;
+  original_language!: string;
+  original_title!: string;
+  overview!: string;
+  popularity!: number;
   poster_path!: string;
   release_date!: string;
-  tmdb_rate!: number;
+  title!: string;
+  video!: boolean;
+  vote_average!: number;
+  vote_count!: number;
 
-  public to_movie_type(): MovieSearchType {
-    return this as MovieSearchType;
+  public to_movie_search_type(): MovieSearchType {
+    return new MovieSearchType({
+      title: this.title,
+      plot_overview: this.overview,
+      poster_path: this.poster_path,
+      release_date: this.release_date,
+      tmdb_id: this.id,
+      imdb_id: undefined,
+    });
   }
 }

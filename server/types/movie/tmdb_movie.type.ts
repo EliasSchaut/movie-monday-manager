@@ -1,7 +1,9 @@
 import { MovieType } from '@/types/movie/movie.type';
+import { ExternalMovieType } from '@/types/movie/external_movie.type';
 
-export class TmdbMovieType {
+export class TmdbMovieType extends ExternalMovieType {
   constructor(tmdb_movie: TmdbMovieType) {
+    super();
     Object.assign(this, tmdb_movie);
   }
 

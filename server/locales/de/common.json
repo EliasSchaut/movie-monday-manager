@@ -1,5 +1,7 @@
 {
   "exception": {
+    "api_fetch": "Der Zugriff auf diese Schnittstelle hat nicht funktioniert. Bitte versuche es später erneut!",
+    "api_timeout": "Der Zugriff auf diese Schnittstelle ist abgelaufen. Bitte versuche es später erneut!",
     "db": {
       "duplication": "Der Eintrag existiert bereits!",
       "internal": "Interner Datenbank Fehler! Bitte kontaktiere den Betreiber der Website.",

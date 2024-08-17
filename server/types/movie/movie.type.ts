@@ -29,8 +29,9 @@ export class MovieType {
   tmdb_id?: number;
   tmdb_rate?: number;
   imdb_id?: string;
-  imdb_rate?: number;
-  rotten_tomato_rate?: number;
+  imdb_rate?: string;
+  metascore?: string;
+  rotten_tomato_rate?: string;
 
   // Media Information
   poster_path?: string;

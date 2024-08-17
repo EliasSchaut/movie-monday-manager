@@ -1,7 +1,12 @@
 export class MovieSearchType {
-  id!: string;
+  constructor(movie: MovieSearchType) {
+    Object.assign(this, movie);
+  }
+
   title!: string;
-  plot_overview!: string;
   poster_path!: string;
   release_date!: string;
+  plot_overview?: string;
+  tmdb_id?: number;
+  imdb_id?: string;
 }

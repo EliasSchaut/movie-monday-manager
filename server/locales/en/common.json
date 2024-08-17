@@ -1,5 +1,7 @@
 {
   "exception": {
+    "api_fetch": "Access to this api did not work. Please try again later!",
+    "api_timeout": "Access to this api has expired. Please try again later!",
     "db": {
       "duplication": "The entry already exists!",
       "internal": "Internal database error! Please contact the website operator.",
