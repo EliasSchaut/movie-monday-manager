@@ -91,39 +91,68 @@ model UserOAuth {
 }
 
 model Movie {
-  id             Int             @id @default(autoincrement())
-  server_id      Int
-  server         Server          @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  tmdb_id        String
-  tmdb_link      String
+  id        Int    @id @default(autoincrement())
+  server_id Int
+  server    Server @relation(fields: [server_id], references: [id], onDelete: Cascade)
+
+  // Basic Information
+  adult          Boolean?
+  original_title String?
   runtime        Int
-  year           Int
-  proposed_at    DateTime        @default(now())
-  proposer_id    String
-  proposer       User            @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
-  metadata       MovieMetadata[]
-  votes          MovieVote[]
-  MovieWatchlist MovieWatchlist[]
+  release_date   String?
+
+  // Production Information
+  budget   Int?
+  revenue  Int?
+  homepage String?
+
+  // Identifiers and Ratings
+  tmdb_id            String?
+  imdb_id            String?
+  tmdb_rate          Int?
+  imdb_rate          String?
+  metascore          String?
+  rotten_tomato_rate String?
+
+  // Media Information
+  poster_path String?
+
+  // Proposal Information
+  proposed_at DateTime @default(now())
+  proposer_id String
+  proposer    User     @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
+
+  // Relations
+  metadata  MovieMetadata[]
+  votes     MovieVote[]
+  watchlist MovieWatchlist[]
 
   @@unique([tmdb_id, server_id])
+  @@unique([imdb_id, server_id])
 }
 
+// metadata for each language
 model MovieMetadata {
-  movie_id     Int
-  lang_meta    String
-  title        String
-  genre        String
-  director     String?
-  actors       String?
-  imdb_rate    String?
-  meta_score   String?
-  rotten_score String?
-  languages    String?
-  plot         String?
-  poster_link  String?
-  movie        Movie   @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  movie_id Int
+  movie    Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  lang     String
 
-  @@unique([movie_id, lang_meta])
+  // Basic Information
+  title             String
+  plot_overview     String
+  tagline           String?
+  genres            String[]
+  original_language String
+  spoken_languages  String[]
+
+  // Production Information
+  director             String?
+  writer               String?
+  actors               String[]
+  production_companies String[]
+  production_countries String[]
+
+  @@unique([movie_id, lang])
 }
 
 model MovieVote {
