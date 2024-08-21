@@ -1,8 +1,9 @@
 import { MovieSearchType } from '@/types/movie/movie_search.type';
 import { ExternalSearchType } from '@/types/movie/external_search.type';
+import { OmitToMovieSearch } from '@/types/utils/movie.util';
 
 export class TmdbSearchType extends ExternalSearchType {
-  constructor(tmdb_movie_search: TmdbSearchType) {
+  constructor(tmdb_movie_search: OmitToMovieSearch<TmdbSearchType>) {
     super();
     Object.assign(this, tmdb_movie_search);
   }

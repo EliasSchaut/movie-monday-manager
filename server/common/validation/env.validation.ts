@@ -43,6 +43,13 @@ export const EnvValidationSchema = Joi.object({
     .default('2h')
     .description('The expiration time of the JWT tokens'),
 
+  MOVIE_API_TYPE: Joi.string()
+    .required()
+    .valid('TMDB', 'OMDB', 'TOMDB')
+    .description(
+      'The API to use for movie data. (TMDB = The Movie Database, OMDB = Open Movie Database, TOMDB = TMDB + OMDB)',
+    ),
+
   TMDB_API_KEY: Joi.string()
     .optional()
     .description('The API key for The Movie Database (TMDb)'),

@@ -1,5 +1,9 @@
-export class MovieType {
-  constructor(movie: MovieType) {
+import { ExternalMovieType } from '@/types/movie/external_movie.type';
+import { OmitToMovie } from '@/types/utils/movie.util';
+
+export class MovieType extends ExternalMovieType {
+  constructor(movie: OmitToMovie<MovieType>) {
+    super();
     Object.assign(this, movie);
   }
 
@@ -35,4 +39,8 @@ export class MovieType {
 
   // Media Information
   poster_path?: string;
+
+  public to_movie_type(): MovieType {
+    return this;
+  }
 }

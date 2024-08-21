@@ -9,8 +9,8 @@ import { ExternalSearchType } from '@/types/movie/external_search.type';
 @Injectable()
 export abstract class MovieApiService extends ApiService implements MovieApi {
   protected readonly MAX_SEARCH_RESULTS: number = 6;
-  protected abstract API_BASE: string;
-  protected abstract API_KEY: string;
+  protected abstract API_BASE: string | null;
+  protected abstract API_KEY: string | null;
 
   public async find(
     id: string,

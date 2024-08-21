@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MovieService } from '@/graphql/movie/movie.service';
 import { MovieResolver } from '@/graphql/movie/movie.resolver';
-import { ImdbApiService } from '@/common/services/imdb_api.service';
+import { MovieApiServiceProvider } from '@/common/services/movie_api/movie_api.provider';
 
 @Module({
-  providers: [MovieResolver, MovieService, ImdbApiService],
+  providers: [MovieResolver, MovieService, MovieApiServiceProvider],
 })
 export class MovieModule {}

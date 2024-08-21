@@ -1,8 +1,9 @@
 import { MovieType } from '@/types/movie/movie.type';
 import { ExternalMovieType } from '@/types/movie/external_movie.type';
+import { OmitToMovie } from '@/types/utils/movie.util';
 
 export class TmdbMovieType extends ExternalMovieType {
-  constructor(tmdb_movie: TmdbMovieType) {
+  constructor(tmdb_movie: OmitToMovie<TmdbMovieType>) {
     super();
     Object.assign(this, tmdb_movie);
   }

@@ -1,6 +1,10 @@
-export class MovieSearchType {
-  constructor(movie: MovieSearchType) {
-    Object.assign(this, movie);
+import { ExternalSearchType } from '@/types/movie/external_search.type';
+import { OmitToMovieSearch } from '@/types/utils/movie.util';
+
+export class MovieSearchType extends ExternalSearchType {
+  constructor(searches: OmitToMovieSearch<MovieSearchType>) {
+    super();
+    Object.assign(this, searches);
   }
 
   title!: string;
@@ -9,4 +13,8 @@ export class MovieSearchType {
   plot_overview?: string;
   tmdb_id?: number;
   imdb_id?: string;
+
+  public to_movie_search_type(): MovieSearchType {
+    return this;
+  }
 }
