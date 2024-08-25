@@ -1,3 +1,5 @@
+import { ElectionInputType } from '@/types/election/election_input.type';
+
 export interface Election {
-  election(num_candidates_to_elect: number, ...args: any[]): string[];
+  election(input: ElectionInputType): string[];
 }

@@ -1,4 +1,4 @@
-import { VotingBallot } from '@/common/elections/stv/util/voting_ballot.util';
+import { VotingBallot } from '@/common/services/elections/stv/util/voting_ballot.util';
 
 export class VotingBallotArray {
   private items: VotingBallot[] = [];

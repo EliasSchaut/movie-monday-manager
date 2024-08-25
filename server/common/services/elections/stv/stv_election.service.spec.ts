@@ -1,6 +1,4 @@
-import { StvElectionService } from '@/common/elections/stv/stv_election.service';
-import { VotingBallotArray } from '@/common/elections/stv/util/voting_ballot_array.util';
-import { VotingBallot } from '@/common/elections/stv/util/voting_ballot.util';
+import { StvElectionService } from '@/common/services/elections/stv/stv_election.service';
 
 describe('ElectionService', () => {
   let election_service: StvElectionService;
@@ -10,19 +8,22 @@ describe('ElectionService', () => {
   });
 
   it('one candidate, one vote', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'valle',
         weight: 1,
         preferences: [['293']],
       },
-    ] as VotingBallot[]);
-    const elected_candidates = election_service.election(1, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 1,
+      votes: voting_ballots,
+    });
     expect(elected_candidates).toEqual(['293']);
   });
 
   it('5 of 9 hate 3', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'one0',
         weight: 1,
@@ -68,8 +69,11 @@ describe('ElectionService', () => {
         weight: 1,
         preferences: [['3']],
       },
-    ]);
-    const elected_candidates = election_service.election(1, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 1,
+      votes: voting_ballots,
+    });
 
     /*
     expect: kick 2, kick 3, elect 1
@@ -78,7 +82,7 @@ describe('ElectionService', () => {
   });
 
   it('4 of 9 like 3', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'one0',
         weight: 1,
@@ -124,13 +128,16 @@ describe('ElectionService', () => {
         weight: 1,
         preferences: [['3']],
       },
-    ]);
-    const elected_candidates = election_service.election(2, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 2,
+      votes: voting_ballots,
+    });
     expect(elected_candidates).toEqual(['1', '3']);
   });
 
   it('7 candidates', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: '1',
         weight: 3,
@@ -166,8 +173,11 @@ describe('ElectionService', () => {
         weight: 3,
         preferences: [['7'], ['5'], ['6']],
       },
-    ]);
-    const elected_candidates = election_service.election(3, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 3,
+      votes: voting_ballots,
+    });
     //expected:
     /*
       elect2(8, 7.66 quota),
@@ -186,7 +196,7 @@ describe('ElectionService', () => {
   });
 
   it('same priority', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'mighty_user',
         weight: 60,
@@ -205,8 +215,11 @@ describe('ElectionService', () => {
           ['3', '10', '11'],
         ],
       },
-    ]);
-    const elected_candidates = election_service.election(4, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 4,
+      votes: voting_ballots,
+    });
     /*
       expected:
       elect1(50, 25 quota), (mighty weight now 45, weak weight now 30)
@@ -219,7 +232,7 @@ describe('ElectionService', () => {
   });
 
   it('split but majority', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'mighty_user',
         weight: 99,
@@ -230,8 +243,11 @@ describe('ElectionService', () => {
         weight: 1,
         preferences: [['3'], ['1', '2', '8', '9'], ['5', '10', '11']],
       },
-    ]);
-    const elected_candidates = election_service.election(1, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 1,
+      votes: voting_ballots,
+    });
     /*
       expected:
       kick[8,9,10,11]
@@ -242,7 +258,7 @@ describe('ElectionService', () => {
   });
 
   it('ignored_consensus_candidate', () => {
-    const voting_ballots = new VotingBallotArray([
+    const voting_ballots = [
       {
         user_id: 'near_consensus1',
         weight: 2,
@@ -263,8 +279,11 @@ describe('ElectionService', () => {
         weight: 3,
         preferences: [['3']],
       },
-    ]);
-    const elected_candidates = election_service.election(1, voting_ballots);
+    ];
+    const elected_candidates = election_service.election({
+      seats_to_fill: 1,
+      votes: voting_ballots,
+    });
     /*
       expected:
       12 is kicked early.

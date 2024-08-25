@@ -1,11 +1,4 @@
 export class VotingBallot {
-  user_id!: string;
-
-  weight: number = 1;
-
-  // ids of candidates. First index is preference (0 = best)
-  preferences!: string[][];
-
   constructor(voting_bollot: {
     user_id: string;
     weight?: number;
@@ -15,6 +8,12 @@ export class VotingBallot {
     this.preferences = voting_bollot.preferences;
     this.weight = voting_bollot.weight ?? this.weight;
   }
+
+  user_id!: string;
+  weight: number = 1;
+
+  // Ids of candidates. The first index is preference (0 = best)
+  preferences!: string[][];
 
   public get_partial_weight(): number {
     return this.weight / this.preferences[0].length;

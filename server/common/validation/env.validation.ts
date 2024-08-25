@@ -46,6 +46,7 @@ export const EnvValidationSchema = Joi.object({
   MOVIE_API_TYPE: Joi.string()
     .required()
     .valid('TMDB', 'OMDB', 'TOMDB')
+    .default('TOMDB')
     .description(
       'The API to use for movie data. (TMDB = The Movie Database, OMDB = Open Movie Database, TOMDB = TMDB + OMDB)',
     ),
@@ -62,6 +63,12 @@ export const EnvValidationSchema = Joi.object({
     .optional()
     .default(5)
     .description('The maximum number of search results of a movie search'),
+
+  ELECTION_TYPE: Joi.string()
+    .required()
+    .valid('STV')
+    .default('STV')
+    .description('The type of election to use'),
 
   EMAIL_HOST: Joi.string()
     .optional()

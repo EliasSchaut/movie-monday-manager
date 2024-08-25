@@ -4,6 +4,8 @@ import { VotingBallotArray } from '@/common/services/elections/stv/util/voting_b
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { Election } from '@/common/services/elections/election.interface';
 import { I18nContext } from 'nestjs-i18n';
+import { ElectionService } from '@/common/services/elections/election.service';
+import { ElectionInputType } from '@/types/election/election_input.type';
 
 /**
  * Class representing a stv-election.
@@ -13,19 +15,16 @@ import { I18nContext } from 'nestjs-i18n';
  *
  */
 @Injectable()
-export class StvElectionService implements Election {
+export class StvElectionService extends ElectionService implements Election {
   private num_candidates_to_elect!: number;
   private ballots!: VotingBallotArray;
   private elected_candidates: string[] = [];
   private voted_out_candidates: string[] = [];
 
   // returns all candidates that are elected.
-  public election(
-    num_candidates_to_elect: number,
-    voting_ballots: VotingBallotArray,
-  ): string[] {
-    this.num_candidates_to_elect = num_candidates_to_elect;
-    this.ballots = voting_ballots;
+  public election(input: ElectionInputType): string[] {
+    this.num_candidates_to_elect = input.seats_to_fill;
+    this.ballots = new VotingBallotArray(input.votes);
     this.reset_election_fields();
 
     // dummy to ensure that candidates that get no first-prio votes are kicked before any other are kicked.
