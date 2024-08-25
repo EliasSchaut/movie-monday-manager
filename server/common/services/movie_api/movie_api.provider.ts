@@ -4,16 +4,17 @@ import { OmdbApiService } from '@/common/services/movie_api/omdb_api.service';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 import { TomdbApiService } from '@/common/services/movie_api/tomdb_api.service';
 import { DangerException } from '@/common/exceptions/danger.exception';
+import { MovieApiTypeEnum } from '@/types/utils/movie.util';
 
 export const MovieApiServiceProvider: Provider = {
   provide: MovieApiService,
   useClass: (() => {
     switch (process.env.MOVIE_API_TYPE) {
-      case 'TMDB':
+      case MovieApiTypeEnum.TMDB:
         return TmdbApiService;
-      case 'OMDB':
+      case MovieApiTypeEnum.OMDB:
         return OmdbApiService;
-      case 'TOMDB':
+      case MovieApiTypeEnum.TOMDB:
         return TomdbApiService;
       default:
         throw new DangerException('Unsupported MOVIE_API_TYPE');

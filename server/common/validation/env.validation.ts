@@ -58,6 +58,11 @@ export const EnvValidationSchema = Joi.object({
     .optional()
     .description('The API key for the Open Movie Database (OMDb)'),
 
+  MAX_MOVIE_SEARCH_ITEMS: Joi.number()
+    .optional()
+    .default(5)
+    .description('The maximum number of search results of a movie search'),
+
   EMAIL_HOST: Joi.string()
     .optional()
     .domain()

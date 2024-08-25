@@ -99,7 +99,7 @@ model Movie {
   adult          Boolean?
   original_title String?
   runtime        Int
-  release_date   String?
+  release_date   String
 
   // Production Information
   budget   Int?
@@ -107,7 +107,7 @@ model Movie {
   homepage String?
 
   // Identifiers and Ratings
-  tmdb_id            String?
+  tmdb_id            Int?
   imdb_id            String?
   tmdb_rate          Int?
   imdb_rate          String?
@@ -135,7 +135,7 @@ model Movie {
 model MovieMetadata {
   movie_id Int
   movie    Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
-  lang     String
+  lang_meta     String
 
   // Basic Information
   title             String
@@ -152,7 +152,7 @@ model MovieMetadata {
   production_companies String[]
   production_countries String[]
 
-  @@unique([movie_id, lang])
+  @@unique([movie_id, lang_meta])
 }
 
 model MovieVote {

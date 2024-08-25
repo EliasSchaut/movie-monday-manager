@@ -14,7 +14,7 @@ export class OmdbSearchType extends ExternalSearchType {
   Type!: string;
   Poster!: string;
 
-  public to_movie_search_type(): MovieSearchType {
+  public to_movie_search_type(lang_meta: string): MovieSearchType {
     return new MovieSearchType({
       title: this.Title,
       poster_path: this.Poster,
@@ -22,6 +22,7 @@ export class OmdbSearchType extends ExternalSearchType {
       plot_overview: undefined,
       tmdb_id: undefined,
       imdb_id: this.imdbID,
+      lang_meta,
     });
   }
 }

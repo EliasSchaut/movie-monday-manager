@@ -40,7 +40,11 @@ export class MovieType extends ExternalMovieType {
   // Media Information
   poster_path?: string;
 
-  public to_movie_type(): MovieType {
+  // Internal Information
+  lang_meta!: string;
+
+  public to_movie_type(lang_meta: string): MovieType {
+    this.lang_meta = lang_meta;
     return this;
   }
 }

@@ -74,7 +74,7 @@ export class TmdbMovieType extends ExternalMovieType {
     }[];
   };
 
-  to_movie_type(): MovieType {
+  public to_movie_type(lang_meta: string): MovieType {
     return new MovieType({
       actors: this.credits.cast.map((cast) => cast.name),
       adult: this.adult,
@@ -108,6 +108,7 @@ export class TmdbMovieType extends ExternalMovieType {
       writer:
         this.credits.crew.find((crew) => crew.job === 'Writer')?.name ||
         undefined,
+      lang_meta,
     });
   }
 }

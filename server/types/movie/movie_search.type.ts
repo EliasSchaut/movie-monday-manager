@@ -14,7 +14,11 @@ export class MovieSearchType extends ExternalSearchType {
   tmdb_id?: number;
   imdb_id?: string;
 
-  public to_movie_search_type(): MovieSearchType {
+  // Internal Information
+  lang_meta!: string;
+
+  public to_movie_search_type(lang_meta: string): MovieSearchType {
+    this.lang_meta = lang_meta;
     return this;
   }
 }

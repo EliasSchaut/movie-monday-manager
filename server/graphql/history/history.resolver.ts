@@ -5,7 +5,7 @@ import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieHistoryInputModel } from '@/types/models/inputs/movie_history.input';
-import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
+import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 
@@ -17,7 +17,7 @@ export class HistoryResolver {
     name: 'history',
   })
   async find_by_id(
-    @Args('imdb_id_input') imdb_id_input: ImdbIdInputModel,
+    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
@@ -54,7 +54,7 @@ export class HistoryResolver {
     name: 'history_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input: ImdbIdInputModel,
+    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {

@@ -1,112 +1,133 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { UserModel } from '@/types/models/user.model';
 import { Movie, MovieMetadata } from '@prisma/client';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
+import { MovieType } from '@/types/movie/movie.type';
+import { OmitToMovie } from '@/types/utils/movie.util';
 
 @ObjectType()
-export class MovieModel {
+export class MovieModel implements OmitToMovie<MovieType> {
   constructor(movie: Movie & { metadata: MovieMetadata[] }) {
     if (movie.metadata.length < 1) {
       throw new DangerException(
         I18nContext.current()!.t('movie.exception.no_metadata'),
       );
     }
-    const metadata = movie.metadata[0];
+    const meta = movie.metadata[0];
 
-    this.imdb_id = movie.imdb_id;
-    this.lang_meta = metadata.lang_meta;
-    this.title = metadata.title;
-    this.year = movie.year;
+    this.id = movie.id;
+    this.title = meta.title;
+    this.original_title = movie.original_title ?? undefined;
+    this.tagline = meta.tagline ?? undefined;
+    this.plot_overview = meta.plot_overview;
+    this.genres = meta.genres;
+    this.original_language = meta.original_language;
+    this.spoken_languages = meta.spoken_languages;
+    this.release_date = movie.release_date;
     this.runtime = movie.runtime;
-    this.imdb_link = movie.imdb_link;
-    this.genre = metadata.genre;
-    this.director = metadata.director;
-    this.actors = metadata.actors;
-    this.imdb_rate = metadata.imdb_rate;
-    this.meta_score = metadata.meta_score;
-    this.rotten_score = metadata.rotten_score;
-    this.languages = metadata.languages;
-    this.plot = metadata.plot;
-    this.poster_link = metadata.poster_link;
-    this.proposed_at = movie.proposed_at;
+    this.adult = movie.adult ?? undefined;
+    this.director = meta.director ?? undefined;
+    this.writer = meta.writer ?? undefined;
+    this.actors = meta.actors;
+    this.production_companies = meta.production_companies;
+    this.production_countries = meta.production_countries;
+    this.budget = movie.budget ?? undefined;
+    this.revenue = movie.revenue ?? undefined;
+    this.homepage = movie.homepage ?? undefined;
+    this.tmdb_id = movie.tmdb_id ?? undefined;
+    this.tmdb_rate = movie.tmdb_rate ?? undefined;
+    this.imdb_id = movie.imdb_id ?? undefined;
+    this.imdb_rate = movie.imdb_rate ?? undefined;
+    this.metascore = movie.metascore ?? undefined;
+    this.rotten_tomato_rate = movie.rotten_tomato_rate ?? undefined;
+    this.poster_path = movie.poster_path ?? undefined;
+    this.lang_meta = meta.lang_meta;
   }
 
-  @Field(() => String)
-  imdb_id!: string;
+  // Internal Information
+  @Field(() => Int)
+  id!: number;
 
-  @Field(() => String, {
-    description: 'The language of the displayed metadata',
-  })
+  @Field(() => String)
   lang_meta!: string;
 
-  @Field(() => String)
-  imdb_link!: string;
-
+  // Basic Information
   @Field(() => String)
   title!: string;
 
-  @Field(() => Int)
-  year!: number;
+  @Field(() => String, { nullable: true })
+  original_title?: string;
+
+  @Field(() => String, { nullable: true })
+  tagline?: string;
 
   @Field(() => String)
-  genre?: string;
+  plot_overview!: string;
+
+  @Field(() => [String])
+  genres!: string[];
+
+  @Field(() => String)
+  @Field(() => String)
+  original_language!: string;
+
+  @Field(() => [String])
+  spoken_languages!: string[];
+
+  @Field(() => String)
+  release_date!: string;
 
   @Field(() => Int)
   runtime!: number;
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  director?: string | null;
+  @Field(() => Boolean)
+  adult?: boolean;
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  actors?: string | null;
+  // Production Information
+  @Field(() => String, { nullable: true })
+  director?: string;
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  imdb_rate?: string | null;
+  @Field(() => String, { nullable: true })
+  writer?: string;
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  meta_score?: string | null;
+  @Field(() => [String])
+  actors!: string[];
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  rotten_score?: string | null;
+  @Field(() => [String])
+  production_companies!: string[];
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  languages?: string | null;
+  @Field(() => [String])
+  production_countries!: string[];
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  plot?: string | null;
+  @Field(() => Int, { nullable: true })
+  budget?: number;
 
-  @Field(() => String, {
-    nullable: true,
-  })
-  poster_link?: string | null;
+  @Field(() => Int, { nullable: true })
+  revenue?: number;
 
-  @Field(() => UserModel, {
-    nullable: true,
-  })
-  proposer?: UserModel;
+  @Field(() => String, { nullable: true })
+  homepage?: string;
 
-  @Field(() => Date, {
-    nullable: true,
-  })
-  proposed_at?: Date;
+  // Identifiers and Ratings
+  @Field(() => Int, { nullable: true })
+  tmdb_id?: number;
 
-  @Field(() => Int, {
-    nullable: true,
-  })
-  rank?: number;
+  @Field(() => Int, { nullable: true })
+  tmdb_rate?: number;
+
+  @Field(() => String, { nullable: true })
+  imdb_id?: string;
+
+  @Field(() => String, { nullable: true })
+  imdb_rate?: string;
+
+  @Field(() => String, { nullable: true })
+  metascore?: string;
+
+  @Field(() => String, { nullable: true })
+  rotten_tomato_rate?: string;
+
+  // Media Information
+  @Field(() => String, { nullable: true })
+  poster_path?: string;
 }

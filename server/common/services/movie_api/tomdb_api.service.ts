@@ -6,11 +6,18 @@ import { TmdbApiService } from '@/common/services/movie_api/tmdb_api.service';
 import { OmdbApiService } from '@/common/services/movie_api/omdb_api.service';
 import { MovieType } from '@/types/movie/movie.type';
 import { MovieSearchType } from '@/types/movie/movie_search.type';
+import {
+  MovieApiTypeEnum,
+  MovieExternalIdEnum,
+  TmdbId,
+} from '@/types/utils/movie.util';
 
 @Injectable()
 export class TomdbApiService extends MovieApiService implements MovieApi {
   protected API_BASE = null;
   protected API_KEY = null;
+  protected API_TYPE = MovieApiTypeEnum.TOMDB;
+  protected API_USED_ID = MovieExternalIdEnum.TMDB;
 
   constructor(
     private readonly tmdbApiService: TmdbApiService,
@@ -20,13 +27,16 @@ export class TomdbApiService extends MovieApiService implements MovieApi {
   }
 
   protected async fetch_movie(
-    tmdb_id: string,
+    tmdb_id: TmdbId,
     lang?: string,
   ): Promise<MovieType | null> {
-    const tmdb_movie = await this.tmdbApiService.find(tmdb_id, lang);
+    const tmdb_movie = await this.tmdbApiService.find({ tmdb_id }, lang);
     if (!tmdb_movie || !tmdb_movie.imdb_id) return null;
 
-    const omdb_movie = await this.omdbApiService.find(tmdb_movie.imdb_id, lang);
+    const omdb_movie = await this.omdbApiService.find(
+      { imdb_id: tmdb_movie.imdb_id },
+      lang,
+    );
     if (!omdb_movie) return null;
 
     return new MovieType({

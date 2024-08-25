@@ -4,22 +4,25 @@ import { CtxType } from '@/types/ctx.type';
 import { MovieModel } from '@/types/models/movie.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { UserModel } from '@/types/models/user.model';
-import { ImdbApiService } from '@/common/services/imdb_api.service';
 import { Prisma } from '@prisma/client';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
+import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
+import { MovieType } from '@/types/movie/movie.type';
+import { ExternalIds, MovieId } from '@/types/utils/movie.util';
 
 @Injectable()
 export class MovieService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly imdb_api_service: ImdbApiService,
+    private readonly movie_api_service: MovieApiService,
   ) {}
 
-  async find_by_id(imdb_id: string, ctx: CtxType): Promise<MovieModel> {
+  async find_by_id(movie_id: MovieId, ctx: CtxType): Promise<MovieModel> {
     const movie = await this.prisma.movie.findUnique({
       where: {
-        imdb_id_server_id: { imdb_id: imdb_id, server_id: ctx.server_id },
+        id: movie_id,
+        server_id: ctx.server_id,
       },
       include: {
         metadata: {
@@ -53,25 +56,31 @@ export class MovieService {
   }
 
   async search(search_query: string, ctx: CtxType): Promise<MovieSearchModel> {
-    return await this.imdb_api_service.search(search_query, ctx.i18n.lang);
+    const searches = await this.movie_api_service.search(
+      search_query,
+      ctx.i18n.lang,
+    );
+    return new MovieSearchModel(searches);
   }
 
-  async create(imdb_id: string, ctx: CtxType): Promise<MovieModel> {
-    const api_movies = await this.imdb_api_service.find_all_langs(imdb_id);
-    if (api_movies === null || api_movies.length === 0)
-      throw new WarningException(
-        ctx.i18n.t('movie.exception.create_api_not_found'),
-      );
+  async create(external_id: ExternalIds, ctx: CtxType): Promise<MovieModel> {
+    const api_movies: MovieType[] = [];
+    for (const lang of ctx.i18n.service.getSupportedLanguages()) {
+      const api_movie = await this.movie_api_service.find(external_id, lang);
+      if (!api_movie)
+        throw new WarningException(
+          ctx.i18n.t('movie.exception.create_api_not_found'),
+        );
+      api_movies.push(api_movie);
+    }
 
+    const lang_independent_metadata = api_movies[0];
     const movie = await this.prisma.movie
       .create({
         data: {
-          imdb_id: imdb_id,
           server_id: ctx.server_id,
           proposer_id: ctx.user_id!,
-          imdb_link: ImdbApiService.gen_imdb_link(imdb_id),
-          runtime: api_movies[0].runtime,
-          year: api_movies[0].year,
+          ...lang_independent_metadata,
           metadata: {
             createMany: {
               data: api_movies as Prisma.MovieMetadataCreateManyMovieInput[],
@@ -88,26 +97,19 @@ export class MovieService {
         },
       })
       .catch((e: Error) => {
-        if (
-          e instanceof Prisma.PrismaClientKnownRequestError &&
-          e.code === 'P2002'
-        ) {
-          throw new WarningException(ctx.i18n.t('movie.exception.duplication'));
-        }
-        throw e;
+        throw new PrismaException(e, {
+          unique_constraint_violation: ctx.i18n.t(
+            'movie.exception.duplication',
+          ),
+        });
       });
     return new MovieModel(movie);
   }
 
-  async delete(imdb_id: string, ctx: CtxType) {
+  async delete(movie_id: MovieId, ctx: CtxType) {
     const movie = await this.prisma.movie
       .delete({
-        where: {
-          imdb_id_server_id: {
-            imdb_id: imdb_id,
-            server_id: ctx.server_id,
-          },
-        },
+        where: { id: movie_id, server_id: ctx.server_id },
         include: {
           metadata: {
             where: {
@@ -125,14 +127,12 @@ export class MovieService {
     return new MovieModel(movie);
   }
 
-  async delete_proposed(imdb_id: string, ctx: CtxType): Promise<MovieModel> {
+  async delete_proposed(movie_id: MovieId, ctx: CtxType): Promise<MovieModel> {
     const movie = await this.prisma.movie
       .delete({
         where: {
-          imdb_id_server_id: {
-            imdb_id: imdb_id,
-            server_id: ctx.server_id,
-          },
+          id: movie_id,
+          server_id: ctx.server_id,
           proposer_id: ctx.user_id,
         },
         include: {
@@ -154,14 +154,9 @@ export class MovieService {
     return new MovieModel(movie);
   }
 
-  async resolve_proposer(imdb_id: string, ctx: CtxType): Promise<UserModel> {
+  async resolve_proposer(movie_id: MovieId, ctx: CtxType): Promise<UserModel> {
     const movie = await this.prisma.movie.findUnique({
-      where: {
-        imdb_id_server_id: {
-          imdb_id: imdb_id,
-          server_id: ctx.server_id,
-        },
-      },
+      where: { id: movie_id, server_id: ctx.server_id },
       include: {
         proposer: true,
       },
@@ -172,7 +167,7 @@ export class MovieService {
   }
 
   // TODO: Implement rank system
-  async resolve_rank(imdb_id: string, ctx: CtxType): Promise<number> {
+  async resolve_rank(movie_id: MovieId, ctx: CtxType): Promise<number> {
     return 1;
   }
 }

@@ -8,7 +8,7 @@ import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { ServerID } from '@/common/decorators/server_id.decorator';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { VoteModel } from '@/types/models/vote.model';
-import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
+import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
 
 @Resolver(() => VoteModel)
 export class VoteResolver {
@@ -19,7 +19,7 @@ export class VoteResolver {
     name: 'vote',
   })
   async find(
-    @Args('imdb_id_input') imdb_id_input: ImdbIdInputModel,
+    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
@@ -69,7 +69,7 @@ export class VoteResolver {
     name: 'vote_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input_model: ImdbIdInputModel,
+    @Args('imdb_id_input') imdb_id_input_model: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,

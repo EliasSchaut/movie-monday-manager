@@ -23,7 +23,7 @@ export class TmdbSearchType extends ExternalSearchType {
   vote_average!: number;
   vote_count!: number;
 
-  public to_movie_search_type(): MovieSearchType {
+  public to_movie_search_type(lang_meta: string): MovieSearchType {
     return new MovieSearchType({
       title: this.title,
       plot_overview: this.overview,
@@ -31,6 +31,7 @@ export class TmdbSearchType extends ExternalSearchType {
       release_date: this.release_date,
       tmdb_id: this.id,
       imdb_id: undefined,
+      lang_meta,
     });
   }
 }

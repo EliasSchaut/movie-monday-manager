@@ -34,7 +34,7 @@ export class OmdbMovieType extends ExternalMovieType {
   Website!: string;
   Response!: string;
 
-  public to_movie_type(): MovieType {
+  public to_movie_type(lang_meta: string): MovieType {
     return new MovieType({
       title: this.Title,
       plot_overview: this.Plot,
@@ -58,6 +58,7 @@ export class OmdbMovieType extends ExternalMovieType {
         (rating) => rating.Source === 'Rotten Tomatoes',
       )?.Value,
       poster_path: this.Poster,
+      lang_meta,
     });
   }
 }

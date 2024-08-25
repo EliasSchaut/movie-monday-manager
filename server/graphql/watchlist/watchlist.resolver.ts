@@ -17,7 +17,7 @@ import { WatchlistItemModel } from '@/types/models/watchlist_item.model';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { WatchlistInputModel } from '@/types/models/inputs/watchlist.input';
 import { UserModel } from '@/types/models/user.model';
-import { ImdbIdInputModel } from '@/types/models/inputs/imdb_id.input';
+import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
 
 @Resolver(() => WatchlistItemModel)
 export class WatchlistResolver {
@@ -67,7 +67,7 @@ export class WatchlistResolver {
     name: 'watchlist_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input: ImdbIdInputModel,
+    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
