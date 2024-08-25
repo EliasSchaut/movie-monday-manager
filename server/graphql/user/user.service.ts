@@ -5,7 +5,6 @@ import { UserModel } from '@/types/models/user.model';
 import { UserUpdateInputModel } from '@/types/models/inputs/user_update.input';
 import { PasswordService } from '@/common/services/password.service';
 import { WarningException } from '@/common/exceptions/warning.exception';
-import cuid from 'cuid';
 
 @Injectable()
 export class UserService {
@@ -77,7 +76,7 @@ export class UserService {
       },
       data: {
         email_update_request: email,
-        challenge: cuid(),
+        challenge: this.passwordService.generate_challenge(),
       },
     });
   }

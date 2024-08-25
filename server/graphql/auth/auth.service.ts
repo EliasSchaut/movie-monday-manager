@@ -60,6 +60,7 @@ export class AuthService {
         data: {
           ...user_input_data,
           server_id: ctx.server_id,
+          challenge: this.passwordService.generate_challenge(),
         },
       })
       .then((user) => {
@@ -87,7 +88,7 @@ export class AuthService {
 
   async verify(challenge: string, ctx: CtxType): Promise<UserModel | null> {
     const user = await this.prisma.user.findUnique({
-      where: { challenge: challenge },
+      where: { challenge: challenge, id: ctx.user_id },
     });
     if (!user || user.verified) {
       throw new WarningException(ctx.i18n.t('auth.exception.not_found_verify'));
@@ -108,7 +109,10 @@ export class AuthService {
     ctx: CtxType,
   ): Promise<UserModel | null> {
     const user = await this.prisma.user.findUnique({
-      where: { challenge: user_pw_reset_input_data.challenge },
+      where: {
+        challenge: user_pw_reset_input_data.challenge,
+        id: user_pw_reset_input_data.user_id,
+      },
     });
     if (!user || !user.pw_reset) {
       throw new WarningException(
@@ -140,7 +144,7 @@ export class AuthService {
       return false;
     }
 
-    const challenge = await this.passwordService.generate_challenge();
+    const challenge = this.passwordService.generate_challenge();
     await this.prisma.user.update({
       where: { id: user.id },
       data: {

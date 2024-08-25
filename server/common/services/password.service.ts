@@ -4,17 +4,19 @@ import bcrypt from 'bcrypt';
 
 @Injectable()
 export class PasswordService {
-  async hash(password: string): Promise<string> {
+  public static readonly CHALLENGE_LENGTH = 20;
+
+  public async hash(password: string): Promise<string> {
     return bcrypt.hash(password, 10);
   }
 
-  async compare(password: string, hash: string): Promise<boolean> {
+  public async compare(password: string, hash: string): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
-  generate_challenge(): string {
+  public generate_challenge(): string {
     return generator.generate({
-      length: 20,
+      length: PasswordService.CHALLENGE_LENGTH,
       strict: true,
     });
   }

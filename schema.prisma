@@ -72,7 +72,7 @@ model User {
   is_admin             Boolean     @default(false)
   verified             Boolean     @default(false)
   pw_reset             Boolean     @default(false)
-  challenge            String      @unique @default(cuid())
+  challenge            String
   email_update_request String?
   oauth                UserOAuth[]
   proposals            Movie[]
