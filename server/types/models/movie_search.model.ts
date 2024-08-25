@@ -12,7 +12,9 @@ export class MovieSearchModel {
     if (movies_search.length > MovieSearchModel.MAX_SEARCH_ITEMS) {
       movies_search = movies_search.slice(0, MovieSearchModel.MAX_SEARCH_ITEMS);
     }
-    this.items = movies_search as MovieSearchItemModel[];
+    this.items = movies_search.map(
+      (movie_search) => new MovieSearchItemModel(movie_search),
+    );
   }
 
   @Field(() => [MovieSearchItemModel])
