@@ -4,12 +4,12 @@ import { CtxType } from '@/types/ctx.type';
 import { MovieModel } from '@/types/models/movie.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { UserModel } from '@/types/models/user.model';
-import { Prisma } from '@prisma/client';
+import { Movie, MovieMetadata, Prisma } from '@prisma/client';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 import { MovieType } from '@/types/movie/movie.type';
-import { ExternalIds, MovieId } from '@/types/utils/movie.util';
+import { MovieExternalIdsType, MovieId } from '@/types/utils/movie.util';
 
 @Injectable()
 export class MovieService {
@@ -39,6 +39,24 @@ export class MovieService {
     return new MovieModel(movie);
   }
 
+  async find_by_id_multilang(
+    movie_id: MovieId,
+    ctx: CtxType,
+  ): Promise<Movie & { metadata: MovieMetadata[] }> {
+    const movie = await this.prisma.movie.findUnique({
+      where: {
+        id: movie_id,
+        server_id: ctx.server_id,
+      },
+      include: {
+        metadata: true,
+      },
+    });
+    if (movie === null)
+      throw new WarningException(ctx.i18n.t('movie.exception.not_found'));
+    return movie;
+  }
+
   async find_many(ctx: CtxType): Promise<MovieModel[]> {
     const movies = await this.prisma.movie.findMany({
       where: { server_id: ctx.server_id },
@@ -63,7 +81,10 @@ export class MovieService {
     return new MovieSearchModel(searches);
   }
 
-  async create(external_id: ExternalIds, ctx: CtxType): Promise<MovieModel> {
+  async create(
+    external_id: MovieExternalIdsType,
+    ctx: CtxType,
+  ): Promise<MovieModel> {
     const api_movies: MovieType[] = [];
     for (const lang of ctx.i18n.service.getSupportedLanguages()) {
       const api_movie = await this.movie_api_service.find(external_id, lang);

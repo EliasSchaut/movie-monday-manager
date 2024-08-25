@@ -99,7 +99,7 @@ model Movie {
   adult          Boolean?
   original_title String?
   runtime        Int
-  release_date   String
+  release_date   DateTime
 
   // Production Information
   budget   Int?
@@ -133,9 +133,9 @@ model Movie {
 
 // metadata for each language
 model MovieMetadata {
-  movie_id Int
-  movie    Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
-  lang_meta     String
+  movie_id  Int
+  movie     Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  lang_meta String
 
   // Basic Information
   title             String
@@ -181,22 +181,29 @@ model MovieWatchlist {
 }
 
 model MovieHistory {
-  id         Int                    @id @default(autoincrement())
-  tmdb_id    String
-  server_id  Int
-  server     Server                 @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  watched_at DateTime               @default(now())
-  tmdb_link  String
-  metadata   MovieHistoryMetadata[]
+  id        Int    @id @default(autoincrement())
+  server_id Int
+  server    Server @relation(fields: [server_id], references: [id], onDelete: Cascade)
+
+  watched_at   DateTime  @default(now())
+  poster_path  String?
+  release_date DateTime?
+  tmdb_id      Int?
+  imdb_id      String?
+
+  metadata MovieHistoryMetadata[]
 
   @@unique([tmdb_id, server_id])
+  @@unique([imdb_id, server_id])
 }
 
 model MovieHistoryMetadata {
   history_id    Int
-  lang_meta     String
-  title         String
   movie_history MovieHistory @relation(fields: [history_id], references: [id], onDelete: Cascade)
+  lang_meta     String
+
+  title         String
+  plot_overview String?
 
   @@unique([history_id, lang_meta])
 }

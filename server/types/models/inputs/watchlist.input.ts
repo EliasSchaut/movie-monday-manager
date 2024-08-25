@@ -1,12 +1,12 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsImdbId } from '@/common/validation/decorators/IsImdbId.validation';
 import { IsDate } from 'class-validator';
+import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 
 @InputType()
 export class WatchlistInputModel {
-  @IsImdbId()
+  @IsMovieId()
   @Field(() => String)
-  imdb_id!: string;
+  movie_id!: string;
 
   @IsDate()
   @Field(() => Date)

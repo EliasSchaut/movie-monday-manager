@@ -1,4 +1,8 @@
-import { registerDecorator, ValidationOptions } from 'class-validator';
+import {
+  registerDecorator,
+  ValidationArguments,
+  ValidationOptions,
+} from 'class-validator';
 import { ImdbIdPattern } from '@/common/validation/patterns/imdb_id.pattern';
 
 export function IsImdbId(validationOptions?: ValidationOptions) {
@@ -14,6 +18,9 @@ export function IsImdbId(validationOptions?: ValidationOptions) {
             typeof value === 'undefined' ||
             (typeof value === 'string' && ImdbIdPattern.test(value))
           );
+        },
+        defaultMessage(args: ValidationArguments) {
+          return `${args.property} must start with 'tt' followed by digits`;
         },
       },
     });

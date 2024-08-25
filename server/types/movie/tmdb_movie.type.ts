@@ -96,7 +96,7 @@ export class TmdbMovieType extends ExternalMovieType {
       production_countries: this.production_countries.map(
         (country) => country.name,
       ),
-      release_date: this.release_date,
+      release_date: new Date(this.release_date),
       revenue: this.revenue,
       rotten_tomato_rate: undefined,
       runtime: this.runtime,

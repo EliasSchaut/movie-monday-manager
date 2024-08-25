@@ -28,7 +28,7 @@ export class TmdbSearchType extends ExternalSearchType {
       title: this.title,
       plot_overview: this.overview,
       poster_path: this.poster_path,
-      release_date: this.release_date,
+      release_date: new Date(this.release_date),
       tmdb_id: this.id,
       imdb_id: undefined,
       lang_meta,

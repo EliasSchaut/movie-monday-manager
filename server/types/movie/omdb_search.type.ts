@@ -18,7 +18,7 @@ export class OmdbSearchType extends ExternalSearchType {
     return new MovieSearchType({
       title: this.Title,
       poster_path: this.Poster,
-      release_date: this.Year,
+      release_date: new Date(this.Year),
       plot_overview: undefined,
       tmdb_id: undefined,
       imdb_id: this.imdbID,

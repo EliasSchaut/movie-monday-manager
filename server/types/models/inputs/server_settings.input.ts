@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsCron } from '@/common/validation/decorators/IsCron.validation';
 import { Length, Max, Min } from 'class-validator';
-import { IsDiscordWebhook } from '@/common/validation/decorators/discord_webhook.validation';
+import { IsDiscordWebhook } from '@/common/validation/decorators/IsDiscordWebhook.validation';
 
 @InputType()
 export class ServerSettingsInputModel {

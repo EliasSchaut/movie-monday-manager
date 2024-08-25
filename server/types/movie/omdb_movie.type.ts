@@ -41,7 +41,7 @@ export class OmdbMovieType extends ExternalMovieType {
       genres: this.Genre.split(', '),
       original_language: this.Language,
       spoken_languages: this.Language.split(', '),
-      release_date: this.Released,
+      release_date: new Date(this.Released),
       runtime: parseInt(this.Runtime.split(' ')[0]),
       director: this.Director,
       writer: this.Writer,

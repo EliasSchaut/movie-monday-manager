@@ -1,13 +1,14 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsImdbId } from '@/common/validation/decorators/IsImdbId.validation';
 import { Max, Min } from 'class-validator';
 import { VoteRankEnum } from '@/types/enums/vote.enum';
+import { MovieId } from '@/types/utils/movie.util';
+import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 
 @InputType()
 export class VoteInputModel {
-  @IsImdbId()
+  @IsMovieId()
   @Field(() => String)
-  imdb_id!: string;
+  movie_id!: MovieId;
 
   @Min(1)
   @Max(5)

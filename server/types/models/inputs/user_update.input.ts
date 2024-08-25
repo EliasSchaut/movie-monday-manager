@@ -1,6 +1,6 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsName } from '@/common/validation/decorators/IsName.validation';
-import { IsEmail, IsOptional, IsUrl } from 'class-validator';
+import { IsEmail, IsOptional, IsUrl, Length } from 'class-validator';
 import { IsUsername } from '@/common/validation/decorators/IsUsername.validation';
 import { IsPassword } from '@/common/validation/decorators/IsPassword.validation';
 
@@ -31,12 +31,16 @@ export class UserUpdateInputModel {
   @Field(() => String, { nullable: true })
   avatar?: string;
 
+  @IsOptional()
+  @Length(1, 4000)
   @Field(() => String, { nullable: true })
   bio?: string;
 
+  @IsOptional()
   @Field(() => Boolean, { nullable: true })
   profile_public?: boolean;
 
+  @IsOptional()
   @Field(() => Boolean, { nullable: true })
   email_opt_in?: boolean;
 }

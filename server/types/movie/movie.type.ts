@@ -15,7 +15,7 @@ export class MovieType extends ExternalMovieType {
   genres!: string[];
   original_language!: string;
   spoken_languages!: string[];
-  release_date!: string;
+  release_date!: Date;
   runtime!: number;
   adult?: boolean;
 

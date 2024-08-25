@@ -1,11 +1,9 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsNumber, Max, Min } from 'class-validator';
+import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 
 @InputType()
 export class MovieIdInputModel {
-  @IsNumber()
-  @Min(0)
-  @Max(999999999)
+  @IsMovieId()
   @Field(() => String)
   movie_id!: number;
 }

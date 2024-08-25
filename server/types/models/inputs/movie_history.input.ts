@@ -1,12 +1,15 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { IsImdbId } from '@/common/validation/decorators/IsImdbId.validation';
+import { MovieId } from '@/types/utils/movie.util';
+import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
+import { IsDate } from 'class-validator';
 
 @InputType()
 export class MovieHistoryInputModel {
-  @IsImdbId()
+  @IsMovieId()
   @Field(() => String)
-  imdb_id!: string;
+  movie_id!: MovieId;
 
+  @IsDate()
   @Field(() => Date, {
     defaultValue: new Date(),
     nullable: true,

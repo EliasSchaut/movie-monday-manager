@@ -17,11 +17,11 @@ export class HistoryResolver {
     name: 'history',
   })
   async find_by_id(
-    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
+    @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
-    return this.history_service.find_by_id(imdb_id_input.imdb_id, {
+    return this.history_service.find_by_id(movie_id_input.movie_id, {
       server_id,
       i18n,
     });
@@ -54,11 +54,11 @@ export class HistoryResolver {
     name: 'history_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
+    @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
-    return this.history_service.delete(imdb_id_input.imdb_id, {
+    return this.history_service.delete(movie_id_input.movie_id, {
       server_id,
       i18n,
     });

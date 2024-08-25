@@ -1,11 +1,15 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { MovieExternalIdsType } from '@/types/utils/movie.util';
+import { ImdbId, MovieExternalIdsType, TmdbId } from '@/types/utils/movie.util';
+import { IsImdbId } from '@/common/validation/decorators/IsImdbId.validation';
+import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 
 @InputType()
 export class MovieExternalIdInputModel implements MovieExternalIdsType {
-  @Field(() => String, { nullable: process.env.MOVIE_API_TYPE == 'OMDB' })
-  imdb_id?: string;
+  @IsImdbId()
+  @Field(() => String, { nullable: true })
+  imdb_id?: ImdbId;
 
-  @Field(() => Int, { nullable: process.env.MOVIE_API_TYPE != 'OMDB' })
-  tmdb_id?: number;
+  @IsMovieId()
+  @Field(() => Int, { nullable: true })
+  tmdb_id?: TmdbId;
 }
