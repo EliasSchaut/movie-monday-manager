@@ -8,25 +8,22 @@ import { WatchlistItemModel } from '@/types/models/watchlist_item.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { DateService } from '@/common/services/date.service';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
+import { MovieId } from '@/types/utils/movie_types.util';
+import { MovieService } from '@/graphql/movie/movie.service';
 
 @Injectable()
 export class WatchlistService {
-  private args_include = {
-    movie: {
-      include: {
-        metadata: true,
-      },
-    },
-  };
-
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly movie_service: MovieService,
+  ) {}
 
   async find(ctx: CtxType): Promise<WatchlistModel> {
     const watchlist = await this.prisma.movieWatchlist.findMany({
       where: {
         server_id: ctx.server_id,
       },
-      include: this.args_include,
+      include: this.include_movie_metadata,
     });
 
     return new WatchlistModel(watchlist);
@@ -36,35 +33,24 @@ export class WatchlistService {
     watchlist_input: WatchlistInputModel,
     ctx: CtxType,
   ): Promise<WatchlistItemModel> {
-    const movie = await this.prisma.movie.findUnique({
-      select: {
-        runtime: true,
-      },
-      where: {
-        imdb_id_server_id: {
-          imdb_id: watchlist_input.imdb_id,
-          server_id: ctx.server_id,
-        },
-      },
-    });
-    if (!movie) {
-      throw new WarningException(
-        ctx.i18n.t('watchlist.exception.movie_not_found'),
-      );
-    }
+    const movie = await this.movie_service
+      .find_by_id_without_metadata(watchlist_input.movie_id, ctx)
+      .catch(() => {
+        throw new WarningException(
+          ctx.i18n.t('watchlist.exception.movie_not_found'),
+        );
+      });
 
-    const end_time = new DateService(watchlist_input.start_time)
-      .add_minutes_rounded_to_5(movie.runtime)
-      .to_date();
-
+    const end_time = this.calculate_end_time(
+      watchlist_input.start_time,
+      movie.runtime,
+    );
     const watchlist_item = await this.prisma.movieWatchlist.upsert({
       create: {
         movie: {
           connect: {
-            imdb_id_server_id: {
-              imdb_id: watchlist_input.imdb_id,
-              server_id: ctx.server_id,
-            },
+            id: watchlist_input.movie_id,
+            server_id: ctx.server_id,
           },
         },
         server: {
@@ -76,8 +62,8 @@ export class WatchlistService {
         end_time: end_time,
       },
       where: {
-        imdb_id_server_id: {
-          imdb_id: watchlist_input.imdb_id,
+        movie_id_server_id: {
+          movie_id: watchlist_input.movie_id,
           server_id: ctx.server_id,
         },
       },
@@ -85,21 +71,27 @@ export class WatchlistService {
         start_time: watchlist_input.start_time,
         end_time: end_time,
       },
-      include: this.args_include,
+      include: this.include_movie_metadata,
     });
     return new WatchlistItemModel(watchlist_item);
   }
 
-  async delete(imdb_id: string, ctx: CtxType): Promise<WatchlistItemModel> {
+  private calculate_end_time(start_time: Date, runtime: number): Date {
+    return new DateService(start_time)
+      .add_minutes_rounded_to_5(runtime)
+      .to_date();
+  }
+
+  async delete(movie_id: MovieId, ctx: CtxType): Promise<WatchlistItemModel> {
     const watchlist_item = await this.prisma.movieWatchlist
       .delete({
         where: {
-          imdb_id_server_id: {
-            imdb_id: imdb_id,
+          movie_id_server_id: {
+            movie_id: movie_id,
             server_id: ctx.server_id,
           },
         },
-        include: this.args_include,
+        include: this.include_movie_metadata,
       })
       .catch((e: Error) => {
         throw new PrismaException(e, {
@@ -114,9 +106,17 @@ export class WatchlistService {
 
   // TODO: Voting System
   async resolve_interested_users(
-    imdb_id: string,
+    movie_id: MovieId,
     ctx: CtxType,
   ): Promise<UserModel[]> {
     return [];
   }
+
+  private include_movie_metadata = {
+    movie: {
+      include: {
+        metadata: true,
+      },
+    },
+  };
 }

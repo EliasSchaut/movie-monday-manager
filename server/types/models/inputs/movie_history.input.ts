@@ -1,5 +1,5 @@
 import { Field, InputType } from '@nestjs/graphql';
-import { MovieId } from '@/types/utils/movie.util';
+import { MovieId } from '@/types/utils/movie_types.util';
 import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 import { IsDate } from 'class-validator';
 

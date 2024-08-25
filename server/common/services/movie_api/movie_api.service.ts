@@ -10,7 +10,7 @@ import {
   MovieApiTypeEnum,
   MovieExternalIdEnum,
   MovieExternalIdsType,
-} from '@/types/utils/movie.util';
+} from '@/types/utils/movie_types.util';
 import { DangerException } from '@/common/exceptions/danger.exception';
 
 @Injectable()

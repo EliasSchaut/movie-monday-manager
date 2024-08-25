@@ -9,7 +9,7 @@ import { PrismaException } from '@/common/exceptions/prisma.exception';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 import { MovieType } from '@/types/movie/movie.type';
-import { MovieExternalIdsType, MovieId } from '@/types/utils/movie.util';
+import { MovieExternalIdsType, MovieId } from '@/types/utils/movie_types.util';
 
 @Injectable()
 export class MovieService {
@@ -31,6 +31,22 @@ export class MovieService {
           },
           take: 1,
         },
+      },
+    });
+
+    if (movie === null)
+      throw new WarningException(ctx.i18n.t('movie.exception.not_found'));
+    return new MovieModel(movie);
+  }
+
+  async find_by_id_without_metadata(
+    movie_id: MovieId,
+    ctx: CtxType,
+  ): Promise<MovieModel> {
+    const movie = await this.prisma.movie.findUnique({
+      where: {
+        id: movie_id,
+        server_id: ctx.server_id,
       },
     });
 

@@ -4,7 +4,7 @@ import { OmdbApiService } from '@/common/services/movie_api/omdb_api.service';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 import { TomdbApiService } from '@/common/services/movie_api/tomdb_api.service';
 import { DangerException } from '@/common/exceptions/danger.exception';
-import { MovieApiTypeEnum } from '@/types/utils/movie.util';
+import { MovieApiTypeEnum } from '@/types/utils/movie_types.util';
 
 export const MovieApiServiceProvider: Provider = {
   provide: MovieApiService,

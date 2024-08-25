@@ -1,5 +1,5 @@
 import { ExternalSearchType } from '@/types/movie/external_search.type';
-import { OmitToMovieSearch } from '@/types/utils/movie.util';
+import { OmitToMovieSearch } from '@/types/utils/movie_types.util';
 
 export class MovieSearchType extends ExternalSearchType {
   constructor(searches: OmitToMovieSearch<MovieSearchType>) {

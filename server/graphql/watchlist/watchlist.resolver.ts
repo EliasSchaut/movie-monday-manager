@@ -67,12 +67,12 @@ export class WatchlistResolver {
     name: 'watchlist_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
+    @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<WatchlistItemModel> {
-    return this.watchlist_service.delete(imdb_id_input.imdb_id, {
+    return this.watchlist_service.delete(movie_id_input.movie_id, {
       user_id,
       server_id,
       i18n,
@@ -88,7 +88,7 @@ export class WatchlistResolver {
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<UserModel[]> {
     return this.watchlist_service.resolve_interested_users(
-      watchlist_item.movie.imdb_id,
+      watchlist_item.movie.id,
       { server_id, i18n },
     );
   }

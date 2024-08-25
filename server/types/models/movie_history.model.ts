@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { MovieHistory, MovieHistoryMetadata } from '@prisma/client';
-import { ImdbId, TmdbId } from '@/types/utils/movie.util';
+import { ImdbId, TmdbId } from '@/types/utils/movie_types.util';
 
 @ObjectType()
 export class MovieHistoryModel {

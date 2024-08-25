@@ -2,35 +2,37 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Movie, MovieMetadata } from '@prisma/client';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
-import { MovieType } from '@/types/movie/movie.type';
-import { OmitToMovie } from '@/types/utils/movie.util';
 
 @ObjectType()
-export class MovieModel implements OmitToMovie<MovieType> {
-  constructor(movie: Movie & { metadata: MovieMetadata[] }) {
-    if (movie.metadata.length < 1) {
-      throw new DangerException(
-        I18nContext.current()!.t('movie.exception.no_metadata'),
-      );
+export class MovieModel {
+  constructor(movie: Movie & { metadata?: MovieMetadata[] }) {
+    if (movie.metadata) {
+      if (movie.metadata.length < 1) {
+        throw new DangerException(
+          I18nContext.current()!.t('movie.exception.no_metadata'),
+        );
+      }
+      const meta = movie.metadata[0];
+
+      this.title = meta.title;
+      this.tagline = meta.tagline ?? undefined;
+      this.plot_overview = meta.plot_overview;
+      this.genres = meta.genres;
+      this.original_language = meta.original_language;
+      this.spoken_languages = meta.spoken_languages;
+      this.director = meta.director ?? undefined;
+      this.writer = meta.writer ?? undefined;
+      this.actors = meta.actors;
+      this.production_companies = meta.production_companies;
+      this.production_countries = meta.production_countries;
+      this.lang_meta = meta.lang_meta;
     }
-    const meta = movie.metadata[0];
 
     this.id = movie.id;
-    this.title = meta.title;
     this.original_title = movie.original_title ?? undefined;
-    this.tagline = meta.tagline ?? undefined;
-    this.plot_overview = meta.plot_overview;
-    this.genres = meta.genres;
-    this.original_language = meta.original_language;
-    this.spoken_languages = meta.spoken_languages;
-    this.release_date = movie.release_date;
+    this.release_date = new Date(movie.release_date);
     this.runtime = movie.runtime;
     this.adult = movie.adult ?? undefined;
-    this.director = meta.director ?? undefined;
-    this.writer = meta.writer ?? undefined;
-    this.actors = meta.actors;
-    this.production_companies = meta.production_companies;
-    this.production_countries = meta.production_countries;
     this.budget = movie.budget ?? undefined;
     this.revenue = movie.revenue ?? undefined;
     this.homepage = movie.homepage ?? undefined;
@@ -41,19 +43,18 @@ export class MovieModel implements OmitToMovie<MovieType> {
     this.metascore = movie.metascore ?? undefined;
     this.rotten_tomato_rate = movie.rotten_tomato_rate ?? undefined;
     this.poster_path = movie.poster_path ?? undefined;
-    this.lang_meta = meta.lang_meta;
   }
 
   // Internal Information
   @Field(() => Int)
   id!: number;
 
-  @Field(() => String)
-  lang_meta!: string;
+  @Field(() => String, { nullable: true })
+  lang_meta?: string;
 
   // Basic Information
-  @Field(() => String)
-  title!: string;
+  @Field(() => String, { nullable: true })
+  title?: string;
 
   @Field(() => String, { nullable: true })
   original_title?: string;
@@ -61,26 +62,25 @@ export class MovieModel implements OmitToMovie<MovieType> {
   @Field(() => String, { nullable: true })
   tagline?: string;
 
-  @Field(() => String)
-  plot_overview!: string;
+  @Field(() => String, { nullable: true })
+  plot_overview?: string;
 
-  @Field(() => [String])
-  genres!: string[];
+  @Field(() => [String], { nullable: true })
+  genres?: string[];
+
+  @Field(() => String, { nullable: true })
+  original_language?: string;
+
+  @Field(() => [String], { nullable: true })
+  spoken_languages?: string[];
 
   @Field(() => String)
-  @Field(() => String)
-  original_language!: string;
-
-  @Field(() => [String])
-  spoken_languages!: string[];
-
-  @Field(() => String)
-  release_date!: string;
+  release_date!: Date;
 
   @Field(() => Int)
   runtime!: number;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   adult?: boolean;
 
   // Production Information
@@ -90,14 +90,14 @@ export class MovieModel implements OmitToMovie<MovieType> {
   @Field(() => String, { nullable: true })
   writer?: string;
 
-  @Field(() => [String])
-  actors!: string[];
+  @Field(() => [String], { nullable: true })
+  actors?: string[];
 
-  @Field(() => [String])
-  production_companies!: string[];
+  @Field(() => [String], { nullable: true })
+  production_companies?: string[];
 
-  @Field(() => [String])
-  production_countries!: string[];
+  @Field(() => [String], { nullable: true })
+  production_countries?: string[];
 
   @Field(() => Int, { nullable: true })
   budget?: number;
