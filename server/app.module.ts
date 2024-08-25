@@ -36,7 +36,7 @@ import { AuthGuard } from '@/graphql/auth/auth.guard';
         middlewares: [
           loggingMiddleware({
             logger: new Logger('PrismaMiddleware'),
-            logLevel: 'log',
+            logLevel: 'debug',
           }),
         ],
       },

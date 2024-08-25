@@ -5,5 +5,6 @@ import { MovieApiServiceProvider } from '@/common/services/movie_api/movie_api.p
 
 @Module({
   providers: [MovieResolver, MovieService, MovieApiServiceProvider],
+  exports: [MovieService, MovieApiServiceProvider],
 })
 export class MovieModule {}
