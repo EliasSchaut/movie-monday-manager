@@ -19,12 +19,12 @@ export class VoteResolver {
     name: 'vote',
   })
   async find(
-    @Args('imdb_id_input') imdb_id_input: MovieIdInputModel,
+    @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel> {
-    return this.vote_service.find(imdb_id_input.imdb_id, {
+    return this.vote_service.find_by_id_user(movie_id_input.movie_id, {
       user_id,
       server_id,
       i18n,
@@ -69,12 +69,12 @@ export class VoteResolver {
     name: 'vote_delete',
   })
   async delete(
-    @Args('imdb_id_input') imdb_id_input_model: MovieIdInputModel,
+    @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
     @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel> {
-    return this.vote_service.delete(imdb_id_input_model.imdb_id, {
+    return this.vote_service.delete(movie_id_input.movie_id, {
       user_id,
       server_id,
       i18n,

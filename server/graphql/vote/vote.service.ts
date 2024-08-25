@@ -5,18 +5,19 @@ import { VoteInputModel } from '@/types/models/inputs/vote.input';
 import { VoteModel } from '@/types/models/vote.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { MovieVote } from '@prisma/client';
+import { MovieId } from '@/types/utils/movie_types.util';
 
 @Injectable()
 export class VoteService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async find(imdb_id: string, ctx: CtxType): Promise<VoteModel> {
+  async find_by_id_user(movie_id: MovieId, ctx: CtxType): Promise<VoteModel> {
     const vote: MovieVote | null = await this.prisma.movieVote.findUnique({
       where: {
-        imdb_id_server_id_user_id: {
+        movie_id_server_id_user_id: {
           user_id: ctx.user_id!,
           server_id: ctx.server_id,
-          imdb_id: imdb_id,
+          movie_id: movie_id,
         },
       },
     });
@@ -53,10 +54,8 @@ export class VoteService {
         },
         movie: {
           connect: {
-            imdb_id_server_id: {
-              server_id: ctx.server_id,
-              imdb_id: vote_input.imdb_id,
-            },
+            server_id: ctx.server_id,
+            id: vote_input.movie_id,
           },
         },
         user: {
@@ -66,10 +65,10 @@ export class VoteService {
         },
       },
       where: {
-        imdb_id_server_id_user_id: {
+        movie_id_server_id_user_id: {
           user_id: ctx.user_id!,
           server_id: ctx.server_id,
-          imdb_id: vote_input.imdb_id,
+          movie_id: vote_input.movie_id,
         },
       },
       update: {
@@ -79,13 +78,13 @@ export class VoteService {
     return new VoteModel(vote);
   }
 
-  async delete(imdb_id: string, ctx: CtxType): Promise<VoteModel> {
+  async delete(movie_id: MovieId, ctx: CtxType): Promise<VoteModel> {
     const vote = await this.prisma.movieVote.delete({
       where: {
-        imdb_id_server_id_user_id: {
+        movie_id_server_id_user_id: {
           user_id: ctx.user_id!,
-          imdb_id: imdb_id,
           server_id: ctx.server_id,
+          movie_id: movie_id,
         },
       },
     });
