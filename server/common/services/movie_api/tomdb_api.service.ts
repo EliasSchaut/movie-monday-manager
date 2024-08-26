@@ -11,6 +11,7 @@ import {
   MovieExternalIdEnum,
   TmdbId,
 } from '@/types/utils/movie_types.util';
+import { ApiService } from '@/common/services/api.service';
 
 @Injectable()
 export class TomdbApiService extends MovieApiService implements MovieApi {
@@ -18,8 +19,9 @@ export class TomdbApiService extends MovieApiService implements MovieApi {
   protected API_KEY = null;
   protected API_TYPE = MovieApiTypeEnum.TOMDB;
   protected API_USED_ID = MovieExternalIdEnum.TMDB;
-  private readonly tmdbApiService = new TmdbApiService();
-  private readonly omdbApiService = new OmdbApiService();
+  private readonly apiService = new ApiService();
+  private readonly tmdbApiService = new TmdbApiService(this.apiService);
+  private readonly omdbApiService = new OmdbApiService(this.apiService);
 
   protected async fetch_movie(
     tmdb_id: TmdbId,

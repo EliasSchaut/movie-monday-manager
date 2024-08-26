@@ -8,8 +8,8 @@ export class MovieSearchType extends ExternalSearchType {
   }
 
   title!: string;
-  poster_path!: string;
-  release_date!: Date;
+  poster_path?: string;
+  release_date?: Date;
   plot_overview?: string;
   tmdb_id?: number;
   imdb_id?: string;

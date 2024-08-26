@@ -8,7 +8,7 @@ export class I18nLangResolver implements I18nResolver {
 
   private readonly DEFAULT_LANG = process.env.DEFAULT_LANGUAGE as string;
 
-  resolve(
+  public resolve(
     ctx: ExecutionContext,
   ): Promise<string | string[] | undefined> | string | string[] | undefined {
     const gql_ctx = GqlExecutionContext.create(ctx);
@@ -20,7 +20,12 @@ export class I18nLangResolver implements I18nResolver {
     return is_curr_lang_supported ? curr_lang : this.DEFAULT_LANG;
   }
 
-  get_current_lang(ctx: ExecutionContext): string {
+  public t(key: string, ctx: ExecutionContext): string {
+    const curr_lang = this.get_current_lang(ctx);
+    return this.i18n.t(key, { lang: curr_lang });
+  }
+
+  public get_current_lang(ctx: ExecutionContext): string {
     return this.resolve(ctx) as string;
   }
 }

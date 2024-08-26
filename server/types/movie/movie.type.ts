@@ -11,20 +11,20 @@ export class MovieType extends ExternalMovieType {
   title!: string;
   original_title?: string;
   tagline?: string;
-  plot_overview!: string;
-  genres!: string[];
-  original_language!: string;
-  spoken_languages!: string[];
-  release_date!: Date;
+  plot_overview?: string;
+  genres?: string[];
+  original_language?: string;
+  spoken_languages?: string[];
+  release_date?: Date;
   runtime!: number;
   adult?: boolean;
 
   // Production Information
   director?: string;
   writer?: string;
-  actors!: string[];
-  production_companies!: string[];
-  production_countries!: string[];
+  actors?: string[];
+  production_companies?: string[];
+  production_countries?: string[];
   budget?: number;
   revenue?: number;
   homepage?: string;

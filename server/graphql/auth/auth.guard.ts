@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import * as process from 'process';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { I18nService } from 'nestjs-i18n';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/common/decorators/role.decorator';
@@ -15,7 +14,6 @@ export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly jwt_service: JwtService,
-    private readonly i18n: I18nService,
     private readonly i18n_resolver: I18nLangResolver,
   ) {}
 
@@ -30,9 +28,8 @@ export class AuthGuard implements CanActivate {
     const req = gql_ctx.getContext().req;
     const token = this.extractTokenFromHeader(req);
     if (!token) {
-      const curr_lang = this.i18n_resolver.get_current_lang(ctx);
       throw new WarningException(
-        this.i18n.t('auth.exception.no_token', { lang: curr_lang }),
+        this.i18n_resolver.t('auth.exception.no_token', ctx),
       );
     }
 
@@ -42,9 +39,8 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET as string,
       });
     } catch {
-      const curr_lang = this.i18n_resolver.get_current_lang(ctx);
       throw new WarningException(
-        this.i18n.t('auth.exception.invalid_token', { lang: curr_lang }),
+        this.i18n_resolver.t('auth.exception.invalid_token', ctx),
       );
     }
 

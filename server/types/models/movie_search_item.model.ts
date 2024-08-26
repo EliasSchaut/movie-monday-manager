@@ -12,21 +12,21 @@ export class MovieSearchItemModel {
   @Field(() => String)
   title!: string;
 
-  @Field(() => String)
-  poster_path!: string;
-
-  @Field(() => String)
-  release_date!: string;
+  @Field(() => String, { nullable: true })
+  poster_path?: string | null;
 
   @Field(() => String, { nullable: true })
-  plot_overview!: string | null;
+  release_date?: string | null;
 
   @Field(() => String, { nullable: true })
-  tmdb_id!: number | null;
+  plot_overview?: string | null;
 
   @Field(() => String, { nullable: true })
-  imdb_id!: string | null;
+  tmdb_id?: number | null;
+
+  @Field(() => String, { nullable: true })
+  imdb_id?: string | null;
 
   @Field(() => String)
-  lang_meta!: string;
+  lang_meta?: string;
 }

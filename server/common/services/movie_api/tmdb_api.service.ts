@@ -18,9 +18,10 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
 
   protected async fetch_movie(
     tmdb_id: TmdbId,
-    lang: string = 'en-US',
+    lang?: string,
   ): Promise<TmdbMovieType | null> {
-    const movie: any = await this.call_movie_endpoint(tmdb_id, lang);
+    const movie: any = await this.call_movie_endpoint(tmdb_id, { lang });
+    if (!movie) return null;
     try {
       return new TmdbMovieType(movie);
     } catch (e) {
@@ -30,9 +31,12 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
 
   protected async fetch_search(
     query: string,
-    lang: string = 'en-US',
+    lang?: string,
   ): Promise<TmdbSearchType[]> {
-    const searches = await this.call_search_endpoint(query, lang);
+    const searches = await this.call_search_endpoint(query, {
+      lang: lang,
+      result_key: 'results',
+    });
 
     try {
       return searches.map((movie: any) => new TmdbSearchType(movie));
@@ -41,11 +45,14 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
     }
   }
 
-  protected gen_movie_link(tmdb_id: TmdbId, lang: string = 'en-US') {
+  protected gen_movie_link(tmdb_id: TmdbId, lang: string = this.DEFAULT_LANG) {
     return `${this.API_BASE}movie/${tmdb_id}?language=${lang}&api_key=${this.API_KEY}&append_to_response=credits`;
   }
 
-  protected gen_movie_search_link(query: string, lang: string = 'en-US') {
+  protected gen_movie_search_link(
+    query: string,
+    lang: string = this.DEFAULT_LANG,
+  ) {
     return `${this.API_BASE}search/movie?query=${query}&language=${lang}&include_adult=true&api_key=${this.API_KEY}`;
   }
 }

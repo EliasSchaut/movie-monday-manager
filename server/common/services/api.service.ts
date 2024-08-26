@@ -16,9 +16,9 @@ export class ApiService {
   ): Promise<any> {
     const timeout_in_ms = options?.timeout_in_ms ?? this.TIMEOUT_IN_MS;
     const custom_timeout_error =
-      options?.custom_timeout_error ?? 'common:exception.api_timeout';
+      options?.custom_timeout_error ?? 'common.exception.api_timeout';
     const custom_fetch_error =
-      options?.custom_fetch_error ?? 'common:exception.api_fetch';
+      options?.custom_fetch_error ?? 'common.exception.api_fetch';
 
     const res: Response = await Promise.race([
       this.create_fetch_timeout(timeout_in_ms, custom_timeout_error),
