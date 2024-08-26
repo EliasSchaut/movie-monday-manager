@@ -27,7 +27,7 @@ describe('TmdbApiService', () => {
 
   it('fetch_movie returns TmdbMovieType when movie data is valid', async () => {
     const tmdb_id = 123;
-    const movie_data = { id: tmdb_id, title: 'Test Movie' };
+    const movie_data = { id: tmdb_id, title: 'Test Movie', runtime: 120 };
     jest.spyOn(apiService, 'call_api').mockResolvedValue(movie_data);
 
     const result = await tmdbApiService.find({ tmdb_id });
@@ -37,9 +37,19 @@ describe('TmdbApiService', () => {
     expect(result?.title).toBe(movie_data.title);
   });
 
-  it('fetch_movie returns null when movie data is invalid', async () => {
+  it('fetch_movie returns null when movie data is null', async () => {
     const tmdb_id = 123;
     jest.spyOn(apiService, 'call_api').mockResolvedValue(null);
+
+    const result = await tmdbApiService.find({ tmdb_id });
+
+    expect(result).toBeNull();
+  });
+
+  it('fetch_movie returns null when movie data is invalid', async () => {
+    const tmdb_id = 123;
+    const invalid_movie_data = { id: tmdb_id, title: 'Test Movie' };
+    jest.spyOn(apiService, 'call_api').mockResolvedValue(invalid_movie_data);
 
     const result = await tmdbApiService.find({ tmdb_id });
 

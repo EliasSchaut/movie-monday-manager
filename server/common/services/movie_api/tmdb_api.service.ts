@@ -20,7 +20,7 @@ export class TmdbApiService extends MovieApiService implements MovieApi {
     tmdb_id: TmdbId,
     lang?: string,
   ): Promise<TmdbMovieType | null> {
-    const movie: any = await this.call_movie_endpoint(tmdb_id, { lang });
+    const movie = await this.call_movie_endpoint(tmdb_id, { lang });
     if (!movie) return null;
     try {
       return new TmdbMovieType(movie);

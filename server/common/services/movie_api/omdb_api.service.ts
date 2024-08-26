@@ -17,8 +17,8 @@ export class OmdbApiService extends MovieApiService implements MovieApi {
   protected API_USED_ID = MovieExternalIdEnum.IMDB;
 
   protected async fetch_movie(imdb_id: ImdbId): Promise<OmdbMovieType | null> {
-    const movie: any = this.call_movie_endpoint(imdb_id);
-
+    const movie = await this.call_movie_endpoint(imdb_id);
+    if (!movie) return null;
     try {
       return new OmdbMovieType(movie);
     } catch (e) {

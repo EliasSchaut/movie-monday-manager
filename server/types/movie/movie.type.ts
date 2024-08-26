@@ -1,9 +1,15 @@
 import { ExternalMovieType } from '@/types/movie/external_movie.type';
 import { OmitToMovie } from '@/types/utils/movie_types.util';
+import { DangerException } from '@/common/exceptions/danger.exception';
 
 export class MovieType extends ExternalMovieType {
   constructor(movie: OmitToMovie<MovieType>) {
     super();
+    if (!movie.title || !movie.runtime || !movie.lang_meta) {
+      throw new DangerException(
+        'Title, Runtime and Lang Meta are required for MovieType',
+      );
+    }
     Object.assign(this, movie);
   }
 

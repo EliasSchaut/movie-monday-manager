@@ -44,7 +44,11 @@ export abstract class MovieApiService implements MovieApi {
   ): Promise<MovieType | null> {
     const id: ExternalId = this.choose_external_id(external_id);
     const movie: ExternalMovieType | null = await this.fetch_movie(id, lang);
-    return movie?.to_movie_type(lang) ?? null;
+    try {
+      return movie?.to_movie_type(lang) ?? null;
+    } catch (e) {
+      return null;
+    }
   }
 
   protected abstract fetch_movie(
@@ -55,7 +59,7 @@ export abstract class MovieApiService implements MovieApi {
   protected async call_movie_endpoint(
     id: ExternalId,
     options?: { result_key?: string; lang?: string },
-  ): Promise<any> {
+  ): Promise<any | null> {
     const movie_endpoint = this.gen_movie_link(id, options?.lang);
     const movie: any = await this.api_service.call_api(movie_endpoint);
     return this.extract_movie_result(movie, options);

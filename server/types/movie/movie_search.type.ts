@@ -1,9 +1,13 @@
 import { ExternalSearchType } from '@/types/movie/external_search.type';
 import { OmitToMovieSearch } from '@/types/utils/movie_types.util';
+import { DangerException } from '@/common/exceptions/danger.exception';
 
 export class MovieSearchType extends ExternalSearchType {
   constructor(searches: OmitToMovieSearch<MovieSearchType>) {
     super();
+    if (!searches.title) {
+      throw new DangerException('Title is required for MovieSearchType');
+    }
     Object.assign(this, searches);
   }
 
