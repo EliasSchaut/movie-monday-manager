@@ -3,9 +3,7 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "server",
   "compilerOptions": {
-    "assets": [
-      { "include": "locales/**/*", "watchAssets": true }
-    ],
+    "assets": [{ "include": "locales/**/*", "watchAssets": true }],
     "tsConfigPath": "./server/tsconfig.json"
   }
 }

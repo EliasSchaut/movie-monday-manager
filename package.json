@@ -19,7 +19,7 @@
     "build:server": "nest build",
     "build:client": "nuxt build",
     "build:db": "npx prisma migrate dev --schema=./schema.prisma",
-    "format": "prettier --write \\\"server/**/*.ts\\\" \\\"test/**/*.ts\\\"",
+    "format": "prettier --write .",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"

@@ -20,9 +20,15 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "paths": {
-        "@/*": ["./*"]
+      "@/*": ["./*"]
     }
   },
   "exclude": [
-    "../node_modules", "test", "dist", ".nuxt", "client", "nuxt.config.ts"]
+    "../node_modules",
+    "test",
+    "dist",
+    ".nuxt",
+    "client",
+    "nuxt.config.ts"
+  ]
 }

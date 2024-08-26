@@ -39,9 +39,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import {
-  SunIcon,
-  MoonIcon,
   ComputerDesktopIcon,
+  MoonIcon,
+  SunIcon,
 } from '@heroicons/vue/24/outline';
 import { settingsStore } from '~/store/settings';
 

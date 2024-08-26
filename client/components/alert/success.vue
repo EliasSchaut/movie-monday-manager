@@ -33,5 +33,6 @@
 <script setup lang="ts">
 import { CheckCircleIcon, XMarkIcon } from '@heroicons/vue/20/solid';
 import { alertStore } from '~/store/alert';
+
 const alert = alertStore();
 </script>

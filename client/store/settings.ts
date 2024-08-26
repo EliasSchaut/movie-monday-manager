@@ -1,5 +1,3 @@
-import { setLocale } from 'vue-i18n-routing';
-
 export const settingsStore = defineStore('settings', {
   state: (): SettingsType => {
     const theme = useColorMode();

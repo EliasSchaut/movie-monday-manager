@@ -1,7 +1,9 @@
 <template>
   <FormInput
     ref="pw_input_child"
-    @input="(e: Event) => $emit('pw_input', (e.target as HTMLInputElement).value)"
+    @input="
+      (e: Event) => $emit('pw_input', (e.target as HTMLInputElement).value)
+    "
     :id="id"
     type="password"
     :label="label != null ? label : $t('common.form.password')"
