@@ -26,7 +26,7 @@ export abstract class MovieApiService implements MovieApi {
   protected abstract API_TYPE: MovieApiTypeEnum;
   protected abstract API_USED_ID: MovieExternalIdEnum;
 
-  constructor(private readonly api_service: ApiService) {}
+  constructor(private readonly apiService: ApiService) {}
 
   private choose_external_id(ids: MovieExternalIdsType): ExternalId {
     const id = ids[this.API_USED_ID] as ExternalId;
@@ -61,7 +61,7 @@ export abstract class MovieApiService implements MovieApi {
     options?: { result_key?: string; lang?: string },
   ): Promise<any | null> {
     const movie_endpoint = this.gen_movie_link(id, options?.lang);
-    const movie: any = await this.api_service.call_api(movie_endpoint);
+    const movie: any = await this.apiService.call_api(movie_endpoint);
     return this.extract_movie_result(movie, options);
   }
 
@@ -100,7 +100,7 @@ export abstract class MovieApiService implements MovieApi {
     options?: { result_key?: string; lang?: string },
   ): Promise<any[]> {
     const search_endpoint = this.gen_movie_search_link(query, options?.lang);
-    let searches: any = await this.api_service.call_api(search_endpoint);
+    let searches: any = await this.apiService.call_api(search_endpoint);
     searches = this.extract_search_results(searches, options);
     return this.filter_search_results(searches);
   }

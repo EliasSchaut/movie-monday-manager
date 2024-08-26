@@ -4,7 +4,7 @@ import * as process from 'node:process';
 import { MovieSearchType } from '@/types/movie/movie_search.type';
 import { OmdbApiService } from '@/common/services/movie_api/omdb_api.service';
 
-describe('TmdbApiService', () => {
+describe('OmdbApiService', () => {
   let omdbApiService: OmdbApiService;
   let apiService: ApiService;
   const mocked_default_lang = 'en-US';

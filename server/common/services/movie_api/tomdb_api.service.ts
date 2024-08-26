@@ -19,9 +19,14 @@ export class TomdbApiService extends MovieApiService implements MovieApi {
   protected API_KEY = null;
   protected API_TYPE = MovieApiTypeEnum.TOMDB;
   protected API_USED_ID = MovieExternalIdEnum.TMDB;
-  private readonly apiService = new ApiService();
-  private readonly tmdbApiService = new TmdbApiService(this.apiService);
-  private readonly omdbApiService = new OmdbApiService(this.apiService);
+  private readonly tmdbApiService: TmdbApiService;
+  private readonly omdbApiService: OmdbApiService;
+
+  constructor(apiService: ApiService) {
+    super(apiService);
+    this.tmdbApiService = new TmdbApiService(apiService);
+    this.omdbApiService = new OmdbApiService(apiService);
+  }
 
   protected async fetch_movie(
     tmdb_id: TmdbId,
