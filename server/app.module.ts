@@ -1,4 +1,4 @@
-import { ContextType, Logger, Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { I18nJsonLoader, I18nModule } from 'nestjs-i18n';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -17,8 +17,7 @@ import { WatchlistModule } from '@/graphql/watchlist/watchlist.module';
 import { loggingMiddleware, PrismaModule } from 'nestjs-prisma';
 import { JwtModule } from '@nestjs/jwt';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@/graphql/auth/auth.guard';
+import * as process from 'node:process';
 
 @Module({
   imports: [
@@ -42,10 +41,10 @@ import { AuthGuard } from '@/graphql/auth/auth.guard';
       },
     }),
     I18nModule.forRoot({
-      fallbackLanguage: 'en',
+      fallbackLanguage: process.env.DEFAULT_LANGUAGE as string,
       loaderOptions: {
-        path: join(__dirname, 'locales'),
-        watch: true,
+        path: join(__dirname, '/locales/'),
+        watch: process.env.NODE_ENV !== 'production',
       },
       loader: I18nJsonLoader,
       resolvers: [I18nLangResolver],
@@ -61,7 +60,6 @@ import { AuthGuard } from '@/graphql/auth/auth.guard';
       subscriptions: {
         'graphql-ws': true,
       },
-      context: (ctx: ContextType) => ctx,
       autoSchemaFile: join(__dirname, 'types', 'generated', 'schema.gql'),
     }),
     JwtModule.register({
@@ -76,12 +74,6 @@ import { AuthGuard } from '@/graphql/auth/auth.guard';
     VoteModule,
     HistoryModule,
     WatchlistModule,
-  ],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard,
-    },
   ],
 })
 export class AppModule {}

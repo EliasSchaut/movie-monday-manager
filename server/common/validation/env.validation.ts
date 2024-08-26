@@ -2,29 +2,34 @@ import * as Joi from 'joi';
 
 export const EnvValidationSchema = Joi.object({
   PORT_FRONTEND: Joi.number()
-    .default('3000')
     .port()
+    .default('3000')
     .description('The port the frontend server should listen on'),
 
   PORT_BACKEND: Joi.number()
-    .default('3001')
     .port()
+    .default('3001')
     .description('The port the backend server should listen on'),
 
   PORT_NEST_DEVTOOLS: Joi.number()
-    .default('8000')
     .port()
+    .default('8000')
     .description('The port for the NestJs Devtools'),
 
   FRONTEND_URL: Joi.string()
-    .default('http://localhost:3000')
     .uri()
+    .default('http://localhost:3000')
     .description('The URL of the frontend server'),
 
   BACKEND_URL: Joi.string()
     .default('http://localhost:3001')
     .uri()
     .description('The URL of the backend server'),
+
+  DEFAULT_LANGUAGE: Joi.string()
+    .valid('en-US', 'de-DE')
+    .default('en-US')
+    .description('The default language of the application'),
 
   DATABASE_URL: Joi.string()
     .default('file:./dev.db')
@@ -44,7 +49,6 @@ export const EnvValidationSchema = Joi.object({
     .description('The expiration time of the JWT tokens'),
 
   MOVIE_API_TYPE: Joi.string()
-    .required()
     .valid('TMDB', 'OMDB', 'TOMDB')
     .default('TOMDB')
     .description(
@@ -60,12 +64,10 @@ export const EnvValidationSchema = Joi.object({
     .description('The API key for the Open Movie Database (OMDb)'),
 
   MAX_MOVIE_SEARCH_ITEMS: Joi.number()
-    .optional()
     .default(5)
     .description('The maximum number of search results of a movie search'),
 
   ELECTION_TYPE: Joi.string()
-    .required()
     .valid('STV')
     .default('STV')
     .description('The type of election to use'),

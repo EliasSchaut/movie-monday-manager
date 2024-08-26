@@ -3,17 +3,20 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import * as process from 'process';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { I18nContext } from 'nestjs-i18n';
+import { I18nService } from 'nestjs-i18n';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
+import { I18nLangResolver } from '@/common/middleware/i18n.resolver';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly jwt_service: JwtService,
+    private readonly i18n: I18nService,
+    private readonly i18n_resolver: I18nLangResolver,
   ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
@@ -24,11 +27,13 @@ export class AuthGuard implements CanActivate {
     if (!role) return true;
 
     const gql_ctx = GqlExecutionContext.create(ctx);
-    const i18n = I18nContext.current();
     const req = gql_ctx.getContext().req;
     const token = this.extractTokenFromHeader(req);
     if (!token) {
-      throw new WarningException(i18n!.t('auth.invalid.no_token'));
+      const curr_lang = this.i18n_resolver.get_current_lang(ctx);
+      throw new WarningException(
+        this.i18n.t('auth.exception.no_token', { lang: curr_lang }),
+      );
     }
 
     let payload;
@@ -37,7 +42,10 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET as string,
       });
     } catch {
-      throw new WarningException(i18n!.t('auth.invalid.token'));
+      const curr_lang = this.i18n_resolver.get_current_lang(ctx);
+      throw new WarningException(
+        this.i18n.t('auth.exception.invalid_token', { lang: curr_lang }),
+      );
     }
 
     req['user'] = payload.username;

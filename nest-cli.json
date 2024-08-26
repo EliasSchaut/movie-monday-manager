@@ -4,7 +4,7 @@
   "sourceRoot": "server",
   "compilerOptions": {
     "assets": [
-      { "include": "./locales", "watchAssets": true }
+      { "include": "locales/**/*", "watchAssets": true }
     ],
     "tsConfigPath": "./server/tsconfig.json"
   }
