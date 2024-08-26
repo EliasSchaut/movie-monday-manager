@@ -99,7 +99,7 @@ model Movie {
   adult          Boolean?
   original_title String?
   runtime        Int
-  release_date   DateTime
+  release_date   DateTime?
 
   // Production Information
   budget   Int?
@@ -139,10 +139,10 @@ model MovieMetadata {
 
   // Basic Information
   title             String
-  plot_overview     String
+  plot_overview     String?
   tagline           String?
   genres            String[]
-  original_language String
+  original_language String?
   spoken_languages  String[]
 
   // Production Information

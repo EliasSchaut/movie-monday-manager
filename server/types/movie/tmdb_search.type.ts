@@ -3,6 +3,8 @@ import { ExternalSearchType } from '@/types/movie/external_search.type';
 import { OmitToMovieSearch } from '@/types/utils/movie_types.util';
 
 export class TmdbSearchType extends ExternalSearchType {
+  private readonly POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w200';
+
   constructor(tmdb_movie_search: OmitToMovieSearch<TmdbSearchType>) {
     super();
     Object.assign(this, tmdb_movie_search);
@@ -28,7 +30,9 @@ export class TmdbSearchType extends ExternalSearchType {
     return new MovieSearchType({
       title: this.title,
       plot_overview: this.overview ?? undefined,
-      poster_path: this.poster_path ?? undefined,
+      poster_path: this.poster_path
+        ? this.POSTER_BASE_URL + this.poster_path
+        : undefined,
       release_date: this.release_date ? new Date(this.release_date) : undefined,
       tmdb_id: this.id,
       imdb_id: undefined,

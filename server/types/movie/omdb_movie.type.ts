@@ -42,17 +42,15 @@ export class OmdbMovieType extends ExternalMovieType {
       runtime: Number(this.Runtime.split(' ')[0]),
 
       plot_overview: this.Plot ?? undefined,
-      genres: this.Genre ? this.Genre.split(', ') : undefined,
+      genres: this.Genre ? this.Genre.split(', ') : [],
       original_language: this.Language ?? undefined,
-      spoken_languages: this.Language ? this.Language.split(', ') : undefined,
+      spoken_languages: this.Language ? this.Language.split(', ') : [],
       release_date: this.Released ? new Date(this.Released) : undefined,
       director: this.Director ?? undefined,
       writer: this.Writer ?? undefined,
       actors: this.Actors ? this.Actors.split(', ') : undefined,
-      production_companies: this.Production
-        ? this.Production.split(', ')
-        : undefined,
-      production_countries: this.Country ? this.Country.split(', ') : undefined,
+      production_companies: this.Production ? this.Production.split(', ') : [],
+      production_countries: this.Country ? this.Country.split(', ') : [],
       homepage: this.Website ?? undefined,
       tmdb_id: undefined,
       tmdb_rate: undefined,

@@ -3,6 +3,8 @@ import { ExternalMovieType } from '@/types/movie/external_movie.type';
 import { OmitToMovie } from '@/types/utils/movie_types.util';
 
 export class TmdbMovieType extends ExternalMovieType {
+  private readonly POSTER_BASE_URL = 'https://image.tmdb.org/t/p/original';
+
   constructor(tmdb_movie: OmitToMovie<TmdbMovieType>) {
     super();
     Object.assign(this, tmdb_movie);
@@ -91,24 +93,26 @@ export class TmdbMovieType extends ExternalMovieType {
       director:
         this.credits?.crew?.find((crew) => crew.job === 'Director')?.name ??
         undefined,
-      genres: this.genres?.map((genre) => genre.name) ?? undefined,
+      genres: this.genres?.map((genre) => genre.name) ?? [],
       homepage: this.homepage ?? undefined,
       imdb_id: this.imdb_id ?? undefined,
       imdb_rate: undefined,
       original_language: this.original_language ?? undefined,
       original_title: this.original_title ?? undefined,
       plot_overview: this.overview ?? undefined,
-      poster_path: this.poster_path ?? undefined,
+      poster_path: this.poster_path
+        ? this.POSTER_BASE_URL + this.poster_path
+        : undefined,
       production_companies:
-        this.production_companies?.map((company) => company.name) ?? undefined,
+        this.production_companies?.map((company) => company.name) ?? [],
       production_countries:
-        this.production_countries?.map((country) => country.name) ?? undefined,
+        this.production_countries?.map((country) => country.name) ?? [],
       release_date: this.release_date ? new Date(this.release_date) : undefined,
       revenue: this.revenue ?? undefined,
       rotten_tomato_rate: undefined,
       runtime: this.runtime,
       spoken_languages:
-        this.spoken_languages?.map((language) => language.name) ?? undefined,
+        this.spoken_languages?.map((language) => language.name) ?? [],
       tagline: this.tagline ?? undefined,
       title: this.title,
       tmdb_id: this.id,

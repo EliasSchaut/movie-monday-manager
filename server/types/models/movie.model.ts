@@ -2,9 +2,11 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Movie, MovieMetadata } from '@prisma/client';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
+import { MovieType } from '@/types/movie/movie.type';
+import { OmitToMovie } from '@/types/utils/movie_types.util';
 
 @ObjectType()
-export class MovieModel {
+export class MovieModel implements OmitToMovie<MovieType> {
   constructor(movie: Movie & { metadata?: MovieMetadata[] }) {
     if (movie.metadata) {
       if (movie.metadata.length < 1) {
@@ -16,9 +18,9 @@ export class MovieModel {
 
       this.title = meta.title;
       this.tagline = meta.tagline ?? undefined;
-      this.plot_overview = meta.plot_overview;
+      this.plot_overview = meta.plot_overview ?? undefined;
       this.genres = meta.genres;
-      this.original_language = meta.original_language;
+      this.original_language = meta.original_language ?? undefined;
       this.spoken_languages = meta.spoken_languages;
       this.director = meta.director ?? undefined;
       this.writer = meta.writer ?? undefined;
@@ -30,7 +32,9 @@ export class MovieModel {
 
     this.id = movie.id;
     this.original_title = movie.original_title ?? undefined;
-    this.release_date = new Date(movie.release_date);
+    this.release_date = movie.release_date
+      ? new Date(movie.release_date)
+      : undefined;
     this.runtime = movie.runtime;
     this.adult = movie.adult ?? undefined;
     this.budget = movie.budget ?? undefined;
@@ -49,12 +53,15 @@ export class MovieModel {
   @Field(() => Int)
   id!: number;
 
-  @Field(() => String, { nullable: true })
-  lang_meta?: string;
+  @Field(() => String)
+  lang_meta!: string;
 
   // Basic Information
-  @Field(() => String, { nullable: true })
-  title?: string;
+  @Field(() => String)
+  title!: string;
+
+  @Field(() => Int)
+  runtime!: number;
 
   @Field(() => String, { nullable: true })
   original_title?: string;
@@ -66,19 +73,16 @@ export class MovieModel {
   plot_overview?: string;
 
   @Field(() => [String], { nullable: true })
-  genres?: string[];
+  genres!: string[];
 
   @Field(() => String, { nullable: true })
   original_language?: string;
 
   @Field(() => [String], { nullable: true })
-  spoken_languages?: string[];
+  spoken_languages!: string[];
 
-  @Field(() => String)
-  release_date!: Date;
-
-  @Field(() => Int)
-  runtime!: number;
+  @Field(() => String, { nullable: true })
+  release_date?: Date;
 
   @Field(() => Boolean, { nullable: true })
   adult?: boolean;
@@ -94,10 +98,10 @@ export class MovieModel {
   actors?: string[];
 
   @Field(() => [String], { nullable: true })
-  production_companies?: string[];
+  production_companies!: string[];
 
   @Field(() => [String], { nullable: true })
-  production_countries?: string[];
+  production_countries!: string[];
 
   @Field(() => Int, { nullable: true })
   budget?: number;

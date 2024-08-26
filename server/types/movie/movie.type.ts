@@ -18,9 +18,9 @@ export class MovieType extends ExternalMovieType {
   original_title?: string;
   tagline?: string;
   plot_overview?: string;
-  genres?: string[];
+  genres!: string[];
   original_language?: string;
-  spoken_languages?: string[];
+  spoken_languages!: string[];
   release_date?: Date;
   runtime!: number;
   adult?: boolean;
@@ -29,8 +29,8 @@ export class MovieType extends ExternalMovieType {
   director?: string;
   writer?: string;
   actors?: string[];
-  production_companies?: string[];
-  production_countries?: string[];
+  production_companies!: string[];
+  production_countries!: string[];
   budget?: number;
   revenue?: number;
   homepage?: string;
