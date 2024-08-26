@@ -27,7 +27,9 @@ export class OmdbApiService extends MovieApiService implements MovieApi {
   }
 
   protected async fetch_search(query: string): Promise<OmdbSearchType[]> {
-    const searches = await this.call_search_endpoint(query);
+    const searches = await this.call_search_endpoint(query, {
+      result_key: 'Search',
+    });
 
     try {
       return searches.map((movie: any) => new OmdbSearchType(movie));

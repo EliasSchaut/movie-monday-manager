@@ -65,68 +65,72 @@ describe('TmdbApiService', () => {
 
   it('fetch_search returns array of MovieSearchType when search results are valid', async () => {
     const query = 'test';
-    const searches = [
-      {
-        imdbID: 'tt1',
-        Title: 'Test Movie 1',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt2',
-        Title: 'Test Movie 2',
-        Runtime: '120 min',
-      },
-    ];
+    const searches = {
+      Search: [
+        {
+          imdbID: 'tt1',
+          Title: 'Test Movie 1',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt2',
+          Title: 'Test Movie 2',
+          Runtime: '120 min',
+        },
+      ],
+    };
     jest.spyOn(apiService, 'call_api').mockResolvedValue(searches);
 
     const result = await omdbApiService.search(query);
 
-    expect(result).toHaveLength(searches.length);
+    expect(result).toHaveLength(searches.Search.length);
     expect(result[0]).toBeInstanceOf(MovieSearchType);
-    expect(result[0].imdb_id).toBe(searches[0].imdbID);
+    expect(result[0].imdb_id).toBe(searches.Search[0].imdbID);
     expect(result[1]).toBeInstanceOf(MovieSearchType);
-    expect(result[1].imdb_id).toBe(searches[1].imdbID);
+    expect(result[1].imdb_id).toBe(searches.Search[1].imdbID);
   });
 
   it('fetch_search returns just MAX_MOVIE_SEARCH_ITEMS items', async () => {
     const query = 'test';
-    const searchResults = [
-      {
-        imdbID: 'tt1',
-        Title: 'Test Movie 1',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt2',
-        Title: 'Test Movie 2',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt3',
-        Title: 'Test Movie 3',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt4',
-        Title: 'Test Movie 4',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt5',
-        Title: 'Test Movie 5',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt6',
-        Title: 'Test Movie 6',
-        Runtime: '120 min',
-      },
-      {
-        imdbID: 'tt7',
-        Title: 'Test Movie 7',
-        Runtime: '120 min',
-      },
-    ];
+    const searchResults = {
+      Search: [
+        {
+          imdbID: 'tt1',
+          Title: 'Test Movie 1',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt2',
+          Title: 'Test Movie 2',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt3',
+          Title: 'Test Movie 3',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt4',
+          Title: 'Test Movie 4',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt5',
+          Title: 'Test Movie 5',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt6',
+          Title: 'Test Movie 6',
+          Runtime: '120 min',
+        },
+        {
+          imdbID: 'tt7',
+          Title: 'Test Movie 7',
+          Runtime: '120 min',
+        },
+      ],
+    };
     jest.spyOn(apiService, 'call_api').mockResolvedValue(searchResults);
 
     const result = await omdbApiService.search(query);
@@ -136,7 +140,7 @@ describe('TmdbApiService', () => {
 
   it('fetch_search returns empty array when search results are invalid', async () => {
     const query = 'test';
-    jest.spyOn(apiService, 'call_api').mockResolvedValue([]);
+    jest.spyOn(apiService, 'call_api').mockResolvedValue({ Search: [] });
 
     const result = await omdbApiService.search(query);
 
@@ -158,7 +162,7 @@ describe('TmdbApiService', () => {
     const query = 'test';
     const lang = 'de-DE';
     const expectedLink = `https://www.omdbapi.com/?apikey=${mocked_api_key}&s=${query}&type=movie`;
-    jest.spyOn(apiService, 'call_api').mockResolvedValue([]);
+    jest.spyOn(apiService, 'call_api').mockResolvedValue({ Search: [] });
     omdbApiService.search(query, lang);
 
     expect(apiService.call_api).toHaveBeenCalledWith(expectedLink);
