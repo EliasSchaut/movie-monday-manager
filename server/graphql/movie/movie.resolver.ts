@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { MovieModel } from '@/types/models/movie.model';
 import { MovieService } from '@/graphql/movie/movie.service';
-import { ServerID } from '@/common/decorators/server_id.decorator';
+import { ServerId } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
@@ -29,7 +29,7 @@ export class MovieResolver {
   })
   async find_by_id(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel> {
     return this.movie_service.find_by_id(movie_id_input.movie_id, {
@@ -42,7 +42,7 @@ export class MovieResolver {
     name: 'movie_find_many',
   })
   async find_many(
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel[]> {
     return this.movie_service.find_many({ server_id, i18n });
@@ -55,7 +55,7 @@ export class MovieResolver {
   async search(
     @Args('movie_search_input') movie_search_input: MovieSearchInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieSearchModel> {
     return this.movie_service.search(movie_search_input.query, {
@@ -72,7 +72,7 @@ export class MovieResolver {
   async create(
     @Args('external_id_input') external_id_input: MovieExternalIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel> {
     return this.movie_service.create(external_id_input, {
@@ -89,7 +89,7 @@ export class MovieResolver {
   async delete(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel> {
     return this.movie_service.delete(movie_id_input.movie_id, {
@@ -106,7 +106,7 @@ export class MovieResolver {
   async delete_proposed(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieModel> {
     return this.movie_service.delete_proposed(movie_id_input.movie_id, {
@@ -121,7 +121,7 @@ export class MovieResolver {
   })
   async resolve_proposer(
     @Parent() movie: MovieModel,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<UserModel> {
     return this.movie_service.resolve_proposer(movie.id, {
@@ -136,7 +136,7 @@ export class MovieResolver {
   })
   async resolve_rank(
     @Parent() movie: MovieModel,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<number> {
     return this.movie_service.resolve_rank(movie.id, { server_id, i18n });

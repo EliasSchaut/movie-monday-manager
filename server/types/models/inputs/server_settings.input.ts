@@ -5,6 +5,20 @@ import { IsDiscordWebhook } from '@/common/validation/decorators/IsDiscordWebhoo
 
 @InputType()
 export class ServerSettingsInputModel {
+  @Length(0, 100)
+  @Field(() => String, {
+    description: 'Visible title of the server',
+    nullable: true,
+  })
+  title?: string;
+
+  @Length(0, 1000)
+  @Field(() => String, {
+    description: 'Description of the server',
+    nullable: true,
+  })
+  desc?: string;
+
   @Min(0)
   @Max(1000)
   @Field(() => Int, {
@@ -93,7 +107,7 @@ export class ServerSettingsInputModel {
   @Length(0, 1500)
   @Field(() => String, {
     description:
-      'The message, the webhook should send. Term <watchlist> will be replaced by actual watchlist',
+      'The message the webhook should send. Term <watchlist> will be replaced by actual watchlist',
     nullable: true,
   })
   discord_msg?: string | null;

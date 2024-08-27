@@ -3,4 +3,5 @@ export enum ResCodeEnum {
   INFO = 'INFO',
   WARNING = 'WARNING',
   DANGER = 'DANGER',
+  FORBIDDEN = 'FORBIDDEN',
 }

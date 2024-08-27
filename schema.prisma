@@ -13,8 +13,6 @@ datasource db {
 model Server {
   id        Int              @id @default(autoincrement())
   name      String           @unique
-  title     String
-  desc      String?
   origin    String           @unique
   settings  ServerSettings?
   oauth     ServerOAuth[]
@@ -26,9 +24,11 @@ model Server {
 }
 
 model ServerSettings {
-  id                          Int     @id @default(autoincrement())
-  server_id                   Int     @unique
-  server                      Server  @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  server_id Int    @unique
+  server    Server @relation(fields: [server_id], references: [id], onDelete: Cascade)
+
+  title                       String?
+  desc                        String?
   max_votes                   Int     @default(50)
   max_proposals               Int     @default(5)
   max_movies                  Int     @default(30)
@@ -44,13 +44,13 @@ model ServerSettings {
 }
 
 model ServerOAuth {
-  id        Int         @id @default(autoincrement())
-  server_id Int
-  server    Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
-  name      String
-  client_id String      @unique
-  secret    String
-  user_oath UserOAuth[]
+  id            Int         @id @default(autoincrement())
+  server_id     Int
+  server        Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
+  name          String
+  client_id     String      @unique
+  client_secret String
+  user_oauth    UserOAuth[]
 
   @@unique([server_id, name])
 }

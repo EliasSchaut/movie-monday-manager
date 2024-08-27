@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserService } from '@/graphql/user/user.service';
-import { ServerID } from '@/common/decorators/server_id.decorator';
+import { ServerId } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { UserModel } from '@/types/models/user.model';
@@ -18,7 +18,7 @@ export class UserResolver {
     name: 'user',
   })
   async user(
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
     @UserID() user_id: string,
   ): Promise<UserModel | null> {
@@ -28,7 +28,7 @@ export class UserResolver {
   @Role(RoleEnum.USER)
   @Mutation(() => UserModel, { name: 'user_update' })
   async user_update(
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
     @UserID() user_id: string,
     @Args({
@@ -47,7 +47,7 @@ export class UserResolver {
   @Role(RoleEnum.USER)
   @Mutation(() => UserModel, { name: 'user_delete' })
   async user_delete(
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
     @UserID() user_id: string,
   ): Promise<UserModel | null> {

@@ -1,9 +1,17 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { ServerOAuth } from '@prisma/client';
 
 @ObjectType({
   description: 'Oauth information',
 })
 export class ServerOauthModel {
+  constructor(oauth: ServerOAuth) {
+    this.id = oauth.id;
+    this.name = oauth.name;
+    this.client_id = oauth.client_id;
+    this.client_secret = oauth.client_secret;
+  }
+
   @Field(() => Number, {
     description: 'Unique id number of server used for comparison',
     nullable: true,

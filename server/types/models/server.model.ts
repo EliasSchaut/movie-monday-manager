@@ -7,13 +7,19 @@ import { Server, ServerSettings } from '@prisma/client';
   description: 'Server Information',
 })
 export class ServerModel {
-  constructor(server: Server & { settings?: ServerSettings | null }) {
+  constructor(
+    server: Server & {
+      settings?: ServerSettings | null;
+      oauth?: ServerOauthModel[] | null;
+    },
+  ) {
     this.id = server.id;
-    this.title = server.title;
     this.name = server.name;
-    this.desc = server.desc;
     this.origin = server.origin;
-    this.settings = server.settings ?? undefined;
+    this.settings = server.settings
+      ? new ServerSettingsModel(server.settings)
+      : undefined;
+    this.oauth = server.oauth ?? undefined;
   }
 
   @Field(() => Int, {
@@ -22,26 +28,14 @@ export class ServerModel {
   id!: number;
 
   @Field(() => String, {
-    description: 'Visible title of the server',
-  })
-  title!: string;
-
-  @Field(() => String, {
     description: 'Unique name of the server',
   })
   name!: string;
 
   @Field(() => String, {
-    description: 'Description of the server',
-    nullable: true,
-  })
-  desc?: string | null;
-
-  @Field(() => String, {
     description: 'Origin URL of the server',
-    nullable: true,
   })
-  origin?: string | null;
+  origin!: string;
 
   @Field(() => ServerSettingsModel, {
     nullable: true,

@@ -3,11 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import * as process from 'process';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { WarningException } from '@/common/exceptions/warning.exception';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 import { I18nLangResolver } from '@/common/middleware/i18n.resolver';
+import { ForbiddenException } from '@/common/exceptions/forbidden.exception';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -28,7 +28,7 @@ export class AuthGuard implements CanActivate {
     const req = gql_ctx.getContext().req;
     const token = this.extractTokenFromHeader(req);
     if (!token) {
-      throw new WarningException(
+      throw new ForbiddenException(
         this.i18n_resolver.t('auth.exception.no_token', ctx),
       );
     }
@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
         secret: process.env.JWT_SECRET as string,
       });
     } catch {
-      throw new WarningException(
+      throw new ForbiddenException(
         this.i18n_resolver.t('auth.exception.invalid_token', ctx),
       );
     }

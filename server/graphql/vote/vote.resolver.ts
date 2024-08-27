@@ -5,7 +5,7 @@ import { Role } from '@/common/decorators/role.decorator';
 import { RoleEnum } from '@/types/enums/role.enum';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
-import { ServerID } from '@/common/decorators/server_id.decorator';
+import { ServerId } from '@/common/decorators/server_id.decorator';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { VoteModel } from '@/types/models/vote.model';
 import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
@@ -21,7 +21,7 @@ export class VoteResolver {
   async find(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel> {
     return this.vote_service.find_by_id_user(movie_id_input.movie_id, {
@@ -37,7 +37,7 @@ export class VoteResolver {
   })
   async find_many_user(
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel[]> {
     return this.vote_service.find_many_user({
@@ -54,7 +54,7 @@ export class VoteResolver {
   async create_or_update(
     @Args('vote_input') vote_input: VoteInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel> {
     return this.vote_service.create_or_update(vote_input, {
@@ -71,7 +71,7 @@ export class VoteResolver {
   async delete(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<VoteModel> {
     return this.vote_service.delete(movie_id_input.movie_id, {

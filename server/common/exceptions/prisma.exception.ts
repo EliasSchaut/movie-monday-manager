@@ -18,7 +18,7 @@ export class PrismaException extends Exception {
         case PrismaError.RecordDoesNotExist: {
           super(
             err_msg_on?.record_does_not_exist ??
-              i18n.t('common:exception.db.record_not_found'),
+              i18n.t('common.exception.db.record_not_found'),
             ResCodeEnum.WARNING,
             e.message,
           );
@@ -27,7 +27,7 @@ export class PrismaException extends Exception {
         case PrismaError.UniqueConstraintViolation: {
           super(
             err_msg_on?.unique_constraint_violation ??
-              i18n.t('common:exception.db.duplication'),
+              i18n.t('common.exception.db.duplication'),
             ResCodeEnum.WARNING,
             e.message,
           );

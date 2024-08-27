@@ -62,12 +62,7 @@ export class ServerService {
     return new ServerSettingsModel(server_settings);
   }
 
-  async resolve_oauth(
-    secret_api_key: string | null,
-    { server_id }: CtxType,
-  ): Promise<ServerOauthModel[]> {
-    const secret_api_key_check =
-      (process.env.SECRET_API_KEY as string) === secret_api_key;
+  async resolve_oauth({ server_id }: CtxType): Promise<ServerOauthModel[]> {
     return (
       await this.prisma.serverOAuth.findMany({
         where: {
@@ -75,29 +70,20 @@ export class ServerService {
         },
       })
     ).map((oauth) => {
-      if (!secret_api_key_check) {
-        oauth.secret = '';
-      }
-      return oauth;
+      return new ServerOauthModel(oauth);
     });
   }
 
   async find_oauth_by_name(
     name: string,
-    secret_api_key: string | null,
     { server_id }: CtxType,
   ): Promise<ServerOauthModel | null> {
-    const secret_api_key_check =
-      (process.env.SECRET_API_KEY as string) === secret_api_key;
     const oauth = await this.prisma.serverOAuth.findFirst({
       where: {
         server_id: server_id,
         name: name,
       },
     });
-    if (!secret_api_key_check && oauth) {
-      oauth.secret = '';
-    }
     return oauth;
   }
 }

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql';
 import { WatchlistService } from '@/graphql/watchlist/watchlist.service';
 import { WatchlistModel } from '@/types/models/watchlist.model';
-import { ServerID } from '@/common/decorators/server_id.decorator';
+import { ServerId } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { Role } from '@/common/decorators/role.decorator';
@@ -27,7 +27,7 @@ export class WatchlistResolver {
     name: 'watchlist',
   })
   async find(
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<WatchlistModel> {
     return this.watchlist_service.find({ server_id, i18n });
@@ -39,7 +39,7 @@ export class WatchlistResolver {
   })
   async auto_info(
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ) {
     //return this.watchlist_service.auto_info({ user_id, server_id, i18n });
@@ -52,7 +52,7 @@ export class WatchlistResolver {
   async add_or_update(
     @Args('watchlist_input') watchlist_input: WatchlistInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<WatchlistItemModel> {
     return this.watchlist_service.add_or_update(watchlist_input, {
@@ -69,7 +69,7 @@ export class WatchlistResolver {
   async delete(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
     @UserID() user_id: string,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<WatchlistItemModel> {
     return this.watchlist_service.delete(movie_id_input.movie_id, {
@@ -84,7 +84,7 @@ export class WatchlistResolver {
   })
   async resolve_interested_users(
     @Parent() watchlist_item: WatchlistItemModel,
-    @ServerID() server_id: number,
+    @ServerId() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<UserModel[]> {
     return this.watchlist_service.resolve_interested_users(

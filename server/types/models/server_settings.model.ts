@@ -4,6 +4,8 @@ import { ServerSettings } from '@prisma/client';
 @ObjectType()
 export class ServerSettingsModel {
   constructor(server_settings: ServerSettings) {
+    this.title = server_settings.title ?? undefined;
+    this.desc = server_settings.desc ?? undefined;
     this.max_votes = server_settings.max_votes;
     this.max_proposals = server_settings.max_proposals;
     this.max_movies = server_settings.max_movies;
@@ -15,9 +17,21 @@ export class ServerSettingsModel {
     this.movie_gap_mins = server_settings.movie_gap_mins;
     this.round_to_5mins = server_settings.round_to_5mins;
     this.discord_auto = server_settings.discord_auto;
-    this.discord_webhook = server_settings.discord_webhook;
-    this.discord_msg = server_settings.discord_msg;
+    this.discord_webhook = server_settings.discord_webhook ?? undefined;
+    this.discord_msg = server_settings.discord_msg ?? undefined;
   }
+
+  @Field(() => String, {
+    description: 'Visible title of the server',
+    nullable: true,
+  })
+  title?: string;
+
+  @Field(() => String, {
+    description: 'Description of the server',
+    nullable: true,
+  })
+  desc?: string;
 
   @Field(() => Int, {
     description: 'Maximal votes a user can give',
@@ -79,12 +93,12 @@ export class ServerSettingsModel {
     description: 'Discord Webhook Link',
     nullable: true,
   })
-  discord_webhook?: string | null;
+  discord_webhook?: string;
 
   @Field(() => String, {
     description:
       'The message, the webhook should send. Term <watchlist> will be replaced by actual watchlist',
     nullable: true,
   })
-  discord_msg?: string | null;
+  discord_msg?: string;
 }

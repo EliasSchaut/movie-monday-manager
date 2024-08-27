@@ -6,7 +6,7 @@ import { I18nContext } from 'nestjs-i18n';
 
 const prisma = new PrismaService();
 
-export const ServerID = createParamDecorator(
+export const ServerId = createParamDecorator(
   async (data: unknown, ctx: ExecutionContext) => {
     const gql_ctx = GqlExecutionContext.create(ctx);
     const req = gql_ctx.getContext().req;
