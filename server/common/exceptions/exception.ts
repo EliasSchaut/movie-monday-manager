@@ -1,5 +1,5 @@
 import { GraphQLError } from 'graphql/error';
-import { ResCodeEnum } from '@/types/enums/res_code.enum';
+import { ResCodeEnum } from '@/types/common/res_code.enum';
 
 export class Exception extends GraphQLError {
   constructor(

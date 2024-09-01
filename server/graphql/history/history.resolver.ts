@@ -7,7 +7,7 @@ import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieHistoryInputModel } from '@/types/models/inputs/movie_history.input';
 import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 
 @Resolver(() => MovieHistoryModel)
 export class HistoryResolver {

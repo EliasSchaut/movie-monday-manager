@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { ResCodeEnum } from '@/types/enums/res_code.enum';
+import { ResCodeEnum } from '@/types/common/res_code.enum';
 import { I18nContext } from 'nestjs-i18n';
 import { PrismaError } from 'prisma-error-enum';
 import { Exception } from '@/common/exceptions/exception';

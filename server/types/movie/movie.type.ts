@@ -1,5 +1,5 @@
 import { ExternalMovieType } from '@/types/movie/external_movie.type';
-import { OmitToMovie } from '@/types/utils/movie_types.util';
+import { OmitToMovie } from '@/types/movie/movie_type.utils';
 import { DangerException } from '@/common/exceptions/danger.exception';
 
 export class MovieType extends ExternalMovieType {

@@ -10,7 +10,7 @@ import {
   MovieApiTypeEnum,
   MovieExternalIdEnum,
   TmdbId,
-} from '@/types/utils/movie_types.util';
+} from '@/types/movie/movie_type.utils';
 import { ApiService } from '@/common/services/api.service';
 
 @Injectable()

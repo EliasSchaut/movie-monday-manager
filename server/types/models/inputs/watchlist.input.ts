@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { IsDate } from 'class-validator';
 import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
-import { MovieId } from '@/types/utils/movie_types.util';
+import { MovieId } from '@/types/movie/movie_type.utils';
 
 @InputType()
 export class WatchlistInputModel {

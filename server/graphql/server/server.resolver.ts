@@ -7,7 +7,7 @@ import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';
 import { ServerSettingsModel } from '@/types/models/server_settings.model';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 import { ServerSettingsInputModel } from '@/types/models/inputs/server_settings.input';
 
 @Resolver(() => ServerModel)

@@ -1,6 +1,6 @@
 import { MovieType } from '@/types/movie/movie.type';
 import { MovieSearchType } from '@/types/movie/movie_search.type';
-import { MovieExternalIdsType } from '@/types/utils/movie_types.util';
+import { MovieExternalIdsType } from '@/types/movie/movie_type.utils';
 
 export interface MovieApi {
   find(id: MovieExternalIdsType, lang: string): Promise<MovieType | null>;

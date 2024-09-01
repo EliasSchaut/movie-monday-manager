@@ -12,7 +12,7 @@ import { ServerId } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 import { WatchlistItemModel } from '@/types/models/watchlist_item.model';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { WatchlistInputModel } from '@/types/models/inputs/watchlist.input';

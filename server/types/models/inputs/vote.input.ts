@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
-import { VoteRankEnum } from '@/types/enums/vote.enum';
-import { MovieId } from '@/types/utils/movie_types.util';
+import { VoteRankEnum } from '@/types/election/vote.enum';
+import { MovieId } from '@/types/movie/movie_type.utils';
 import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 
 @InputType()

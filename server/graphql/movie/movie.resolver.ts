@@ -14,7 +14,7 @@ import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieIdInputModel } from '@/types/models/inputs/movie_id.input';
 import { UserModel } from '@/types/models/user.model';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
 import { MovieSearchInputModel } from '@/types/models/inputs/movie_search.input';

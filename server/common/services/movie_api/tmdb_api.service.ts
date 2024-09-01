@@ -7,7 +7,7 @@ import {
   MovieApiTypeEnum,
   MovieExternalIdEnum,
   TmdbId,
-} from '@/types/utils/movie_types.util';
+} from '@/types/movie/movie_type.utils';
 
 @Injectable()
 export class TmdbApiService extends MovieApiService implements MovieApi {

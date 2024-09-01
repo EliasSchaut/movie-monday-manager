@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModel } from '@/types/models/auth.model';
-import { CtxType } from '@/types/ctx.type';
+import { CtxType } from '@/types/common/ctx.type';
 import { PasswordService } from '@/common/services/password.service';
 import { UserPwResetInputModel } from '@/types/models/inputs/user_pw_reset.input';
 import { UserModel } from '@/types/models/user.model';
@@ -16,7 +16,6 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly passwordService: PasswordService,
     private readonly emailService: EmailService,
   ) {}
 
@@ -33,7 +32,7 @@ export class AuthService {
     if (user === null)
       throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
 
-    if (!(await this.passwordService.compare(password, user.password)))
+    if (!(await PasswordService.compare(password, user.password)))
       throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
 
     if (!user.verified)
@@ -52,7 +51,7 @@ export class AuthService {
     user_input_data: UserInputModel,
     ctx: CtxType,
   ): Promise<UserModel | null> {
-    user_input_data.password = await this.passwordService.hash(
+    user_input_data.password = await PasswordService.hash(
       user_input_data.password,
     );
     return this.prisma.user
@@ -60,7 +59,7 @@ export class AuthService {
         data: {
           ...user_input_data,
           server_id: ctx.server_id,
-          challenge: this.passwordService.generate_challenge(),
+          challenge: PasswordService.generate_challenge(),
         },
       })
       .then((user) => {
@@ -71,7 +70,7 @@ export class AuthService {
             user.challenge as string,
             ctx.server!.origin!,
           ),
-          ctx.server!.title,
+          ctx.server!.settings!.title!,
         );
         return new UserModel(user).convert_to_public();
       })
@@ -124,7 +123,7 @@ export class AuthService {
       await this.prisma.user.update({
         where: { id: user.id },
         data: {
-          password: await this.passwordService.hash(
+          password: await PasswordService.hash(
             user_pw_reset_input_data.password,
           ),
           pw_reset: false,
@@ -144,7 +143,7 @@ export class AuthService {
       return false;
     }
 
-    const challenge = this.passwordService.generate_challenge();
+    const challenge = PasswordService.generate_challenge();
     await this.prisma.user.update({
       where: { id: user.id },
       data: {
@@ -161,7 +160,7 @@ export class AuthService {
       user.email,
       user.first_name + ' ' + user.last_name,
       pw_reset_url,
-      ctx.server!.title,
+      ctx.server!.settings!.title!,
     );
     return true;
   }

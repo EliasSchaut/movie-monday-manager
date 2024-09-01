@@ -5,7 +5,7 @@ import { WarningException } from '@/common/exceptions/warning.exception';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
 import { ServerModel } from '@/types/models/server.model';
 import { ServerSettingsModel } from '@/types/models/server_settings.model';
-import { CtxType } from '@/types/ctx.type';
+import { CtxType } from '@/types/common/ctx.type';
 import { I18nContext } from 'nestjs-i18n';
 
 describe('ServerService', () => {

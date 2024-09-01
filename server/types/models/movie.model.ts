@@ -3,7 +3,7 @@ import { Movie, MovieMetadata } from '@prisma/client';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import { I18nContext } from 'nestjs-i18n';
 import { MovieType } from '@/types/movie/movie.type';
-import { OmitToMovie } from '@/types/utils/movie_types.util';
+import { OmitToMovie } from '@/types/movie/movie_type.utils';
 
 @ObjectType()
 export class MovieModel implements OmitToMovie<MovieType> {

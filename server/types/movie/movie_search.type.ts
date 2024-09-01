@@ -1,5 +1,5 @@
 import { ExternalSearchType } from '@/types/movie/external_search.type';
-import { OmitToMovieSearch } from '@/types/utils/movie_types.util';
+import { OmitToMovieSearch } from '@/types/movie/movie_type.utils';
 import { DangerException } from '@/common/exceptions/danger.exception';
 
 export class MovieSearchType extends ExternalSearchType {

@@ -1,6 +1,6 @@
 import { MovieSearchType } from '@/types/movie/movie_search.type';
 import { ExternalSearchType } from '@/types/movie/external_search.type';
-import { OmitToMovieSearch } from '@/types/utils/movie_types.util';
+import { OmitToMovieSearch } from '@/types/movie/movie_type.utils';
 
 export class OmdbSearchType extends ExternalSearchType {
   constructor(omdb_movie: OmitToMovieSearch<OmdbSearchType>) {

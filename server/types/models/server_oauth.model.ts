@@ -10,19 +10,20 @@ export class ServerOauthModel {
     this.name = oauth.name;
     this.client_id = oauth.client_id;
     this.client_secret = oauth.client_secret;
+    this.issuer_url = oauth.issuer_url;
   }
 
   @Field(() => Number, {
     description: 'Unique id number of server used for comparison',
     nullable: true,
   })
-  id?: number;
+  id!: number;
 
   @Field(() => String, { description: 'Name of oauth', nullable: true })
-  name?: string;
+  name!: string;
 
   @Field(() => String, { description: 'Client id of oauth', nullable: true })
-  client_id?: string;
+  client_id!: string;
 
   @Field(() => String, {
     description:
@@ -30,4 +31,9 @@ export class ServerOauthModel {
     nullable: true,
   })
   client_secret?: string;
+
+  @Field(() => String, {
+    description: 'Redirect uri of oauth',
+  })
+  issuer_url!: string;
 }

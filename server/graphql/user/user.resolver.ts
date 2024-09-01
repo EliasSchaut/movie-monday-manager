@@ -7,7 +7,7 @@ import { UserModel } from '@/types/models/user.model';
 import { UserID } from '@/common/decorators/user_id.decorator';
 import { UserUpdateInputModel } from '@/types/models/inputs/user_update.input';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 
 @Resolver(() => UserModel)
 export class UserResolver {

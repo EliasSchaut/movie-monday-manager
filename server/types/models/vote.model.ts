@@ -1,8 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { VoteRankEnum } from '@/types/enums/vote.enum';
+import { VoteRankEnum } from '@/types/election/vote.enum';
 import { MovieVote } from '@prisma/client';
 import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
-import { MovieId } from '@/types/utils/movie_types.util';
+import { MovieId } from '@/types/movie/movie_type.utils';
 
 @ObjectType()
 export class VoteModel {

@@ -10,7 +10,7 @@ import {
   MovieApiTypeEnum,
   MovieExternalIdEnum,
   MovieExternalIdsType,
-} from '@/types/utils/movie_types.util';
+} from '@/types/movie/movie_type.utils';
 import { DangerException } from '@/common/exceptions/danger.exception';
 import * as process from 'node:process';
 

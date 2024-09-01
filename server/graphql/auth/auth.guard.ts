@@ -5,7 +5,7 @@ import * as process from 'process';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/common/decorators/role.decorator';
-import { RoleEnum } from '@/types/enums/role.enum';
+import { RoleEnum } from '@/types/auth/role.enum';
 import { I18nLangResolver } from '@/common/middleware/i18n.resolver';
 import { ForbiddenException } from '@/common/exceptions/forbidden.exception';
 

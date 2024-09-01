@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CtxType } from '@/types/ctx.type';
+import { CtxType } from '@/types/common/ctx.type';
 import { VoteInputModel } from '@/types/models/inputs/vote.input';
 import { VoteModel } from '@/types/models/vote.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { MovieVote } from '@prisma/client';
-import { MovieId } from '@/types/utils/movie_types.util';
+import { MovieId } from '@/types/movie/movie_type.utils';
 
 @Injectable()
 export class VoteService {

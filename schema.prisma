@@ -15,7 +15,7 @@ model Server {
   name      String           @unique
   origin    String           @unique
   settings  ServerSettings?
-  oauth     ServerOAuth[]
+  oauths     ServerOAuth[]
   users     User[]
   movies    Movie[]
   history   MovieHistory[]
@@ -48,11 +48,12 @@ model ServerOAuth {
   server_id     Int
   server        Server      @relation(fields: [server_id], references: [id], onDelete: Cascade)
   name          String
-  client_id     String      @unique
+  issuer_url    String
+  client_id     String
   client_secret String
   user_oauth    UserOAuth[]
 
-  @@unique([server_id, name])
+  @@unique([server_id, issuer_url, client_id])
 }
 
 model User {

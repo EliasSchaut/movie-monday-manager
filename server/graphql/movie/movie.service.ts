@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CtxType } from '@/types/ctx.type';
+import { CtxType } from '@/types/common/ctx.type';
 import { MovieModel } from '@/types/models/movie.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { UserModel } from '@/types/models/user.model';
@@ -9,7 +9,7 @@ import { PrismaException } from '@/common/exceptions/prisma.exception';
 import { MovieSearchModel } from '@/types/models/movie_search.model';
 import { MovieApiService } from '@/common/services/movie_api/movie_api.service';
 import { MovieType } from '@/types/movie/movie.type';
-import { MovieExternalIdsType, MovieId } from '@/types/utils/movie_types.util';
+import { MovieExternalIdsType, MovieId } from '@/types/movie/movie_type.utils';
 
 @Injectable()
 export class MovieService {

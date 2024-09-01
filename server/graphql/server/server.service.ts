@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { CtxType } from '@/types/ctx.type';
+import { CtxType } from '@/types/common/ctx.type';
 import { ServerOauthModel } from '@/types/models/server_oauth.model';
 import { ServerModel } from '@/types/models/server.model';
 import { WarningException } from '@/common/exceptions/warning.exception';
 import { ServerSettingsModel } from '@/types/models/server_settings.model';
 import { ServerSettingsInputModel } from '@/types/models/inputs/server_settings.input';
 import { PrismaException } from '@/common/exceptions/prisma.exception';
+import { OAuthType } from '@/types/auth/oauth.type';
 
 @Injectable()
 export class ServerService {
@@ -70,7 +71,7 @@ export class ServerService {
         },
       })
     ).map((oauth) => {
-      return new ServerOauthModel(oauth);
+      return this.hide_secret(new ServerOauthModel(oauth));
     });
   }
 
@@ -84,6 +85,22 @@ export class ServerService {
         name: name,
       },
     });
+    if (!oauth) return null;
+    return this.hide_secret(new ServerOauthModel(oauth));
+  }
+
+  async find_oauth_many_all_servers(): Promise<OAuthType[]> {
+    const oauths = await this.prisma.server.findMany({
+      select: {
+        id: true,
+        oauths: true,
+      },
+    });
+    return oauths.map((oauth) => new OAuthType(oauth));
+  }
+
+  private hide_secret(oauth: ServerOauthModel): ServerOauthModel {
+    oauth.client_secret = 'hidden';
     return oauth;
   }
 }

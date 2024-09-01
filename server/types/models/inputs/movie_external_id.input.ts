@@ -3,7 +3,7 @@ import {
   ImdbId,
   MovieExternalIdsType,
   TmdbId,
-} from '@/types/utils/movie_types.util';
+} from '@/types/movie/movie_type.utils';
 import { IsImdbId } from '@/common/validation/decorators/IsImdbId.validation';
 import { IsMovieId } from '@/common/validation/decorators/IsMovieId.validation';
 

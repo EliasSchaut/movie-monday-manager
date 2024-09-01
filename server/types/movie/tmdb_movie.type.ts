@@ -1,6 +1,6 @@
 import { MovieType } from '@/types/movie/movie.type';
 import { ExternalMovieType } from '@/types/movie/external_movie.type';
-import { OmitToMovie } from '@/types/utils/movie_types.util';
+import { OmitToMovie } from '@/types/movie/movie_type.utils';
 
 export class TmdbMovieType extends ExternalMovieType {
   private readonly POSTER_BASE_URL = 'https://image.tmdb.org/t/p/original';

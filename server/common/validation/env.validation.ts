@@ -70,7 +70,12 @@ export const EnvValidationSchema = Joi.object({
   ELECTION_TYPE: Joi.string()
     .valid('STV')
     .default('STV')
-    .description('The type of election to use'),
+    .description('The type of election service to use'),
+
+  AVATAR_TYPE: Joi.string()
+    .valid('GRAVATAR')
+    .default('GRAVATAR')
+    .description('The type of avatar service to use'),
 
   EMAIL_HOST: Joi.string()
     .optional()
