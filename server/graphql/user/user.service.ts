@@ -5,12 +5,14 @@ import { UserModel } from '@/types/models/user.model';
 import { UserUpdateInputModel } from '@/types/models/inputs/user_update.input';
 import { PasswordService } from '@/common/services/password.service';
 import { WarningException } from '@/common/exceptions/warning.exception';
+import { EmailService } from '@/common/services/email.service';
+import { UserPwResetInputModel } from '@/types/models/inputs/user_pw_reset.input';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly passwordService: PasswordService,
+    private readonly emailService: EmailService,
   ) {}
 
   async find_by_id(ctx: CtxType): Promise<UserModel> {
@@ -50,7 +52,7 @@ export class UserService {
     user_update_input_data: UserUpdateInputModel,
   ): Promise<void> {
     if (user_update_input_data.password) {
-      user_update_input_data.password = await this.passwordService.hash(
+      user_update_input_data.password = await PasswordService.hash(
         user_update_input_data.password,
       );
     }
@@ -75,9 +77,71 @@ export class UserService {
         id: ctx.user_id,
       },
       data: {
-        email_update_request: email,
-        challenge: this.passwordService.generate_challenge(),
+        request_target_email: email,
+        challenge: PasswordService.generate_challenge(),
       },
     });
+  }
+
+  async reset_password(
+    user_pw_reset_input_data: UserPwResetInputModel,
+    ctx: CtxType,
+  ): Promise<UserModel | null> {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        challenge: user_pw_reset_input_data.challenge,
+        id: user_pw_reset_input_data.user_id,
+      },
+    });
+    if (!user || !user.request_pw_reset) {
+      throw new WarningException(
+        ctx.i18n.t('auth.exception.not_found_password_reset'),
+      );
+    }
+
+    return new UserModel(
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: {
+          password: await PasswordService.hash(
+            user_pw_reset_input_data.password,
+          ),
+          request_pw_reset: false,
+        },
+      }),
+    );
+  }
+
+  async request_password_reset(
+    username: string,
+    ctx: CtxType,
+  ): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({
+      where: { username: username },
+    });
+    if (!user) {
+      throw new WarningException(ctx.i18n.t('user.exception.not_found'));
+    }
+
+    const challenge = PasswordService.generate_challenge();
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        challenge: challenge,
+        request_pw_reset: true,
+      },
+    });
+
+    const pw_reset_url = this.emailService.generate_pw_reset_url(
+      challenge,
+      ctx.server!.origin!,
+    );
+    await this.emailService.send_password_reset(
+      user.email,
+      user.first_name + ' ' + user.last_name,
+      pw_reset_url,
+      ctx.server!.settings!.title!,
+    );
+    return true;
   }
 }

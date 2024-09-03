@@ -16,15 +16,10 @@ import { VoteModule } from '@/graphql/vote/vote.module';
 import { WatchlistModule } from '@/graphql/watchlist/watchlist.module';
 import { loggingMiddleware, PrismaModule } from 'nestjs-prisma';
 import { JwtModule } from '@nestjs/jwt';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import * as process from 'node:process';
 
 @Module({
   imports: [
-    DevtoolsModule.register({
-      http: process.env.NODE_ENV !== 'production',
-      port: Number(process.env.PORT_NEST_DEVTOOLS),
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: EnvValidationSchema,

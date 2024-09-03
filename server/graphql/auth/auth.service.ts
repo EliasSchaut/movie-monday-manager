@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
 import { JwtService } from '@nestjs/jwt';
-import { AuthModel } from '@/types/models/auth.model';
+import { SignedInModel } from '@/types/models/signed_in.model';
 import { CtxType } from '@/types/common/ctx.type';
 import { PasswordService } from '@/common/services/password.service';
-import { UserPwResetInputModel } from '@/types/models/inputs/user_pw_reset.input';
 import { UserModel } from '@/types/models/user.model';
 import { EmailService } from '@/common/services/email.service';
 import { UserInputModel } from '@/types/models/inputs/user.input';
-import { Prisma } from '@prisma/client';
 import { WarningException } from '@/common/exceptions/warning.exception';
+import { PrismaException } from '@/common/exceptions/prisma.exception';
+import { SignInInput } from '@/types/models/inputs/sign_in.input';
 
 @Injectable()
 export class AuthService {
@@ -20,19 +20,24 @@ export class AuthService {
   ) {}
 
   async sign_in(
-    email: string,
-    password: string,
+    sign_in_input: SignInInput,
     ctx: CtxType,
-  ): Promise<AuthModel> {
+  ): Promise<SignedInModel> {
     const user = await this.prisma.user.findUnique({
-      select: { id: true, password: true, verified: true, is_admin: true },
-      where: { email: email },
+      select: {
+        id: true,
+        username: true,
+        password: true,
+        verified: true,
+        is_admin: true,
+      },
+      where: { email: sign_in_input.email },
     });
 
     if (user === null)
       throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
 
-    if (!(await PasswordService.compare(password, user.password)))
+    if (!(await PasswordService.compare(sign_in_input.password, user.password)))
       throw new WarningException(ctx.i18n.t('auth.exception.forbidden_login'));
 
     if (!user.verified)
@@ -40,11 +45,14 @@ export class AuthService {
         ctx.i18n.t('auth.exception.forbidden_not_verified'),
       );
 
-    const payload = { username: user.id, sub: { is_admin: user.is_admin } };
-    return {
-      barrier_token: await this.jwtService.signAsync(payload),
-      is_admin: user.is_admin,
-    } as AuthModel;
+    const payload = {
+      username: user.username,
+      sub: { id: user.id, is_admin: user.is_admin },
+    };
+    return new SignedInModel(
+      await this.jwtService.signAsync(payload),
+      user.is_admin,
+    );
   }
 
   async register(
@@ -72,16 +80,15 @@ export class AuthService {
           ),
           ctx.server!.settings!.title!,
         );
-        return new UserModel(user).convert_to_public();
+        return new UserModel(user).clear_system_info();
       })
-      .catch((e: Prisma.PrismaClientKnownRequestError) => {
-        if (e.code === 'P2002') {
-          throw new WarningException(
-            ctx.i18n.t('user.exception.conflict_username'),
-          );
-        } else {
-          throw new WarningException(ctx.i18n.t('user.exception.create'));
-        }
+      .catch((e: Error) => {
+        throw new PrismaException(e, {
+          unique_constraint_violation: ctx.i18n.t(
+            'user.exception.conflict_username',
+          ),
+          no_matches: ctx.i18n.t('user.exception.create'),
+        });
       });
   }
 
@@ -101,67 +108,5 @@ export class AuthService {
         },
       }),
     );
-  }
-
-  async reset_password(
-    user_pw_reset_input_data: UserPwResetInputModel,
-    ctx: CtxType,
-  ): Promise<UserModel | null> {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        challenge: user_pw_reset_input_data.challenge,
-        id: user_pw_reset_input_data.user_id,
-      },
-    });
-    if (!user || !user.pw_reset) {
-      throw new WarningException(
-        ctx.i18n.t('auth.exception.not_found_password_reset'),
-      );
-    }
-
-    return new UserModel(
-      await this.prisma.user.update({
-        where: { id: user.id },
-        data: {
-          password: await PasswordService.hash(
-            user_pw_reset_input_data.password,
-          ),
-          pw_reset: false,
-        },
-      }),
-    );
-  }
-
-  async reset_password_request(
-    username: string,
-    ctx: CtxType,
-  ): Promise<boolean> {
-    const user = await this.prisma.user.findUnique({
-      where: { username: username },
-    });
-    if (!user) {
-      return false;
-    }
-
-    const challenge = PasswordService.generate_challenge();
-    await this.prisma.user.update({
-      where: { id: user.id },
-      data: {
-        challenge: challenge,
-        pw_reset: true,
-      },
-    });
-
-    const pw_reset_url = this.emailService.generate_pw_reset_url(
-      challenge,
-      ctx.server!.origin!,
-    );
-    await this.emailService.send_password_reset(
-      user.email,
-      user.first_name + ' ' + user.last_name,
-      pw_reset_url,
-      ctx.server!.settings!.title!,
-    );
-    return true;
   }
 }

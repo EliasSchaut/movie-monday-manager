@@ -36,58 +36,58 @@ export class ServerSettingsModel {
   @Field(() => Int, {
     description: 'Maximal votes a user can give',
   })
-  max_votes!: number;
+  max_votes?: number;
 
   @Field(() => Int, {
     description: 'Maximal number of movies a user can propose',
   })
-  max_proposals!: number;
+  max_proposals?: number;
 
   @Field(() => Int, {
     description: 'Maximal numbers of movies that can be proposed',
   })
-  max_movies!: number;
+  max_movies?: number;
 
   @Field(() => Boolean, {
     description: 'Enables or disables the automatic creation of the watchlist',
   })
-  watchlist_auto!: boolean;
+  watchlist_auto?: boolean;
 
   @Field(() => Int, {
     description:
       'Number of movies that will be added to watchlist, if watchlist is on auto mode',
   })
-  watchlist_num_of_movies!: number;
+  watchlist_num_of_movies?: number;
 
   @Field(() => String, {
     description:
       'Cron string that specifies the interval, when the watchlist creation is triggered',
   })
-  watchlist_schedule_creation!: string;
+  watchlist_schedule_creation?: string;
 
   @Field(() => String, {
     description:
       'Cron string that specifies the start time of the first movie added',
   })
-  watchlist_schedule_start!: string;
+  watchlist_schedule_start?: string;
 
   @Field(() => Int, {
     description:
       'Gap time in minutes between movies added to the watchlist in a auto creation round',
   })
-  movie_gap_mins!: number;
+  movie_gap_mins?: number;
 
   @Field(() => Boolean, {
     description:
       'Indicates if the end time of a movie will be rounded to the next five mins',
   })
-  round_to_5mins!: boolean;
+  round_to_5mins?: boolean;
 
   @Field(() => Boolean, {
     description:
       'Enables or disables whether a message should send via a discord webhook on watchlist creation',
   })
-  discord_auto!: boolean;
+  discord_auto?: boolean;
 
   @Field(() => String, {
     description: 'Discord Webhook Link',

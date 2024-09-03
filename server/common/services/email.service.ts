@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import nodemailer, { TransportOptions } from 'nodemailer';
 
+// TODO: Multilanguage support
 @Injectable()
 export class EmailService {
   private transporter;

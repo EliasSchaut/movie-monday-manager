@@ -6,13 +6,14 @@ import crypto from 'crypto';
 @Injectable()
 export class PasswordService {
   public static readonly CHALLENGE_LENGTH = 20;
+  private static readonly SALT_ROUNDS = 10;
 
   public static async hash_md5(password: string): Promise<string> {
     return crypto.createHash('md5').update(password).digest('hex');
   }
 
   public static async hash(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
+    return bcrypt.hash(password, PasswordService.SALT_ROUNDS);
   }
 
   public static async compare(

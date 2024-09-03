@@ -11,8 +11,10 @@ import { I18nContext } from 'nestjs-i18n';
 describe('ServerService', () => {
   let service: ServerService;
   let prisma: PrismaService;
+  let ctx: CtxType;
 
   beforeEach(async () => {
+    ctx = { server_id: 1, i18n: I18nContext.current()! };
     const module: TestingModule = await Test.createTestingModule({
       providers: [ServerService, PrismaService],
     }).compile();
@@ -24,8 +26,11 @@ describe('ServerService', () => {
     } as any);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('find_by_id returns server model if server exists', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const server = {
       id: '1',
       name: 'Test Server',
@@ -40,14 +45,12 @@ describe('ServerService', () => {
   });
 
   it('find_by_id throws WarningException if server does not exist', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     prisma.server.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(service.find_by_id(ctx)).rejects.toThrow(WarningException);
   });
 
   it('update returns updated server settings model', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const server_input = { title: 'Test Server' };
     const server_settings = { server_id: 1, title: 'Test Server' };
     prisma.serverSettings.update = jest.fn().mockResolvedValue(server_settings);
@@ -59,7 +62,6 @@ describe('ServerService', () => {
   });
 
   it('update throws PrismaException if update fails', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const server_input = { title: 'Test Server' };
     prisma.serverSettings.update = jest
       .fn()
@@ -71,7 +73,6 @@ describe('ServerService', () => {
   });
 
   it('resolve_settings returns server settings model if settings exist', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const server_settings = { server_id: 1, title: 'Test Server' };
     prisma.serverSettings.findUnique = jest
       .fn()
@@ -84,7 +85,6 @@ describe('ServerService', () => {
   });
 
   it('resolve_settings throws WarningException if settings do not exist', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     prisma.serverSettings.findUnique = jest.fn().mockResolvedValue(null);
 
     await expect(service.resolve_settings(ctx)).rejects.toThrow(
@@ -93,7 +93,6 @@ describe('ServerService', () => {
   });
 
   it('resolve_oauth returns oauth models', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const oauths = [
       {
         server_id: 1,
@@ -111,7 +110,6 @@ describe('ServerService', () => {
   });
 
   it('find_oauth_by_name oauth models if oauth does exist', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     const oauths = [
       {
         server_id: 1,
@@ -128,7 +126,6 @@ describe('ServerService', () => {
   });
 
   it('find_oauth_by_name returns null if oauth does not exist', async () => {
-    const ctx: CtxType = { server_id: 1, i18n: I18nContext.current()! };
     prisma.serverOAuth.findFirst = jest.fn().mockResolvedValue(null);
 
     const result = await service.find_oauth_by_name('oauth', ctx);

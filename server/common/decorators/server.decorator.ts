@@ -14,7 +14,7 @@ export const Server = createParamDecorator(
     const server = await prisma.server.findUnique({
       include: {
         settings: true,
-        oauth: true,
+        oauths: true,
       },
       where: {
         origin: req.headers.origin,

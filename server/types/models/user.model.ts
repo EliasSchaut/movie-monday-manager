@@ -11,15 +11,16 @@ export class UserModel {
     this.password = user.password;
     this.first_name = user.first_name;
     this.last_name = user.last_name;
-    this.avatar = user.avatar ?? undefined;
+    this.avatar_url = user.avatar_url ?? undefined;
     this.bio = user.bio ?? undefined;
     this.profile_public = user.profile_public;
     this.email_opt_in = user.email_opt_in;
     this.is_admin = user.is_admin;
     this.challenge = user.challenge;
-    this.server_id = user.server_id;
     this.verified = user.verified;
-    this.pw_reset = user.pw_reset;
+    this.request_pw_reset = user.request_pw_reset;
+    this.request_email_update = user.request_email_update;
+    this.request_target_email = user.request_target_email ?? undefined;
   }
 
   @Field(() => ID, {
@@ -33,6 +34,12 @@ export class UserModel {
   username!: string;
 
   @Field(() => String, {
+    description: 'Hashed password of user used for login',
+    nullable: true,
+  })
+  password?: string;
+
+  @Field(() => String, {
     description:
       'Unique private email of user used to login and receive emails',
     nullable: true,
@@ -40,10 +47,11 @@ export class UserModel {
   email?: string;
 
   @Field(() => String, {
-    description: 'Hashed password of user used for login',
+    description:
+      'Challenge string used for password reset and account verification',
     nullable: true,
   })
-  password?: string;
+  challenge?: string;
 
   @Field(() => String, {
     description: 'First name of user. Only public if profile is public',
@@ -62,13 +70,19 @@ export class UserModel {
       'Link to profile picture of user. Only public if profile is public',
     nullable: true,
   })
-  avatar?: string;
+  avatar_url?: string;
 
   @Field(() => String, {
     description: 'Short bio of user. Only public if profile is public',
     nullable: true,
   })
   bio?: string;
+
+  @Field(() => Boolean, {
+    description: 'Indicates whether the user is an admin',
+    nullable: true,
+  })
+  is_admin?: boolean;
 
   @Field(() => Boolean, {
     description: 'Indicates whether the user wants their profile to be public',
@@ -84,25 +98,6 @@ export class UserModel {
   email_opt_in?: boolean;
 
   @Field(() => Boolean, {
-    description: 'Indicates whether the user is an admin',
-    nullable: true,
-  })
-  is_admin?: boolean;
-
-  @Field(() => String, {
-    description:
-      'Challenge string used for password reset and account verification',
-    nullable: true,
-  })
-  challenge?: string;
-
-  @Field(() => Number, {
-    description: 'Unique id number of server on which the user is registered',
-    nullable: true,
-  })
-  server_id?: number;
-
-  @Field(() => Boolean, {
     description: 'Indicates whether the user account is verified',
     nullable: true,
   })
@@ -112,14 +107,26 @@ export class UserModel {
     description: 'Indicates whether a password reset was requested',
     nullable: true,
   })
-  pw_reset?: boolean;
+  request_pw_reset?: boolean;
+
+  @Field(() => Boolean, {
+    description: 'Indicates whether an email change was requested',
+    nullable: true,
+  })
+  request_email_update?: boolean;
+
+  @Field(() => String, {
+    description: 'Indicates the email the user wants to change to',
+    nullable: true,
+  })
+  request_target_email?: string;
 
   @Field(() => [VoteModel], {
     nullable: true,
   })
   votes?: VoteModel[];
 
-  // clears all user fields that are not meant to be seen by public
+  // clears all user fields that are not meant to be seen by the public
   public convert_to_public(): this {
     if (!this.profile_public) {
       this.clear_user_profile();
@@ -128,21 +135,24 @@ export class UserModel {
     return this;
   }
 
-  private clear_user_profile() {
-    this.first_name = undefined;
-    this.last_name = undefined;
-    this.avatar = undefined;
-    this.bio = undefined;
+  public clear_user_profile(): this {
+    delete this.first_name;
+    delete this.last_name;
+    delete this.avatar_url;
+    delete this.bio;
+    return this;
   }
 
-  private clear_system_info() {
-    this.email = undefined;
-    this.password = undefined;
-    this.email_opt_in = undefined;
-    this.is_admin = undefined;
-    this.challenge = undefined;
-    this.server_id = undefined;
-    this.verified = undefined;
-    this.pw_reset = undefined;
+  public clear_system_info(): this {
+    delete this.email;
+    delete this.password;
+    delete this.challenge;
+    delete this.email_opt_in;
+    delete this.is_admin;
+    delete this.verified;
+    delete this.request_pw_reset;
+    delete this.request_email_update;
+    delete this.request_target_email;
+    return this;
   }
 }

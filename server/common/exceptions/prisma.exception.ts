@@ -10,38 +10,39 @@ export class PrismaException extends Exception {
     err_msg_on?: {
       record_does_not_exist?: string;
       unique_constraint_violation?: string;
+      no_matches?: string;
     },
   ) {
     const i18n = I18nContext.current()!;
+    let err_msg: string;
+    let res_code: ResCodeEnum = ResCodeEnum.DANGER;
+    let cause: any;
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
+      cause = e.message;
       switch (e.code) {
         case PrismaError.RecordDoesNotExist: {
-          super(
+          err_msg =
             err_msg_on?.record_does_not_exist ??
-              i18n.t('common.exception.db.record_not_found'),
-            ResCodeEnum.WARNING,
-            e.message,
-          );
+            i18n.t('common.exception.db.record_not_found');
+          res_code = ResCodeEnum.WARNING;
           break;
         }
         case PrismaError.UniqueConstraintViolation: {
-          super(
+          err_msg =
             err_msg_on?.unique_constraint_violation ??
-              i18n.t('common.exception.db.duplication'),
-            ResCodeEnum.WARNING,
-            e.message,
-          );
+            i18n.t('common.exception.db.duplication');
+          res_code = ResCodeEnum.WARNING;
           break;
         }
         default: {
-          super(
-            i18n.t('common.exception.db.internal'),
-            ResCodeEnum.DANGER,
-            e.message,
-          );
+          err_msg =
+            err_msg_on?.no_matches ?? i18n.t('common.exception.db.internal');
         }
       }
+    } else {
+      err_msg = i18n.t('common.exception.db.internal');
+      cause = e;
     }
-    super(i18n.t('common.exception.internal'), ResCodeEnum.DANGER, e);
+    super(err_msg, res_code, cause);
   }
 }

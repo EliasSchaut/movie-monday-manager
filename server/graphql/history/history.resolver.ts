@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { MovieHistoryModel } from '@/types/models/movie_history.model';
 import { HistoryService } from '@/graphql/history/history.service';
-import { ServerId } from '@/common/decorators/server_id.decorator';
+import { ServerID } from '@/common/decorators/server_id.decorator';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { I18nTranslations } from '@/types/generated/i18n.generated';
 import { MovieHistoryInputModel } from '@/types/models/inputs/movie_history.input';
@@ -18,7 +18,7 @@ export class HistoryResolver {
   })
   async find_by_id(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
-    @ServerId() server_id: number,
+    @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
     return this.history_service.find_by_id(movie_id_input.movie_id, {
@@ -31,7 +31,7 @@ export class HistoryResolver {
     name: 'history_find_many',
   })
   async find_many(
-    @ServerId() server_id: number,
+    @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel[]> {
     return this.history_service.find_many({ server_id, i18n });
@@ -43,7 +43,7 @@ export class HistoryResolver {
   })
   async create(
     @Args('history_input') history_input: MovieHistoryInputModel,
-    @ServerId() server_id: number,
+    @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
     return this.history_service.create(history_input, { server_id, i18n });
@@ -55,7 +55,7 @@ export class HistoryResolver {
   })
   async delete(
     @Args('movie_id_input') movie_id_input: MovieIdInputModel,
-    @ServerId() server_id: number,
+    @ServerID() server_id: number,
     @I18n() i18n: I18nContext<I18nTranslations>,
   ): Promise<MovieHistoryModel> {
     return this.history_service.delete(movie_id_input.movie_id, {

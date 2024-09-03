@@ -5,19 +5,16 @@ import { I18nContext } from 'nestjs-i18n';
 describe('ApiService', () => {
   let apiService: ApiService;
   let fetchMock: jest.SpyInstance;
-  let I18nContextMock: jest.SpyInstance;
-
   beforeEach(() => {
     apiService = new ApiService();
     fetchMock = jest.spyOn(global, 'fetch');
-    I18nContextMock = jest.spyOn(I18nContext, 'current').mockReturnValue({
+    jest.spyOn(I18nContext, 'current').mockReturnValue({
       t: jest.fn().mockReturnValue('test'),
     } as any);
   });
 
   afterEach(() => {
-    fetchMock.mockRestore();
-    I18nContextMock.mockRestore();
+    jest.clearAllMocks();
   });
 
   it('calls the API and returns the response JSON', async () => {

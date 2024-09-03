@@ -17,13 +17,13 @@ export class ServerOauthModel {
     description: 'Unique id number of server used for comparison',
     nullable: true,
   })
-  id!: number;
+  id?: number;
 
   @Field(() => String, { description: 'Name of oauth', nullable: true })
-  name!: string;
+  name?: string;
 
   @Field(() => String, { description: 'Client id of oauth', nullable: true })
-  client_id!: string;
+  client_id?: string;
 
   @Field(() => String, {
     description:
