@@ -4,17 +4,21 @@ export default defineNuxtConfig({
   alias: {
     '@/prisma/*': './prisma/*',
   },
+
   app: {
     head: {
       title: process.env.PROJECT_NAME,
     },
   },
+
   devServer: {
     port: process.env.PORT_FRONTEND,
   },
+
   devtools: { enabled: true },
   workspaceDir: '.',
   srcDir: 'client/',
+
   modules: [
     '@nuxtjs/i18n',
     '@nuxtjs/apollo',
@@ -25,6 +29,7 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
     'shadcn-nuxt',
   ],
+
   runtimeConfig: {
     api_secret: process.env.SECRET_API_KEY as string,
   },
@@ -106,4 +111,6 @@ export default defineNuxtConfig({
       maxAge: 60 * 60 * 24 * 30,
     },
   },
+
+  compatibilityDate: '2024-09-06',
 });

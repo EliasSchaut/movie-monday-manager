@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import colors from 'tailwindcss/colors';
 
 export default <Partial<Config>>{
   darkMode: 'class',
@@ -11,7 +12,12 @@ export default <Partial<Config>>{
     './app.vue',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: colors.indigo,
+        secondary: colors.gray,
+      },
+    },
   },
   plugins: [require('@tailwindcss/forms')],
 };
